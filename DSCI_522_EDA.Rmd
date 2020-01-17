@@ -1,0 +1,119 @@
+---
+title: "DSCI_522_EDA"
+author: "Katie Birchard"
+date: "17/01/2020"
+output: github_document
+---
+
+```{r}
+# Loading necessary packages for EDA
+library(tidyverse)
+library(lubridate)
+
+# Loading in the dataset locally (will change to downloading using script later)
+avocado <- read_csv("avocado.csv")
+
+# Checking column headers
+head(avocado)
+
+# Changing the spread of the data so we have a column for PLU and bag size
+# Note that PLU is the Price Look-Up codes - which are baed on the commodity,
+# variety, and size of the avocado group
+# It looks like the average price was calculated across these PLUs
+avocado2 <- avocado %>% 
+  gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
+  gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`)
+
+# How many data points do we have for each feature?
+length(avocado$X1)
+length(avocado2$X1)
+
+# Creating another column for month
+avocado2$month <- month(as.Date(avocado2$Date), label=TRUE)
+```
+
+```{r}
+# What is the average avocado price per region?
+avocado_by_region <- avocado2 %>%
+  group_by(region) %>%
+  summarize(ave_price = mean(AveragePrice))
+
+# There are many regions here, so it might make sense to group them
+ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("Regions") +
+  ylab("Average Price") +
+  ggtitle("Average Price of Avocados by Region") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90)) 
+```
+
+```{r}
+# What is the average avocado price by type (organic vs. non-organic)
+avocado_by_type <- avocado2 %>%
+  group_by(type) %>%
+  summarize(ave_price = mean(AveragePrice))
+
+ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("Type") +
+  ylab("Average Price") +
+  ggtitle("Average Price of Avocados by Type") +
+  theme_bw()
+```
+
+```{r}
+# What is the average price per month?
+avocado_by_month <- avocado2 %>%
+  group_by(month) %>%
+  summarize(ave_price = mean(AveragePrice))
+
+# Interesting 
+ggplot(avocado_by_month, aes(x=reorder(month, -ave_price), y=ave_price)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("Month") +
+  ylab("Average Price") +
+  ggtitle("Average Price of Avocados by Month") +
+  theme_bw()
+```
+
+```{r}
+# How many of each variety of avocado sells?
+avocado_by_plu <- avocado2 %>%
+  group_by(PLU) %>%
+  summarize(ave_no_sold = mean(no_sold))
+
+# PLU 4770 is not very popular...
+ggplot(avocado_by_plu, aes(x=reorder(PLU, -ave_no_sold), y=ave_no_sold)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("PLU") +
+  ylab("Average Number of Avocados Sold") +
+  ggtitle("Average Number of Avocados Sold by PLU") +
+  theme_bw()
+```
+
+```{r}
+# Do people prefer buying smaller bags, or bigger bags of avocados?
+avocado_by_bag <- avocado2 %>%
+  group_by(bag_size) %>%
+  summarize(ave_bags_sold = mean(bags_sold))
+
+# Turns out smaller bags are better
+ggplot(avocado_by_bag, aes(x=reorder(bag_size, -ave_bags_sold), y=ave_bags_sold)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("PLU") +
+  ylab("Average Number of Bags Sold") +
+  ggtitle("Average Number of Bags Sold by Bag Size") +
+  theme_bw()
+```
+
+```{r}
+# Do people buy their avocados in bags more or individually?
+ggplot(avocado2, aes(y=bags_sold, x=no_sold)) +
+  geom_point(alpha=0.5, colour="darkblue") +
+  ylab("Number of bags of avocados sold") +
+  xlab("Number of avocados sold total") +
+  ggtitle("Are people buying more avocados individually or in bulk?") +
+  theme_bw()
+```
+
