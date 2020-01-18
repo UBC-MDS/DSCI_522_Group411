@@ -9,6 +9,7 @@ output: github_document
 # Loading necessary packages for EDA
 library(tidyverse)
 library(lubridate)
+library(caret)
 
 # Loading in the dataset locally (will change to downloading using script later)
 avocado <- read_csv("avocado.csv")
@@ -24,17 +25,44 @@ avocado2 <- avocado %>%
   gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
   gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`)
 
+# Creating another column for month
+avocado2$month <- month(as.Date(avocado2$Date), label=TRUE)
+
+avocado2$year_month <- as.POSIXct(avocado2$Date)
+avocado2$year_month <- format(avocado2$year_month, "%Y-%m")
+
 # How many data points do we have for each feature?
 length(avocado$X1)
 length(avocado2$X1)
 
-# Creating another column for month
-avocado2$month <- month(as.Date(avocado2$Date), label=TRUE)
+# Must split into test and train data, and only use train data for EDA
+# set a random seed
+set.seed(123)
+
+# First, separate the dataset with average price as the target
+trainIndex_price <- createDataPartition(avocado2$AveragePrice,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+
+priceTrain <- avocado2[trainIndex_price, ]
+priceTest <- avocado2[-trainIndex_price, ]
+
+# Second, separate the dataset with number sold as the target
+trainIndex_sold <- createDataPartition(avocado2$no_sold,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+
+soldTrain <- avocado2[trainIndex_sold, ]
+soldTest <- avocado2[-trainIndex_sold, ]
+
 ```
 
+## What is the average avocado price per region?
+
 ```{r}
-# What is the average avocado price per region?
-avocado_by_region <- avocado2 %>%
+avocado_by_region <- priceTrain %>%
   group_by(region) %>%
   summarize(ave_price = mean(AveragePrice))
 
@@ -48,9 +76,10 @@ ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
   theme(axis.text.x = element_text(angle=90)) 
 ```
 
+## What is the average avocado price by type (organic vs. non-organic)
+
 ```{r}
-# What is the average avocado price by type (organic vs. non-organic)
-avocado_by_type <- avocado2 %>%
+avocado_by_type <- priceTrain %>%
   group_by(type) %>%
   summarize(ave_price = mean(AveragePrice))
 
@@ -62,9 +91,10 @@ ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
   theme_bw()
 ```
 
+## What is the average price per month?
+
 ```{r}
-# What is the average price per month?
-avocado_by_month <- avocado2 %>%
+avocado_by_month <- priceTrain %>%
   group_by(month) %>%
   summarize(ave_price = mean(AveragePrice))
 
@@ -77,9 +107,10 @@ ggplot(avocado_by_month, aes(x=reorder(month, -ave_price), y=ave_price)) +
   theme_bw()
 ```
 
+## How many of each variety of avocado sells?
+
 ```{r}
-# How many of each variety of avocado sells?
-avocado_by_plu <- avocado2 %>%
+avocado_by_plu <- priceTrain %>%
   group_by(PLU) %>%
   summarize(ave_no_sold = mean(no_sold))
 
@@ -92,9 +123,10 @@ ggplot(avocado_by_plu, aes(x=reorder(PLU, -ave_no_sold), y=ave_no_sold)) +
   theme_bw()
 ```
 
+## Do people prefer buying smaller bags, or bigger bags of avocados?
+
 ```{r}
-# Do people prefer buying smaller bags, or bigger bags of avocados?
-avocado_by_bag <- avocado2 %>%
+avocado_by_bag <- priceTrain %>%
   group_by(bag_size) %>%
   summarize(ave_bags_sold = mean(bags_sold))
 
@@ -107,9 +139,10 @@ ggplot(avocado_by_bag, aes(x=reorder(bag_size, -ave_bags_sold), y=ave_bags_sold)
   theme_bw()
 ```
 
+## Do people buy their avocados in bags more or individually?
+
 ```{r}
-# Do people buy their avocados in bags more or individually?
-ggplot(avocado2, aes(y=bags_sold, x=no_sold)) +
+ggplot(priceTrain, aes(y=bags_sold, x=no_sold)) +
   geom_point(alpha=0.5, colour="darkblue") +
   ylab("Number of bags of avocados sold") +
   xlab("Number of avocados sold total") +
@@ -117,3 +150,42 @@ ggplot(avocado2, aes(y=bags_sold, x=no_sold)) +
   theme_bw()
 ```
 
+## Does average price correlate with how many avocados are sold per week?
+
+```{r}
+ggplot(priceTrain, aes(x=AveragePrice, y=no_sold)) +
+  geom_point(alpha=0.5, colour="darkblue") +
+  xlab("Average Price") +
+  ylab("Number of avocados sold every week") +
+  ggtitle("Is Average Avocado Price related to Number Sold?") +
+  theme_bw()
+```
+
+## What about by month?
+
+```{r}
+avocado_by_month2 <- priceTrain %>%
+  group_by(year_month) %>%
+  summarize(ave_no_sold = mean(no_sold),
+            ave_price = mean(AveragePrice),
+            month = first(month),
+            region = first(region))
+
+ggplot(avocado_by_month2, aes(x=ave_price, y=ave_no_sold, colour=month)) +
+  geom_point(alpha=0.8) +
+  xlab("Average Price") +
+  ylab("Number of avocados sold every month") +
+  ggtitle("Is Average Avocado Price related to Number Sold?") +
+  theme_bw()
+```
+
+```{r}
+
+ggplot(avocado_by_month2, aes(x=year_month, y=ave_price)) +
+  geom_point(alpha=0.5, colour="darkblue") +
+  xlab("Year-Month") +
+  ylab("Average Price") +
+  ggtitle("Average Avocado Price Over Time")
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90)) 
+```
