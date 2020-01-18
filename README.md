@@ -18,13 +18,13 @@ Our goal is to find the feature that most strongly predicts the average price of
 
 To answer our research question, we will first need to determine our target and features. Our target will be `average price` and our features will be `type`, `region`, `date`, `total volume`, `4046`, `4225`, `4770`, `Total Bags`, `Small Bags`, `Large Bags`, and `XLarge Bags`.
 
-Next, we will need to determine if the features are correlated with the target. We will do this by fitting an additive linear model. We will then conduct a hypothesis test and interpret the p-values to determine if the features are significant.
+Next, we will need to determine if the features are correlated with the target. We will do this by fitting an additive linear model. We will then conduct a hypothesis test and interpret the p-values to determine if the features are significant. This hypothesis test will also serve as a validation for the feature importances computed in the next step.
 
-Once we have confirmed that the features are correlated with the target, we will fit a random forest model. We will then compute the feature importance using the `feature_importances_` attribute.
+Once we have confirmed that the features are correlated with the target, we will fit a random forest model. We will then compute the feature importances using the `feature_importances_` attribute.
 
 ## Exploratory Data Analysis
 
 
 ## Results
 
-To communicate our results, we will create a bar chart ranking the features by importance, from most to least important. The plot will have the features on the x-axis and the importance score on the y-axis.
+To communicate our results, we will create a bar chart ranking the features by importance, from most to least important. The plot will have the features on the x-axis and the importance values on the y-axis.
