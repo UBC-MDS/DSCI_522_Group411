@@ -27,4 +27,4 @@ Once we have confirmed that the features are correlated with the target, we will
 
 ## Results
 
-To communicate our results, we will create a bar chart ranking the features by importance. The plot will have the features on the x-axis and the importance score on the y-axis.
+To communicate our results, we will create a bar chart ranking the features by importance, from most to least important. The plot will have the features on the x-axis and the importance score on the y-axis.
