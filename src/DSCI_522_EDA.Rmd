@@ -1,0 +1,251 @@
+---
+title: "DSCI 522 Exploratory Data Analysis"
+author: "Katie Birchard, Andrea Lee, Ryan Homer"
+output: github_document
+---
+
+## **Research Question**: What is the strongest predictor of avocado prices in the United States?
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+
+# Loading necessary packages for EDA
+library(tidyverse)
+library(lubridate)
+library(caret)
+library(knitr)
+library(ggpubr)
+
+# Loading in the dataset locally (will change to downloading using script later)
+avocado <- read_csv("avocado.csv")
+```
+
+
+```{r checking packaging and looking at top and bottom of data, include=FALSE}
+# Check the number of rows
+nrow(avocado)
+
+# Check the number of columns
+ncol(avocado)
+
+# Check the structure of the dataset
+# Here we can see the headers and type of each potential feature
+str(avocado)
+
+# Looking at the top of the data
+head(avocado[, c(2:7)])
+head(avocado[, c(8:14)])
+
+# Looking at the bottom of the data
+tail(avocado[, c(2:7)])
+tail(avocado[, c(8:14)])
+
+# How many regions in the US are included in the dataset?
+unique(avocado$region)
+table(avocado$region)
+# There are 54 unique regions, each with 338 observations
+
+#We want to make sure that the data is consistent. For instance, for this dataset we want to make #sure that we have an equal number of observations for each region.
+
+# How many types of avocado are there?
+unique(avocado$type)
+table(avocado$type)
+# Looks like there are 3 more conventional observations than organic
+```
+
+The dataset we chose for this project was compiled by the Hass Avocado Board using retail scan data, and was retrieved from Kaggle at this [link](https://www.kaggle.com/neuromusic/avocado-prices?fbclid=IwAR35kKP-Fz0yYZj-QqsZ6iNDSVnLBncxTOG3Cce3F5EupQTVHo85ecn7SBo). The dataset includes 23 columns and 18,249 rows of data. Most of the columns/features are of type numeric, except for `region` and `type`, which are categorical, and `Date`, which is a date-time object. The data is ordered by year of `Date` (with months descending), starting in 2015 and ending in 2018. Each row of the dataframe represents a week in avocado sales, including information about the average price of an avocado for each region in the United States, number of bags sold, number of each PLU code sold, total volume sold, number of bags sold, and number of type sold (organic vs conventional). 
+
+Preliminary exploration of the dataset has given some insight to the potential features of our model. First, it looks like the PLU code `4770` does not have as many examples as the other PLU codes, which could be due to missing data or rarity of that avocado variety. It also looks like `XLarge Bags` might not be sold everywhere, considering that none were sold in either the head or the tail of the data. We also want to make sure that each categorical variable is represented equally in the dataset. It appears that 54 unique regions are represented in the dataset, each with 338 observations. In addition, there are only 2 types of avocado, with `conventional` having 9126 observations and `organic` having 9123 observations. This slight difference between types is minor, and so should not affect analysis.
+
+Since we want to ensure the prices in this dataset are relatively accurate, we compared the average prices in this dataset to another [study](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) published by M. Shahbandeh in February 2019. According to the dataset we selected, the average price of avocados from 2015 to 2018 was \$1.41.
+
+```{r validating with external data sources}
+broom::tidy(summary(avocado$AveragePrice))
+```
+
+According to Shahbandeh's study, the average price of avocados in 2015 was \$1.03, in 2016 was \$1.04, in 2017 was \$1.28, and in 2018 was \$1.10. Thus, the average price from our dataset is slightly higher compared to Shahbandeh's study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
+
+```{r preliminary data wrangling, include=FALSE}
+# Changing the spread of the data so we have a column for PLU and bag size
+# Note that PLU is the Price Look-Up codes - which are baed on the commodity,
+# variety, and size of the avocado group
+# It looks like the average price was calculated across these PLUs
+avocado2 <- avocado %>% 
+  gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
+  gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`)
+
+# Creating another column for month
+avocado2$month <- month(as.Date(avocado2$Date), label=TRUE)
+
+avocado2$year_month <- as.POSIXct(avocado2$Date)
+avocado2$year_month <- format(avocado2$year_month, "%Y-%m")
+
+# How many data points do we have for each feature?
+length(avocado$X1)
+length(avocado2$X1)
+```
+
+## Splitting the data into train and test sets 
+
+Before we begin visualizing the data, we will split the dataset into 80% training data and 20% test data. The test data will not be used for the exploratory dataset, and will only be used for testing the finalized model at the end of the project. 
+
+```{r}
+# Must split into test and train data, and only use train data for EDA
+# set a random seed
+set.seed(123)
+
+# First, separate the dataset with average price as the target
+trainIndex_price <- createDataPartition(avocado2$AveragePrice,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+
+priceTrain <- avocado2[trainIndex_price, ]
+priceTest <- avocado2[-trainIndex_price, ]
+
+# Second, separate the dataset with number sold as the target
+trainIndex_sold <- createDataPartition(avocado2$no_sold,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+
+soldTrain <- avocado2[trainIndex_sold, ]
+soldTest <- avocado2[-trainIndex_sold, ]
+
+```
+
+## Exploratory analysis on the training dataset 
+
+We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, month, and number sold each week against the average price to visualize the relationships between these variables (figure 1). From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. We can also clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados. When we observe the monthly trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months. Finally, the number of avocados sold each week may also have play a role in avocado prices. However, since avocado prices may be predicting the number sold in this relationship, the number sold may not be the best feature to use in our model. 
+
+```{r}
+### What is the average avocado price per region?
+avocado_by_region <- priceTrain %>%
+  group_by(region) %>%
+  summarize(ave_price = mean(AveragePrice))
+
+# There are many regions here, so it might make sense to group them
+price_per_region <- ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("Regions") +
+  ylab("Average Price") +
+  ggtitle("Region") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90, size = 5),
+        axis.title.x = element_blank()) 
+
+# What is the average avocado price by type (organic vs. non-organic)
+avocado_by_type <- priceTrain %>%
+  group_by(type) %>%
+  summarize(ave_price = mean(AveragePrice))
+
+price_per_type <- ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("Type") +
+  ylab("Average Price") +
+  ggtitle("Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+# What is the average price per month?
+avocado_by_month <- priceTrain %>%
+  group_by(month) %>%
+  summarize(ave_price = mean(AveragePrice))
+
+price_per_month <- ggplot(avocado_by_month, aes(x=month, y=ave_price)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("Month") +
+  ylab("Average Price") +
+  ggtitle("Month") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+# Does average price correlate with number total sold?
+price_per_sold <- ggplot(priceTrain, aes(x=no_sold, y=AveragePrice)) +
+  geom_point(alpha=0.2, colour="darkblue") +
+  ylab("Average Price") +
+  xlab("Number Sold") +
+  ggtitle("Number sold each week") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+gridExtra::grid.arrange(price_per_region, price_per_type,
+                        price_per_month, price_per_sold,
+                        ncol=2, nrow=2)
+```
+
+**Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week. 
+
+```{r other exploratory graphs, include=FALSE}
+# How many of each variety of avocado sells?
+avocado_by_plu <- priceTrain %>%
+  group_by(PLU) %>%
+  summarize(ave_no_sold = mean(no_sold))
+
+# PLU 4770 is not very popular...
+ggplot(avocado_by_plu, aes(x=reorder(PLU, -ave_no_sold), y=ave_no_sold)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("PLU") +
+  ylab("Average Number of Avocados Sold") +
+  ggtitle("Average Number of Avocados Sold by PLU") +
+  theme_bw()
+
+# Do people prefer buying smaller bags, or bigger bags of avocados?
+avocado_by_bag <- priceTrain %>%
+  group_by(bag_size) %>%
+  summarize(ave_bags_sold = mean(bags_sold))
+
+# Turns out smaller bags are better
+ggplot(avocado_by_bag, aes(x=reorder(bag_size, -ave_bags_sold), y=ave_bags_sold)) +
+  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  xlab("PLU") +
+  ylab("Average Number of Bags Sold") +
+  ggtitle("Average Number of Bags Sold by Bag Size") +
+  theme_bw()
+
+### Do people buy their avocados in bags more or individually?
+
+ggplot(priceTrain, aes(y=bags_sold, x=no_sold)) +
+  geom_point(alpha=0.5, colour="darkblue") +
+  ylab("Number of bags of avocados sold") +
+  xlab("Number of avocados sold total") +
+  ggtitle("Are people buying more avocados individually or in bulk?") +
+  theme_bw()
+```
+
+```{r, include=FALSE}
+avocado_by_month2 <- priceTrain %>%
+  group_by(year_month) %>%
+  summarize(ave_no_sold = mean(no_sold),
+            ave_price = mean(AveragePrice),
+            month = first(month),
+            region = first(region))
+
+price_sold_month <- ggplot(avocado_by_month2, aes(x=ave_price, y=ave_no_sold, colour=month)) +
+  geom_point(alpha=0.8) +
+  xlab("Average Price") +
+  ylab("Number of avocados sold every month") +
+  ggtitle("Is Average Avocado Price related to Number Sold?") +
+  theme_bw()
+```
+
+We also plotted the average avocado price over time to get an idea of how the price has fluctuated and whether there were any outlier months in the dataset (figure 2). It appears that there was a sharp incline in avocado prices in August-October of 2017, which may influence our analysis.
+
+```{r}
+
+ggplot(avocado_by_month2, aes(x=year_month, y=ave_price)) +
+  geom_point(alpha=0.5, colour="darkblue") +
+  xlab("Year-Month") +
+  ylab("Average Price") +
+  #ggtitle("Average Avocado Price Over Time") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90)) 
+```
+
+**Figure 2.** Average number of avocados sold per week between 2015 and 2018.
+
+## References
+Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
+
+Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) 
