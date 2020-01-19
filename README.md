@@ -20,9 +20,11 @@ To answer our research question, we will first need to determine our target and 
 
 Next, we will need to determine if the features are correlated with the target. We will do this by fitting an additive linear model. We will then conduct a hypothesis test and interpret the p-values and confidence intervals to determine which features are significant. This hypothesis test will also serve as a validation for the feature importances computed in the last step.
 
-To get a better understanding of our features, we will also test for multicollinearity by computing their variance inflation factors. We will then check for and remove any redundancies between features. This will allow us to build a more accurate model.
+To get a better understanding of our features, we will also test for multicollinearity by computing their variance inflation factors. We will then check for and remove any redundancies between features. This will allow us to build a more accurate model in the next step.
 
-Once we have confirmed that the features are correlated with the target, we will fit a random forest regression model. We will then compute the feature importances using the `feature_importances_` attribute.
+Once we have confirmed which features are correlated with the target and are non-redundant, we will fit a Random Forest Regressor model. We will then compute the feature importances using the `feature_importances_` attribute. This attribute will return an importance value for each feature that indicates how important that feature is at explaining the target (the higher the value, the more important the feature is). This importance value is based on the decrease in impurity measure. The model calculates the decrease in impurity by computing how much each feature contributes to decreasing the weighted impurity. Then, the model averages each feature's impurity decrease over the trees.
+
+Lastly, we will plot our results in order to find out which feature is the strongest predictor of avocado prices.
 
 ## Exploratory Data Analysis
 
