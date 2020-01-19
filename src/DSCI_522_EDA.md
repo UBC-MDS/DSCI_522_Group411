@@ -41,7 +41,7 @@ selected, the average price of avocados from 2015 to 2018 was $1.41.
     ##     <dbl> <dbl>  <dbl> <dbl> <dbl>   <dbl>
     ## 1    0.44   1.1   1.37  1.41  1.66    3.25
 
-Table 1. Summary statistics for the average price of avocados in the
+**Table 1.** Summary statistics for the average price of avocados in the
 United States.
 
 According to Shahbandeh’s study, the average price of avocados in 2015
