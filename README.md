@@ -6,7 +6,7 @@
 
 ## Dataset
 
-We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromusic/avocado-prices?fbclid=IwAR35kKP-Fz0yYZj-QqsZ6iNDSVnLBncxTOG3Cce3F5EupQTVHo85ecn7SBo) retrieved from Kaggle and compiled by the Hass Avocado Board using retail scan data. The dataset consists of approximately 18,000 records over 4 years (2015 - 2018). The dataset contains information about avocado prices, PLU numbers, types, region purchased, volume sold, bags sold, and date sold.
+We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromusic/avocado-prices?fbclid=IwAR35kKP-Fz0yYZj-QqsZ6iNDSVnLBncxTOG3Cce3F5EupQTVHo85ecn7SBo) retrieved from Kaggle and compiled by the Hass Avocado Board using retail scan data [1]. The dataset consists of approximately 18,000 records over 4 years (2015 - 2018). The dataset contains information about avocado prices, PLU numbers, types, region purchased, volume sold, bags sold, and date sold.
 
 ## Research Question
 
@@ -30,3 +30,6 @@ Once we have confirmed which features are correlated with the target and are non
 ## Results
 
 To communicate our results, we will create a bar chart ranking the features by importance, from most to least important. The plot will have the features on the x-axis and the importance values on the y-axis.
+
+## References
+[1] Kiggins, Justin, Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets, May 2018, [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
