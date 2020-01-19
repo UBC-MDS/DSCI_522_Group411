@@ -26,11 +26,13 @@ Once we have confirmed that the features are correlated with the target, we will
 
 ## Exploratory Data Analysis
 
-Before we can perform our hypotheses tests and create our random forest regression model, we will partition the complete dataset into an 80% training set and a 20% test set. We will then perform exploratory data analysis on the training set to assess the validity of our dataset, as well as assess possible correlations between the features and average avocado prices. To ensure the validity of our dataset, we will include a table of summary statistics and compare these values to a previous study looking at average avocado prices over a similar time period. To get an idea of which features may be of importance, we will include bar plots depicting the relationship between month and price, type and price, and region and price. We will also display a plot depicting how avocado prices have varied by week between 2015 and 2018.
+Before we can perform our hypotheses tests and create our random forest regression model, we will partition the complete dataset into an 80% training set and a 20% test set. We will then perform exploratory data analysis on the training set to assess the validity of our dataset, as well as assess possible correlations between the features and average avocado prices. To ensure the validity of our dataset, we will include a table of summary statistics and compare these values to a previous study looking at average avocado prices over a similar time period [2]. To get an idea of which features may be of importance, we will include bar plots depicting the relationship between month and price, type and price, and region and price. We will also display a plot depicting how avocado prices have varied by week between 2015 and 2018.
 
 ## Results
 
 To communicate our results, we will create a bar chart ranking the features by importance, from most to least important. The plot will have the features on the x-axis and the importance values on the y-axis.
 
 ## References
-[1] Kiggins, Justin, Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets, May 2018, [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
+[1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
+
+[2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) 
