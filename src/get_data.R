@@ -1,4 +1,4 @@
-# author: Ryan Homer
+# authors: Katie Birchard, Ryan Homer, Andrea Lee
 # date: 2020-01-18
 #
 "Fetch a dataset to a specified path.
@@ -19,6 +19,12 @@ main <- function(opt) {
   # so no need to use `is.null`
   if (!url.exists(opt$url)) {
     stop("Unable to access URL!")
+  }
+
+  # make sure path exists
+  path <- dirname(opt$destfile)
+  if (!dir.exists(path)) {
+    dir.create(path, recursive = TRUE)
   }
 
   download.file(opt$url, destfile = opt$destfile, quiet = opt$quiet)
