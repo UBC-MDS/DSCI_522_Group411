@@ -17,7 +17,8 @@ library(caret)
 library(knitr)
 library(ggpubr)
 
-# Loading in the dataset. See README for how to download dataset
+# Loading in the dataset.
+# (See README for how to download dataset.)
 avocado <- read_csv("../data/avocado.csv")
 ```
 
