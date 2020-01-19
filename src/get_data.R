@@ -21,6 +21,12 @@ main <- function(opt) {
     stop("Unable to access URL!")
   }
 
+  # make sure path exists
+  path <- dirname(opt$destfile)
+  if (!dir.exists(path)) {
+    dir.create(path, recursive = TRUE)
+  }
+
   download.file(opt$url, destfile = opt$destfile, quiet = opt$quiet)
 }
 
