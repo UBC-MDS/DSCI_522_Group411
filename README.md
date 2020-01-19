@@ -16,7 +16,7 @@ Our goal is to find the feature that most strongly predicts the average price of
 
 ## Analysis
 
-To answer our research question, we will first need to determine our target and features. Our target will be `average price` and our features will be `type`, `region`, `date`, `total volume`, `4046`, `4225`, `4770`, `Total Bags`, `Small Bags`, `Large Bags`, and `XLarge Bags`. Our features may be subject to change after data wrangling is performed.
+To answer our research question, we will first need to determine our target and features. Our target will be `average price` and our features will be `type`, `region`, `date`, `total volume`, `4046`, `4225`, `4770`, `Total Bags`, `Small Bags`, `Large Bags`, and `XLarge Bags`. Our features may be subject to change after exploratory data analysis and data wrangling is performed.
 
 Next, we will need to determine if the features are correlated with the target. We will do this by fitting an additive linear model. We will then conduct a hypothesis test and interpret the p-values to determine which features are significant. This hypothesis test will also serve as a validation for the feature importances computed in the last step. 
 
