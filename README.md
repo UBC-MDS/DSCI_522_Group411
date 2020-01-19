@@ -48,6 +48,7 @@ tidyverse|1.2.1
 lubridate|1.7.4
 caret|6.0-85
 knitr|1.25
+ggpubr|0.2.4
 
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
