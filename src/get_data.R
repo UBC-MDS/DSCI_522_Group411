@@ -1,4 +1,4 @@
-# author: Ryan Homer
+# authors: Katie Birchard, Ryan Homer, Andrea Lee
 # date: 2020-01-18
 #
 "Fetch a dataset to a specified path.

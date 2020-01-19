@@ -32,6 +32,23 @@ Before we can perform our hypotheses tests and create our random forest regressi
 
 To communicate our results, we will create a bar chart ranking the features by importance, from most to least important. The plot will have the features on the x-axis and the importance values on the y-axis.
 
+## Usage
+
+To replicate this analysis, clone this repository and make sure that the dependencies below are installed. Then, run the following in your terminal from the root directory of the project.
+
+```
+Rscript src/get_data.R --url=https://raw.githubusercontent.com/ryanhomer/dsci522-group411-data/master/avocado.csv --destfile=data/avocado.csv
+Rscript -e "rmarkdown::render('DSCI_522_EDA.Rmd')"
+```
+
+### R Package Dependencies
+Package Name|Version
+-|-
+tidyverse|1.2.1
+lubridate|1.7.4
+caret|6.0-85
+knitr|1.25
+
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
 
