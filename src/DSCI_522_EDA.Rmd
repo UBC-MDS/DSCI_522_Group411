@@ -64,6 +64,8 @@ Since we want to ensure the prices in this dataset are relatively accurate, we c
 broom::tidy(summary(avocado$AveragePrice))
 ```
 
+Table 1. Summary statistics for the average price of avocados in the United States. 
+
 According to Shahbandeh's study, the average price of avocados in 2015 was \$1.03, in 2016 was \$1.04, in 2017 was \$1.28, and in 2018 was \$1.10. Thus, the average price from our dataset is slightly higher compared to Shahbandeh's study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
 
 ```{r preliminary data wrangling, include=FALSE}
