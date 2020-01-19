@@ -15,8 +15,9 @@ library(tidyverse)
 library(lubridate)
 library(caret)
 library(knitr)
+library(ggpubr)
 
-# Loading in the dataset locally (will change to downloading using script later)
+# Loading in the dataset 
 avocado <- read_csv("avocado.csv")
 ```
 
@@ -62,6 +63,8 @@ Since we want to ensure the prices in this dataset are relatively accurate, we c
 ```{r validating with external data sources}
 broom::tidy(summary(avocado$AveragePrice))
 ```
+
+**Table 1.** Summary statistics for the average price of avocados in the United States. 
 
 According to Shahbandeh's study, the average price of avocados in 2015 was \$1.03, in 2016 was \$1.04, in 2017 was \$1.28, and in 2018 was \$1.10. Thus, the average price from our dataset is slightly higher compared to Shahbandeh's study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
 
@@ -116,57 +119,68 @@ soldTest <- avocado2[-trainIndex_sold, ]
 
 ## Exploratory analysis on the training dataset 
 
-### What is the average avocado price per region?
+We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, month, and number sold each week against the average price to visualize the relationships between these variables (figure 1). From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. We can also clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados. When we observe the monthly trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months. Finally, the number of avocados sold each week may also have play a role in avocado prices. However, since avocado prices may be predicting the number sold in this relationship, the number sold may not be the best feature to use in our model. 
 
 ```{r}
+### What is the average avocado price per region?
 avocado_by_region <- priceTrain %>%
   group_by(region) %>%
   summarize(ave_price = mean(AveragePrice))
 
 # There are many regions here, so it might make sense to group them
-ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
+price_per_region <- ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
   geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
   xlab("Regions") +
   ylab("Average Price") +
-  ggtitle("Average Price of Avocados by Region") +
+  ggtitle("Region") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle=90)) 
-```
+  theme(axis.text.x = element_text(angle=90, size = 5),
+        axis.title.x = element_blank()) 
 
-### What is the average avocado price by type (organic vs. non-organic)
-
-```{r}
+# What is the average avocado price by type (organic vs. non-organic)
 avocado_by_type <- priceTrain %>%
   group_by(type) %>%
   summarize(ave_price = mean(AveragePrice))
 
-ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
+price_per_type <- ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
   geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
   xlab("Type") +
   ylab("Average Price") +
-  ggtitle("Average Price of Avocados by Type") +
-  theme_bw()
-```
+  ggtitle("Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
 
-### What is the average price per month?
-
-```{r}
+# What is the average price per month?
 avocado_by_month <- priceTrain %>%
   group_by(month) %>%
   summarize(ave_price = mean(AveragePrice))
 
-# Interesting 
-ggplot(avocado_by_month, aes(x=reorder(month, -ave_price), y=ave_price)) +
+price_per_month <- ggplot(avocado_by_month, aes(x=month, y=ave_price)) +
   geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
   xlab("Month") +
   ylab("Average Price") +
-  ggtitle("Average Price of Avocados by Month") +
-  theme_bw()
+  ggtitle("Month") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+# Does average price correlate with number total sold?
+price_per_sold <- ggplot(priceTrain, aes(x=no_sold, y=AveragePrice)) +
+  geom_point(alpha=0.2, colour="darkblue") +
+  ylab("Average Price") +
+  xlab("Number Sold") +
+  ggtitle("Number sold each week") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+gridExtra::grid.arrange(price_per_region, price_per_type,
+                        price_per_month, price_per_sold,
+                        ncol=2, nrow=2)
 ```
 
-### How many of each variety of avocado sells?
+**Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week. 
 
-```{r}
+```{r other exploratory graphs, include=FALSE}
+# How many of each variety of avocado sells?
 avocado_by_plu <- priceTrain %>%
   group_by(PLU) %>%
   summarize(ave_no_sold = mean(no_sold))
@@ -178,11 +192,8 @@ ggplot(avocado_by_plu, aes(x=reorder(PLU, -ave_no_sold), y=ave_no_sold)) +
   ylab("Average Number of Avocados Sold") +
   ggtitle("Average Number of Avocados Sold by PLU") +
   theme_bw()
-```
 
-### Do people prefer buying smaller bags, or bigger bags of avocados?
-
-```{r}
+# Do people prefer buying smaller bags, or bigger bags of avocados?
 avocado_by_bag <- priceTrain %>%
   group_by(bag_size) %>%
   summarize(ave_bags_sold = mean(bags_sold))
@@ -194,11 +205,9 @@ ggplot(avocado_by_bag, aes(x=reorder(bag_size, -ave_bags_sold), y=ave_bags_sold)
   ylab("Average Number of Bags Sold") +
   ggtitle("Average Number of Bags Sold by Bag Size") +
   theme_bw()
-```
 
 ### Do people buy their avocados in bags more or individually?
 
-```{r}
 ggplot(priceTrain, aes(y=bags_sold, x=no_sold)) +
   geom_point(alpha=0.5, colour="darkblue") +
   ylab("Number of bags of avocados sold") +
@@ -207,20 +216,7 @@ ggplot(priceTrain, aes(y=bags_sold, x=no_sold)) +
   theme_bw()
 ```
 
-### Does average price correlate with how many avocados are sold per week?
-
-```{r}
-ggplot(priceTrain, aes(x=AveragePrice, y=no_sold)) +
-  geom_point(alpha=0.5, colour="darkblue") +
-  xlab("Average Price") +
-  ylab("Number of avocados sold every week") +
-  ggtitle("Is Average Avocado Price related to Number Sold?") +
-  theme_bw()
-```
-
-### What about by month?
-
-```{r}
+```{r, include=FALSE}
 avocado_by_month2 <- priceTrain %>%
   group_by(year_month) %>%
   summarize(ave_no_sold = mean(no_sold),
@@ -228,7 +224,7 @@ avocado_by_month2 <- priceTrain %>%
             month = first(month),
             region = first(region))
 
-ggplot(avocado_by_month2, aes(x=ave_price, y=ave_no_sold, colour=month)) +
+price_sold_month <- ggplot(avocado_by_month2, aes(x=ave_price, y=ave_no_sold, colour=month)) +
   geom_point(alpha=0.8) +
   xlab("Average Price") +
   ylab("Number of avocados sold every month") +
@@ -236,16 +232,20 @@ ggplot(avocado_by_month2, aes(x=ave_price, y=ave_no_sold, colour=month)) +
   theme_bw()
 ```
 
+We also plotted the average avocado price over time to get an idea of how the price has fluctuated and whether there were any outlier months in the dataset (figure 2). It appears that there was a sharp incline in avocado prices in August-October of 2017, which may influence our analysis.
+
 ```{r}
 
 ggplot(avocado_by_month2, aes(x=year_month, y=ave_price)) +
   geom_point(alpha=0.5, colour="darkblue") +
   xlab("Year-Month") +
   ylab("Average Price") +
-  ggtitle("Average Avocado Price Over Time") +
+  #ggtitle("Average Avocado Price Over Time") +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90)) 
 ```
+
+**Figure 2.** Average number of avocados sold per week between 2015 and 2018.
 
 ## References
 Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).

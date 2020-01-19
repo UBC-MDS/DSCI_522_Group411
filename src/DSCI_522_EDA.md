@@ -41,6 +41,9 @@ selected, the average price of avocados from 2015 to 2018 was $1.41.
     ##     <dbl> <dbl>  <dbl> <dbl> <dbl>   <dbl>
     ## 1    0.44   1.1   1.37  1.41  1.66    3.25
 
+**Table 1.** Summary statistics for the average price of avocados in the
+United States.
+
 According to Shahbandeh’s study, the average price of avocados in 2015
 was $1.03, in 2016 was $1.04, in 2017 was $1.28, and in 2018 was $1.10.
 Thus, the average price from our dataset is slightly higher compared to
@@ -54,44 +57,41 @@ this dataset are likely accurate.
 Before we begin visualizing the data, we will split the dataset into 80%
 training data and 20% test data. The test data will not be used for the
 exploratory dataset, and will only be used for testing the finalized
-model at the end of the
-project.
+model at the end of the project.
 
 ## Exploratory analysis on the training dataset
 
-### What is the average avocado price per region?
+We wanted to determine which features might be the most important to
+include in our random forest regression model. Therefore we plotted
+region, type, month, and number sold each week against the average price
+to visualize the relationships between these variables (figure 1). From
+looking at these relationships, we can see that some regions, such as
+Hartford-Springfield and San Francisco, have higher avocado prices than
+other regions, such as Houston. We can also clearly see (and we may have
+already predicted from our own experience) that organic avocados are
+likely more expensive than non-organic avocados. When we observe the
+monthly trend of avocado prices, we can see that perhaps avocados are
+most expensive in the fall months, and least expensive during the winter
+months. Finally, the number of avocados sold each week may also have
+play a role in avocado prices. However, since avocado prices may be
+predicting the number sold in this relationship, the number sold may not
+be the best feature to use in our model.
 
 ![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-### What is the average avocado price by type (organic vs. non-organic)
+**Figure 1.** Average price of avocados in the United States by region,
+type, month, and number of total avocados sold each week.
 
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-
-### What is the average price per month?
+We also plotted the average avocado price over time to get an idea of
+how the price has fluctuated and whether there were any outlier months
+in the dataset (figure 2). It appears that there was a sharp incline in
+avocado prices in August-October of 2017, which may influence our
+analysis.
 
 ![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-### How many of each variety of avocado sells?
-
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
-
-### Do people prefer buying smaller bags, or bigger bags of avocados?
-
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
-
-### Do people buy their avocados in bags more or individually?
-
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
-
-### Does average price correlate with how many avocados are sold per week?
-
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-
-### What about by month?
-
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
-
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+**Figure 2.** Average number of avocados sold per week between 2015 and
+2018.
 
 ## References
 
