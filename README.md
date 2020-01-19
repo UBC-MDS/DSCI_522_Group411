@@ -12,15 +12,17 @@ We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromu
 
 We will be answering the research question: **What is the strongest predictor of avocado prices?**
 
-Our goal is to find the feature that most strongly predicts the average price of avocados. A natural inferential sub-question would be to first determine if any of the features correlate with avocado prices. From our results, we can also compute a rank of features by importance.
+Our goal is to find the feature that most strongly predicts the average price of avocados. A natural inferential sub-question would be to first determine if any of the features correlate with avocado prices and if there is any multicollinearity among the features. From our results, we can also compute a rank of features by importance.
 
 ## Analysis
 
-To answer our research question, we will first need to determine our target and features. Our target will be `average price` and our features will be `type`, `region`, `date`, `total volume`, `4046`, `4225`, `4770`, `Total Bags`, `Small Bags`, `Large Bags`, and `XLarge Bags`.
+To answer our research question, we will first need to determine our target and features. Our target will be `average price` and our features will be `type`, `region`, `date`, `total volume`, `4046`, `4225`, `4770`, `Total Bags`, `Small Bags`, `Large Bags`, and `XLarge Bags`. Our features may be subject to change after data wrangling is performed.
 
-Next, we will need to determine if the features are correlated with the target. We will do this by fitting an additive linear model. We will then conduct a hypothesis test and interpret the p-values to determine if the features are significant. This hypothesis test will also serve as a validation for the feature importances computed in the next step.
+Next, we will need to determine if the features are correlated with the target. We will do this by fitting an additive linear model. We will then conduct a hypothesis test and interpret the p-values to determine which features are significant. This hypothesis test will also serve as a validation for the feature importances computed in the last step. 
 
-Once we have confirmed that the features are correlated with the target, we will fit a random forest model. We will then compute the feature importances using the `feature_importances_` attribute.
+To get a better understanding of our features, we will also test for multicolinearity by computing their variance inflation factors. We will then check for and remove any redundancies between features. This will allow us to build a more accurate model in the next step.
+
+Once we have confirmed which features are correlated with the target and are non-redundant, we will fit a random forest model using these features. We will then compute the feature importances using the `feature_importances_` attribute.
 
 ## Exploratory Data Analysis
 
