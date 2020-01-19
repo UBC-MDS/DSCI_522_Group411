@@ -92,3 +92,13 @@ project.
 ![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+## References
+
+Kiggins, J. “Avocado Prices: Historical data on avocado prices and sales
+volume in multiple US markets.” May 2018. [Web
+Link](https://www.kaggle.com/neuromusic/avocado-prices).
+
+Shahbandeh, M. “Average sales price of avocados in the U.S. 2012-2018.”
+February 2019. [Web
+Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/)

@@ -246,3 +246,8 @@ ggplot(avocado_by_month2, aes(x=year_month, y=ave_price)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90)) 
 ```
+
+## References
+Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
+
+Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) 
