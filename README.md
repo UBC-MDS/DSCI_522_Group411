@@ -55,4 +55,4 @@ ggpubr|0.2.4
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
 
-[2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/)
+[2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/).
