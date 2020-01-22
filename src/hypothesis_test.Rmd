@@ -1,0 +1,88 @@
+---
+title: "DSCI 522 Hypothesis Test"
+author: "Katie Birchard, Ryan Homer, Andrea Lee"
+output: github_document
+---
+
+## Hypothesis Test: What is the strongest predictor of avocado prices in the United States?
+To conduct a hypothesis test, we will fit an additive linear model and interpret the p-values to determine which features are significant.
+
+The features we will be testing are:
+
+- total_volume: total volume of avocados sold
+- total_bags: total number of bags of avocados sold
+- type: type of avocado sold (conventional or organic)
+- region: U.S. state avocado was sold in
+- PLU: price lookup code of avocado (4046 small avocado, 4225 large avocado, 4770 x-large avocado)
+- bag_size: size of bag of avocados sold (small, large, x-large)
+- month: month avocado was sold in
+
+The target is:
+
+- average_price: average price of avocado sold
+
+We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+
+# Loading necessary packages
+library(tidyverse)
+library(tidyr)
+library(broom)
+library(lubridate)
+library(caret)
+library(knitr)
+```
+
+```{r load data, include=FALSE}
+# Loading in the dataset.
+# (See README for how to download dataset.)
+avocado <- read_csv("avocado.csv")
+```
+
+```{r preliminary data wrangling, include=FALSE}
+avocado2 <- avocado %>% 
+  gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
+  gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`) %>% 
+  mutate(type = unclass(as.factor(type)),
+         region = unclass(as.factor(region)),
+         PLU = as.double(PLU),
+         bag_size = unclass(as.factor(bag_size)),
+         month = month(as.Date(Date)))%>%
+  rename(total_volume = `Total Volume`,
+         total_bags = `Total Bags`,
+         average_price = AveragePrice) %>% 
+  select(-'X1', -'year', -'Date')
+```
+
+```{r split data}
+set.seed(123)
+
+trainIndex_price <- createDataPartition(avocado2$average_price,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+priceTrain <- avocado2[trainIndex_price, ]
+priceTest <- avocado2[-trainIndex_price, ]
+
+trainIndex_sold <- createDataPartition(avocado2$no_sold,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+soldTrain <- avocado2[trainIndex_sold, ]
+soldTest <- avocado2[-trainIndex_sold, ]
+```
+
+```{r hypothesis test}
+tidy(lm(average_price ~ total_volume + total_bags + type + region + PLU + bag_size + month, data = priceTrain))
+```
+
+At a significance level of 0.05, it appears that the following features are significant as their p-values are less than the significance level:
+
+- total_volume
+- total_bags
+- type
+- month
+
+It is surprising that the features region and PLU are not significant at a significance level of 0.05. However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
