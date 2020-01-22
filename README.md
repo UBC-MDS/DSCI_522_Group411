@@ -1,4 +1,4 @@
-# Predicting Avocado Prices
+# Avocado Price Predictors
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -6,7 +6,7 @@
 
 ## Dataset
 
-We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromusic/avocado-prices?fbclid=IwAR35kKP-Fz0yYZj-QqsZ6iNDSVnLBncxTOG3Cce3F5EupQTVHo85ecn7SBo) retrieved from Kaggle and compiled by the Hass Avocado Board using retail scan data [1]. The dataset consists of approximately 18,000 records over 4 years (2015 - 2018). The dataset contains information about avocado prices, Price Look-Up (PLU) codes, types (organic or conventional), region purchased in the United States, volume sold, bags sold, and date sold.
+We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromusic/avocado-prices?fbclid=IwAR35kKP-Fz0yYZj-QqsZ6iNDSVnLBncxTOG3Cce3F5EupQTVHo85ecn7SBo) retrieved from Kaggle and compiled by the Hass Avocado Board using retail scan data from the United States [1]. The dataset consists of approximately 18,000 records over 4 years (2015 - 2018). The dataset contains information about avocado prices, Price Look-Up (PLU) codes, types (organic or conventional), region purchased in the United States, volume sold, bags sold, and date sold.
 
 ## Research Question
 
@@ -22,7 +22,7 @@ Next, we will need to determine if the features are correlated with the target. 
 
 To get a better understanding of our features, we will also test for multicollinearity by computing their variance inflation factors. We will then check for and remove any redundancies between features. This will allow us to build a more accurate model in the next step.
 
-Once we have confirmed which features are correlated with the target and are non-redundant, we will fit a Random Forest Regressor model. We will then compute the feature importances using the `feature_importances_` attribute. This attribute will return an importance value for each feature that indicates how important that feature is at explaining the target (the higher the value, the more important the feature is). This importance value is based on the decrease in impurity measure. The model calculates the decrease in impurity by computing how much each feature contributes to decreasing the weighted impurity. Then, the model averages each feature's impurity decrease over the trees.
+Once we have confirmed which features are correlated with the target and are non-redundant, we will fit a Random Forest Regressor model using these features. We will then compute the feature importances using the `feature_importances_` attribute. This attribute will return an importance value for each feature that indicates how important that feature is at explaining the target (the higher the value, the more important the feature is). The importance value is based on the decrease in impurity measure. The decrease in impurity is calculated by the model by computing how much each feature contributes to decreasing the weighted impurity. The model then averages each feature's impurity decrease over the trees.
 
 Lastly, we will plot our results in order to find out which feature is the strongest predictor of avocado prices.
 
@@ -55,4 +55,4 @@ ggpubr|0.2.4
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
 
-[2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/)
+[2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/).
