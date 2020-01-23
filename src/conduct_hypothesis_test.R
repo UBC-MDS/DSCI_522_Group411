@@ -42,8 +42,10 @@ make_plot <- function(datafile, out) {
   # Read in data
   avocado <- read_feather(datafile)
   
+  # Fit model
   model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
   
+  # Make residual plot
   plot <- ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
     geom_point(colour= "cadetblue", alpha=0.1) +
     labs(title = 'Residual Plot', x = "Predicted Values", y = "Residuals") +
@@ -58,8 +60,10 @@ make_table <- function(datafile, out) {
   # Read in data
   avocado <- read_feather(datafile)
   
+  # Fit model
   model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
   
+  # Conduct anova
   anova <- kable(anova(model), 
                 caption = "Table 1. Anova Table.") %>% 
           as_image(file = file.path(dest_path, 'anova_table.png'))
