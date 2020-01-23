@@ -12,7 +12,6 @@ Options:
 
 suppressMessages(library(docopt))
 suppressMessages(library(tidyverse))
-suppressMessages(library(janitor))
 suppressMessages(library(lubridate))
 suppressMessages(library(caret))
 suppressMessages(library(feather))
