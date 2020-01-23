@@ -1,8 +1,10 @@
 # authors: Katie Birchard, Ryan Homer, Andrea Lee
 # date: 2020-01-18
 # Rscript src/render_EDA.R --datafile=data/train.feather --out=doc
-"Fetch a dataset to a specified path.
+"Create and save exploratory data analysis figures.
+
 Usage: render_EDA.R --datafile=<path to the dataset> --out=<path to output directory>
+
 Options:
 <datafile>      Complete URL to the dataset.
 <out> The destination path to save the EDA figures.
@@ -15,7 +17,6 @@ suppressMessages(library(caret))
 suppressMessages(library(knitr))
 suppressMessages(library(ggpubr))
 suppressMessages(library(feather))
-suppressMessages(library(gridExtra))
 suppressMessages(library(kableExtra))
 
 main <- function(args) {
@@ -106,6 +107,20 @@ make_plot <- function(datafile, out) {
                           ncol=1, nrow=3)
 
   ggsave('EDA_plot.png',  plot, path = file.path(dest_path))
+  
+  # What is the average price over time?
+  year_plot <- avocado %>%
+    group_by(year_month) %>%
+    summarize(average_price = mean(average_price)) %>%
+    ggplot(aes(x=year_month, y=average_price)) +
+    geom_point(alpha=0.5, colour="darkblue") +
+    xlab("Year-Month") +
+    ylab("Average Price") +
+    #ggtitle("Average Avocado Price Over Time") +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle=90)) 
+  
+  ggsave('EDA_year_plot.png',  year_plot, path = file.path(dest_path))
 }
 
 make_table <- function(datafile, out) {
@@ -117,7 +132,6 @@ make_table <- function(datafile, out) {
   # What is the distribution of the different categorical features?
   region_summary <- avocado %>%
     count(region)
-  
   region_summary <- avocado %>%
     group_by(region) %>%
     summarize(min = min(average_price),
@@ -127,10 +141,39 @@ make_table <- function(datafile, out) {
               upper_quantile = quantile(average_price, 0.75),
               max = max(average_price))  %>%
     left_join(region_summary)
-  
-  region_summary_table <- kable(region_summary,
+    region_summary_table <- kable(region_summary,
                                 caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.") %>% 
-                          as_image(file = file.path(dest_path, 'EDA_table.png'))
+                          as_image(file = file.path(dest_path, 'EDA_region_table.png'))
+  
+  type_summary <- avocado %>%
+    count(type)
+    type_summary <- avocado %>%
+    group_by(type) %>%
+    summarize(min = min(average_price),
+              lower_quartile = quantile(average_price, 0.25),
+              mean = mean(average_price),
+              median = median(average_price),
+              upper_quantile = quantile(average_price, 0.75),
+              max = max(average_price))  %>%
+    left_join(type_summary)
+    type_summary_table <- kable(type_summary, 
+                              caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.") %>% 
+                        as_image(file = file.path(dest_path, 'EDA_type_table.png'))
+  
+  month_summary <- avocado %>%
+    count(month)
+  month_summary <- avocado %>%
+    group_by(month) %>%
+    summarize(min = min(average_price),
+              lower_quartile = quantile(average_price, 0.25),
+              mean = mean(average_price),
+              median = median(average_price),
+              upper_quantile = quantile(average_price, 0.75),
+              max = max(average_price))  %>%
+    left_join(month_summary)
+    month_summary_table <- kable(month_summary, 
+                               caption = "Table 3. Summary statistics for the average price of avocados for each month of the year.") %>% 
+                         as_image(file = file.path(dest_path, 'EDA_month_table.png'))
 }
 
 main(docopt(doc))
