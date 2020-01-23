@@ -277,6 +277,70 @@ region_summary <- avocado %>%
 region_summary_table <- kable(region_summary,
                               caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.")
 
+region_summary_table
+```
+
+| region              |  min | lower\_quartile |     mean | median | upper\_quantile |  max |   n |
+| :------------------ | ---: | --------------: | -------: | -----: | --------------: | ---: | --: |
+| Albany              | 0.85 |          1.3550 | 1.559929 |  1.560 |          1.8100 | 2.13 | 283 |
+| Atlanta             | 0.62 |          1.0400 | 1.340787 |  1.220 |          1.6200 | 2.75 | 267 |
+| BaltimoreWashington | 0.95 |          1.2600 | 1.540150 |  1.570 |          1.7100 | 2.28 | 266 |
+| Boise               | 0.58 |          1.0100 | 1.328132 |  1.200 |          1.5800 | 2.79 | 273 |
+| Boston              | 0.85 |          1.2600 | 1.532391 |  1.560 |          1.8125 | 2.19 | 276 |
+| BuffaloRochester    | 1.03 |          1.3325 | 1.511407 |  1.480 |          1.6000 | 2.57 | 270 |
+| California          | 0.67 |          1.0800 | 1.383871 |  1.340 |          1.6400 | 2.58 | 279 |
+| Charlotte           | 0.92 |          1.2575 | 1.624963 |  1.600 |          1.9200 | 2.83 | 272 |
+| Chicago             | 0.82 |          1.2400 | 1.558657 |  1.610 |          1.7900 | 2.30 | 268 |
+| CincinnatiDayton    | 0.44 |          0.9375 | 1.213712 |  1.130 |          1.4725 | 2.17 | 264 |
+| Columbus            | 0.71 |          1.0000 | 1.249048 |  1.170 |          1.4800 | 2.22 | 273 |
+| DallasFtWorth       | 0.65 |          0.8200 | 1.093913 |  1.040 |          1.3500 | 1.90 | 276 |
+| Denver              | 0.60 |          0.9900 | 1.222862 |  1.170 |          1.4300 | 2.16 | 269 |
+| Detroit             | 0.48 |          1.0300 | 1.278340 |  1.250 |          1.5100 | 2.08 | 265 |
+| GrandRapids         | 0.77 |          1.2550 | 1.506421 |  1.510 |          1.7550 | 2.73 | 271 |
+| GreatLakes          | 0.73 |          1.1100 | 1.328242 |  1.330 |          1.5300 | 1.98 | 273 |
+| HarrisburgScranton  | 0.91 |          1.2175 | 1.510893 |  1.480 |          1.7900 | 2.27 | 280 |
+| HartfordSpringfield | 0.86 |          1.3900 | 1.820476 |  1.810 |          2.2700 | 2.68 | 273 |
+| Houston             | 0.51 |          0.7900 | 1.044794 |  0.980 |          1.2750 | 1.92 | 267 |
+| Indianapolis        | 0.79 |          1.0850 | 1.313964 |  1.290 |          1.5300 | 2.10 | 275 |
+| Jacksonville        | 0.54 |          1.2100 | 1.511195 |  1.470 |          1.8150 | 2.99 | 251 |
+| LasVegas            | 0.54 |          0.9850 | 1.378880 |  1.270 |          1.7250 | 3.03 | 259 |
+| LosAngeles          | 0.53 |          0.9450 | 1.223709 |  1.140 |          1.4250 | 2.37 | 275 |
+| Louisville          | 0.56 |          1.0500 | 1.298973 |  1.240 |          1.5500 | 2.29 | 292 |
+| MiamiFtLauderdale   | 0.79 |          1.2300 | 1.428321 |  1.420 |          1.5775 | 3.05 | 262 |
+| Midsouth            | 0.95 |          1.1700 | 1.402073 |  1.400 |          1.6000 | 2.17 | 275 |
+| Nashville           | 0.51 |          0.9600 | 1.208146 |  1.090 |          1.4950 | 2.22 | 275 |
+| NewOrleansMobile    | 0.58 |          1.0300 | 1.300809 |  1.340 |          1.5200 | 2.32 | 272 |
+| NewYork             | 0.77 |          1.3600 | 1.729493 |  1.780 |          2.0600 | 2.65 | 276 |
+| Northeast           | 0.87 |          1.3400 | 1.621736 |  1.670 |          1.8900 | 2.31 | 265 |
+| NorthernNewEngland  | 0.95 |          1.1900 | 1.481495 |  1.520 |          1.6800 | 1.96 | 281 |
+| Orlando             | 0.83 |          1.2300 | 1.517970 |  1.480 |          1.8100 | 2.87 | 271 |
+| Philadelphia        | 0.91 |          1.3700 | 1.620404 |  1.605 |          1.8600 | 2.39 | 272 |
+| PhoenixTucson       | 0.46 |          0.6700 | 1.198216 |  1.140 |          1.7100 | 2.62 | 269 |
+| Pittsburgh          | 0.87 |          1.2500 | 1.366741 |  1.390 |          1.4900 | 1.83 | 270 |
+| Plains              | 0.76 |          1.1200 | 1.441978 |  1.500 |          1.7000 | 2.13 | 273 |
+| Portland            | 0.68 |          0.9800 | 1.311533 |  1.210 |          1.5700 | 2.85 | 274 |
+| RaleighGreensboro   | 0.86 |          1.2200 | 1.574397 |  1.540 |          1.8300 | 3.00 | 257 |
+| RichmondNorfolk     | 0.78 |          1.0650 | 1.294183 |  1.260 |          1.4950 | 1.96 | 263 |
+| Roanoke             | 0.70 |          1.0200 | 1.237312 |  1.160 |          1.4400 | 2.27 | 279 |
+| Sacramento          | 0.86 |          1.2000 | 1.604757 |  1.600 |          1.9500 | 2.82 | 267 |
+| SanDiego            | 0.61 |          1.0500 | 1.412614 |  1.290 |          1.8025 | 2.74 | 264 |
+| SanFrancisco        | 0.84 |          1.3400 | 1.806255 |  1.660 |          2.3000 | 3.25 | 267 |
+| Seattle             | 0.75 |          1.1000 | 1.442809 |  1.350 |          1.6950 | 2.96 | 267 |
+| SouthCarolina       | 0.69 |          1.1000 | 1.406856 |  1.370 |          1.6700 | 2.21 | 264 |
+| SouthCentral        | 0.62 |          0.8400 | 1.095170 |  1.060 |          1.3500 | 1.81 | 265 |
+| Southeast           | 0.62 |          1.1500 | 1.399329 |  1.410 |          1.6350 | 2.33 | 283 |
+| Spokane             | 0.74 |          1.0900 | 1.442830 |  1.320 |          1.7100 | 2.93 | 265 |
+| StLouis             | 0.68 |          1.1325 | 1.422409 |  1.320 |          1.7500 | 2.84 | 274 |
+| Syracuse            | 1.03 |          1.3400 | 1.511217 |  1.460 |          1.6400 | 2.44 | 263 |
+| Tampa               | 0.75 |          1.1900 | 1.410743 |  1.410 |          1.5900 | 2.70 | 269 |
+| TotalUS             | 0.76 |          1.0400 | 1.317778 |  1.330 |          1.5350 | 2.09 | 279 |
+| West                | 0.66 |          0.9600 | 1.273053 |  1.185 |          1.5400 | 2.52 | 262 |
+| WestTexNewMexico    | 0.52 |          0.8000 | 1.250498 |  1.110 |          1.6500 | 2.93 | 261 |
+
+Table 1. Summary statistics for the average price of avocados in all
+regions in the United States.
+
+``` r
 type_summary <- avocado %>%
   count(type)
 
@@ -293,6 +357,18 @@ type_summary <- avocado %>%
 type_summary_table <- kable(type_summary, 
                             caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.")
 
+type_summary_table
+```
+
+| type         |  min | lower\_quartile |     mean | median | upper\_quantile |  max |    n |
+| :----------- | ---: | --------------: | -------: | -----: | --------------: | ---: | ---: |
+| conventional | 0.46 |          0.9800 | 1.157939 |   1.13 |            1.32 | 2.22 | 7303 |
+| organic      | 0.44 |          1.4225 | 1.653286 |   1.62 |            1.86 | 3.25 | 7298 |
+
+Table 2. Summary statistics for the average price of avocados for
+organic and non-organic avocados.
+
+``` r
 month_summary <- avocado %>%
   count(month)
 
@@ -308,7 +384,27 @@ month_summary <- avocado %>%
 
 month_summary_table <- kable(month_summary, 
                             caption = "Table 2. Summary statistics for the average price of avocados for each month of the year.")
+
+month_summary_table
 ```
+
+| month |  min | lower\_quartile |     mean | median | upper\_quantile |  max |    n |
+| :---- | ---: | --------------: | -------: | -----: | --------------: | ---: | ---: |
+| Jan   | 0.51 |            1.05 | 1.312503 |  1.280 |          1.5400 | 2.70 | 1542 |
+| Feb   | 0.46 |            0.99 | 1.279950 |  1.270 |          1.5600 | 2.59 | 1385 |
+| Mar   | 0.44 |            1.07 | 1.331495 |  1.300 |          1.5650 | 3.05 | 1451 |
+| Apr   | 0.51 |            1.07 | 1.370415 |  1.340 |          1.6325 | 2.83 | 1132 |
+| May   | 0.55 |            1.05 | 1.353705 |  1.320 |          1.6100 | 2.73 | 1212 |
+| Jun   | 0.52 |            1.10 | 1.400954 |  1.340 |          1.6600 | 2.76 | 1017 |
+| Jul   | 0.56 |            1.17 | 1.458411 |  1.410 |          1.6900 | 2.75 | 1227 |
+| Aug   | 0.58 |            1.18 | 1.514462 |  1.470 |          1.7900 | 3.00 | 1096 |
+| Sep   | 0.58 |            1.19 | 1.570145 |  1.560 |          1.8500 | 2.97 | 1037 |
+| Oct   | 0.65 |            1.27 | 1.577873 |  1.565 |          1.8200 | 3.25 | 1208 |
+| Nov   | 0.60 |            1.16 | 1.451225 |  1.440 |          1.7000 | 3.12 | 1143 |
+| Dec   | 0.49 |            1.05 | 1.333058 |  1.310 |          1.5700 | 2.57 | 1151 |
+
+Table 2. Summary statistics for the average price of avocados for each
+month of the year.
 
 ``` r
 ### What is the average avocado price per region?
@@ -378,7 +474,7 @@ gridExtra::grid.arrange(price_per_region, price_per_type,
                         ncol=1, nrow=3)
 ```
 
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 **Figure 1.** Average price of avocados in the United States by region,
 type, month, and number of total avocados sold each week.
@@ -402,7 +498,7 @@ avocado %>%
     theme(axis.text.x = element_text(angle=90)) 
 ```
 
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 **Figure 2.** Average number of avocados sold per week between 2015 and
 2018.

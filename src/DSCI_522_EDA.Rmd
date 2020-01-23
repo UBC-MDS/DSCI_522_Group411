@@ -97,6 +97,10 @@ region_summary <- avocado %>%
 region_summary_table <- kable(region_summary,
                               caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.")
 
+region_summary_table
+```
+
+```{r}
 type_summary <- avocado %>%
   count(type)
 
@@ -113,6 +117,11 @@ type_summary <- avocado %>%
 type_summary_table <- kable(type_summary, 
                             caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.")
 
+type_summary_table
+```
+
+```{r}
+
 month_summary <- avocado %>%
   count(month)
 
@@ -128,6 +137,8 @@ month_summary <- avocado %>%
 
 month_summary_table <- kable(month_summary, 
                             caption = "Table 2. Summary statistics for the average price of avocados for each month of the year.")
+
+month_summary_table
 
 ```
 
