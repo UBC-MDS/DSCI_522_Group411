@@ -10,11 +10,16 @@ To conduct a hypothesis test, we will fit an additive linear model and interpret
 The features we will be testing are:
 
 - total_volume: total volume of avocados sold
+- PLU_4046: number of of avocados with a price lookup code of 4046 (small avocado) sold
+- PLU_4225: number of of avocados with a price lookup code of 4225 (large avocado) sold
+- PLU_4770:  number of of avocados with a price lookup code of 4770 (x-large avocado) sold
 - total_bags: total number of bags of avocados sold
+- small_bags: number of small bags of avocados sold
+- large_bags: number of large bags of avocados sold
+- xlarge_bags: number of x-large bags of avocados sold
 - type: type of avocado sold (conventional or organic)
+- year: year avocado was sold in
 - region: U.S. state avocado was sold in
-- PLU: price lookup code of avocado (4046 small avocado, 4225 large avocado, 4770 x-large avocado)
-- bag_size: size of bag of avocados sold (small, large, x-large)
 - month: month avocado was sold in
 
 The target is:
@@ -32,46 +37,18 @@ library(broom)
 library(lubridate)
 library(caret)
 library(knitr)
+library(feather)
 ```
 
 ```{r load data, include=FALSE}
-avocado <- read_csv("avocado.csv")
-```
-
-```{r preliminary data wrangling, include=FALSE}
-avocado2 <- avocado %>% 
-  gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
-  gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`) %>% 
-  mutate(month = month(as.Date(Date)))%>%
-  rename(total_volume = `Total Volume`,
-         total_bags = `Total Bags`,
-         average_price = AveragePrice) %>% 
-  select(-'X1', -'year', -'Date')
-```
-
-```{r split data}
-set.seed(123)
-
-trainIndex_price <- createDataPartition(avocado2$average_price,
-                                        p=0.8,
-                                        list=FALSE,
-                                        times=1)
-priceTrain <- avocado2[trainIndex_price, ]
-priceTest <- avocado2[-trainIndex_price, ]
-
-trainIndex_sold <- createDataPartition(avocado2$no_sold,
-                                        p=0.8,
-                                        list=FALSE,
-                                        times=1)
-soldTrain <- avocado2[trainIndex_sold, ]
-soldTest <- avocado2[-trainIndex_sold, ]
+avocado <- read_feather('../data/train.feather')
 ```
 
 ```{r fit model}
-model = lm(average_price ~ total_volume + total_bags + type + region + PLU + bag_size + month, data = priceTrain)
+model = lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
 
 ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
-  geom_point(colour= "cadetblue", alpha=0.01) +
+  geom_point(colour= "cadetblue", alpha=0.1) +
   labs(title = 'Residual Plot', x = "Predicted Values", y = "Residuals") +
   theme_minimal()
 ```
@@ -85,10 +62,15 @@ anova(model)
 At a significance level of 0.05, it appears that the following features are significant as their p-values are less than the significance level:
 
 - total_volume
+- PLU_4046
+- PLU_4770
 - total_bags
+- small_bags
+- large_bags
 - type
-- month
+- year
 - region
+- month
 
 However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
 
