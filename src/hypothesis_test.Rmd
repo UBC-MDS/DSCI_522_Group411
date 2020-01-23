@@ -59,6 +59,8 @@ Based on the EDA, we chose to fit a linear model to conudct our hypothesis test.
 anova(model)
 ```
 
+ANOVA is a special case of linear model that assumes categorical predictors. Because many of our features are categorical with numerous levels, we can use ANOVA to calculate and interpret the features' p-values.
+
 At a significance level of 0.05, it appears that the following features are significant as their p-values are less than the significance level:
 
 - total_volume

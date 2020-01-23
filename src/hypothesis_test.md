@@ -62,6 +62,11 @@ model is appropriate in this case.
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
+ANOVA is a special case of linear model that assumes categorical
+predictors. Because many of our features are categorical with numerous
+levels, we can use ANOVA to calculate and interpret the features’
+p-values.
+
 At a significance level of 0.05, it appears that the following features
 are significant as their p-values are less than the significance level:
 
