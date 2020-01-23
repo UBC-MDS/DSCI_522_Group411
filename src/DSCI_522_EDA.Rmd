@@ -17,9 +17,13 @@ library(caret)
 library(knitr)
 library(ggpubr)
 
+
 # Loading in the dataset.
 # (See README for how to download dataset.)
-avocado <- read_csv("../data/avocado.csv")
+# avocado <- read_csv("../data/avocado.csv") # Uncomment when push
+
+# Loading in the dataset 
+avocado <- read_csv("src/avocado.csv")
 ```
 
 
@@ -80,6 +84,7 @@ avocado2 <- avocado %>%
 
 # Creating another column for month
 avocado2$month <- month(as.Date(avocado2$Date), label=TRUE)
+avocado$month <- month(as.Date(avocado$Date), label=TRUE)
 
 avocado2$year_month <- as.POSIXct(avocado2$Date)
 avocado2$year_month <- format(avocado2$year_month, "%Y-%m")
@@ -107,6 +112,15 @@ trainIndex_price <- createDataPartition(avocado2$AveragePrice,
 priceTrain <- avocado2[trainIndex_price, ]
 priceTest <- avocado2[-trainIndex_price, ]
 
+# Use the raw dataset
+trainIndex_price2 <- createDataPartition(avocado$AveragePrice,
+                                        p=0.8,
+                                        list=FALSE,
+                                        times=1)
+
+priceTrain2 <- avocado[trainIndex_price2, ]
+priceTest2 <- avocado[-trainIndex_price2, ]
+
 # Second, separate the dataset with number sold as the target
 trainIndex_sold <- createDataPartition(avocado2$no_sold,
                                         p=0.8,
@@ -118,9 +132,25 @@ soldTest <- avocado2[-trainIndex_sold, ]
 
 ```
 
+```{r}
+ggplot(priceTrain2, aes(x=region, y=AveragePrice)) +
+  geom_jitter(alpha=0.1, width=0.1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90, size = 5),
+        axis.title.x = element_blank()) 
+```
+
+
 ## Exploratory analysis on the training dataset 
 
 We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, month, and number sold each week against the average price to visualize the relationships between these variables (figure 1). From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. We can also clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados. When we observe the monthly trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months. Finally, the number of avocados sold each week may also have play a role in avocado prices. However, since avocado prices may be predicting the number sold in this relationship, the number sold may not be the best feature to use in our model. 
+
+```{r}
+# What is the distribution of the different categorical features?
+
+
+```
+
 
 ```{r}
 ### What is the average avocado price per region?
@@ -129,8 +159,10 @@ avocado_by_region <- priceTrain %>%
   summarize(ave_price = mean(AveragePrice))
 
 # There are many regions here, so it might make sense to group them
-price_per_region <- ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
-  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+price_per_region <- ggplot(priceTrain, aes(x=reorder(region, -AveragePrice), y=AveragePrice)) +
+  geom_boxplot(fill="darkblue", alpha=0.1, width=0.2) +
+  geom_point(aes(x=reorder(region, -ave_price), y=ave_price),
+             data=avocado_by_region, colour="red") +
   xlab("Regions") +
   ylab("Average Price") +
   ggtitle("Region") +
@@ -138,13 +170,19 @@ price_per_region <- ggplot(avocado_by_region, aes(x=reorder(region, -ave_price),
   theme(axis.text.x = element_text(angle=90, size = 5),
         axis.title.x = element_blank()) 
 
+priceTrain %>%
+  filter(region == "WestTexNewMexico") %>%
+  ggplot()
+
 # What is the average avocado price by type (organic vs. non-organic)
 avocado_by_type <- priceTrain %>%
   group_by(type) %>%
   summarize(ave_price = mean(AveragePrice))
 
-price_per_type <- ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
-  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+price_per_type <- ggplot(priceTrain, aes(x=reorder(type, -AveragePrice), y=AveragePrice)) +
+  geom_jitter(fill="darkblue", alpha=0.1, colour="darkblue", width=0.1) +
+  geom_point(aes(x=reorder(type, -ave_price), y=ave_price),
+             data=avocado_by_type, colour="red") +
   xlab("Type") +
   ylab("Average Price") +
   ggtitle("Type") +
@@ -156,8 +194,10 @@ avocado_by_month <- priceTrain %>%
   group_by(month) %>%
   summarize(ave_price = mean(AveragePrice))
 
-price_per_month <- ggplot(avocado_by_month, aes(x=month, y=ave_price)) +
-  geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+price_per_month <- ggplot(priceTrain, aes(x=month, y=AveragePrice, colour=type)) +
+  geom_jitter(fill="darkblue", alpha=0.1, aes(colour=type)) +
+  geom_point(aes(x=month, y=ave_price),
+             data=avocado_by_month, colour="red") +
   xlab("Month") +
   ylab("Average Price") +
   ggtitle("Month") +
@@ -174,8 +214,8 @@ price_per_sold <- ggplot(priceTrain, aes(x=no_sold, y=AveragePrice)) +
   theme(axis.title.x = element_blank())
 
 gridExtra::grid.arrange(price_per_region, price_per_type,
-                        price_per_month, price_per_sold,
-                        ncol=2, nrow=2)
+                        price_per_month,
+                        ncol=1, nrow=3)
 ```
 
 **Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week. 
@@ -247,6 +287,12 @@ ggplot(avocado_by_month2, aes(x=year_month, y=ave_price)) +
 ```
 
 **Figure 2.** Average number of avocados sold per week between 2015 and 2018.
+
+```{r, include=FALSE}
+write_csv(priceTrain, "avocado_train_clean.csv")
+write_csv(priceTrain2, "avocado_train_raw.csv")
+```
+
 
 ## References
 Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
