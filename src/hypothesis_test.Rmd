@@ -45,7 +45,7 @@ avocado <- read_feather('../data/train.feather')
 ```
 
 ```{r fit model}
-model = lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
+model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
 
 ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
   geom_point(colour= "cadetblue", alpha=0.1) +
