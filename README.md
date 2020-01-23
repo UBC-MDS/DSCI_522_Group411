@@ -41,6 +41,7 @@ To replicate this analysis, clone this repository and make sure that the depende
 ```
 Rscript src/get_data.R --url=https://raw.githubusercontent.com/ryanhomer/dsci522-group411-data/master/avocado.csv --destfile=data/avocado.csv
 Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
+Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
 ```
 
 ### R Package Dependencies
