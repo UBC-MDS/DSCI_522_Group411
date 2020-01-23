@@ -27,17 +27,28 @@ chose not to choose a stricter significance level (i.e. 0.01 or 0.001)
 as we do not believe that predicting avocado prices requires as
 conservative of a test.
 
-    ## # A tibble: 8 x 5
-    ##   term              estimate std.error statistic  p.value
-    ##   <chr>                <dbl>     <dbl>     <dbl>    <dbl>
-    ## 1 (Intercept)   0.582         1.27e- 2    45.7   0.      
-    ## 2 total_volume -0.0000000129  9.31e-10   -13.8   1.84e-43
-    ## 3 total_bags    0.0000000264  3.24e- 9     8.15  3.81e-16
-    ## 4 type          0.488         1.76e- 3   277.    0.      
-    ## 5 region       -0.000103      5.57e- 5    -1.85  6.38e- 2
-    ## 6 PLU          -0.00000323    2.77e- 6    -1.17  2.43e- 1
-    ## 7 bag_size      0.000532      1.05e- 3     0.509 6.11e- 1
-    ## 8 month         0.0184        2.42e- 4    76.1   0.
+![](hypothesis_test_files/figure-gfm/fit%20model-1.png)<!-- -->
+
+Based on the EDA, we chose to fit a linear model to conudct our
+hypothesis test. To confirm that a linear model would be appropriate for
+this dataset, we will examine its residual plot. Looking at the residual
+plot, the points are randomly distributed which indicates that a linear
+model is appropriate in this case.
+
+    ## Analysis of Variance Table
+    ## 
+    ## Response: average_price
+    ##                  Df Sum Sq Mean Sq    F value Pr(>F)    
+    ## total_volume      1  796.4   796.4 1.1540e+04 <2e-16 ***
+    ## total_bags        1   21.9    21.9 3.1710e+02 <2e-16 ***
+    ## type              1 7361.1  7361.1 1.0667e+05 <2e-16 ***
+    ## region           53 3521.0    66.4 9.6273e+02 <2e-16 ***
+    ## PLU               2    0.1     0.1 7.8920e-01 0.4542    
+    ## bag_size          2    0.0     0.0 1.2130e-01 0.8857    
+    ## month             1  562.4   562.4 8.1498e+03 <2e-16 ***
+    ## Residuals    131333 9062.8     0.1                      
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 At a significance level of 0.05, it appears that the following features
 are significant as their p-values are less than the significance level:
@@ -46,11 +57,10 @@ are significant as their p-values are less than the significance level:
   - total\_bags
   - type
   - month
+  - region
 
-It is surprising that the features region and PLU are not significant at
-a significance level of 0.05. However, we should be cautious not to use
-the p-value significance as a stand alone measure to determine if these
-features are correlated with the target. We will also conduct a
-multicollinearity test to determine if any of the features are
-redundant. We will then use these results to serve as a validation for
-our final feature importances model.
+However, we should be cautious not to use the p-value significance as a
+stand alone measure to determine if these features are correlated with
+the target. We will also conduct a multicollinearity test to determine
+if any of the features are redundant. We will then use these results to
+serve as a validation for our final feature importances model.

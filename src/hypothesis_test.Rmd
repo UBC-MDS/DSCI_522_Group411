@@ -26,7 +26,6 @@ We chose a significance level of 0.05 as it is the industry standard. We chose n
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
 
-# Loading necessary packages
 library(tidyverse)
 library(tidyr)
 library(broom)
@@ -36,8 +35,6 @@ library(knitr)
 ```
 
 ```{r load data, include=FALSE}
-# Loading in the dataset.
-# (See README for how to download dataset.)
 avocado <- read_csv("avocado.csv")
 ```
 
@@ -45,11 +42,7 @@ avocado <- read_csv("avocado.csv")
 avocado2 <- avocado %>% 
   gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
   gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`) %>% 
-  mutate(type = unclass(as.factor(type)),
-         region = unclass(as.factor(region)),
-         PLU = as.double(PLU),
-         bag_size = unclass(as.factor(bag_size)),
-         month = month(as.Date(Date)))%>%
+  mutate(month = month(as.Date(Date)))%>%
   rename(total_volume = `Total Volume`,
          total_bags = `Total Bags`,
          average_price = AveragePrice) %>% 
@@ -74,8 +67,19 @@ soldTrain <- avocado2[trainIndex_sold, ]
 soldTest <- avocado2[-trainIndex_sold, ]
 ```
 
+```{r fit model}
+model = lm(average_price ~ total_volume + total_bags + type + region + PLU + bag_size + month, data = priceTrain)
+
+ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
+  geom_point(colour= "cadetblue", alpha=0.01) +
+  labs(title = 'Residual Plot', x = "Predicted Values", y = "Residuals") +
+  theme_minimal()
+```
+
+Based on the EDA, we chose to fit a linear model to conudct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we will examine its residual plot. Looking at the residual plot, the points are randomly distributed which indicates that a linear model is appropriate in this case.
+
 ```{r hypothesis test}
-tidy(lm(average_price ~ total_volume + total_bags + type + region + PLU + bag_size + month, data = priceTrain))
+anova(model)
 ```
 
 At a significance level of 0.05, it appears that the following features are significant as their p-values are less than the significance level:
@@ -84,5 +88,6 @@ At a significance level of 0.05, it appears that the following features are sign
 - total_bags
 - type
 - month
+- region
 
-It is surprising that the features region and PLU are not significant at a significance level of 0.05. However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
+However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
