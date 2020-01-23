@@ -1,9 +1,12 @@
 ---
-title: "multicollinearity"
+title: "Multicollinearity"
 output: github_document
+bibliography: ../../doc/refs.bib
 ---
 
-```{r}
+Load libraries.
+
+```{r libraries}
 library(tidyverse)
 library(lubridate)
 library(caret)
@@ -11,10 +14,16 @@ library(feather)
 library(reshape2)
 ```
 
-```{r}
-# See README for how to create feather files.
-df <- read_feather("../data/train.feather")
+## Correlation Matrix
 
+Get training data.
+
+```{r data}
+# See README for how to create feather files.
+df <- read_feather(here::here("data/train.feather"))
+```
+
+```{r util}
 #' Set upper triangle of matrix to NA
 #'
 #' @param corr_matrix A matrix
@@ -24,8 +33,12 @@ upper_tri_na <- function(corr_matrix) {
   corr_matrix[upper.tri(corr_matrix)] <- NA
   corr_matrix
 }
+```
 
-# Create dataframe for correlation matrix plot
+Select numerical predictors, get correlation matrix and wrangle into plottable dataframe [@corr].
+
+```{r dataframe}
+# Create dataframe for correlation matrix chart
 corr_df <- df %>% 
   select(total_volume, 
          PLU_4046, 
@@ -34,24 +47,23 @@ corr_df <- df %>%
          total_bags, 
          small_bags, 
          large_bags, 
-         xlarge_bags, 
-         #type, 
-         #year, 
-         #region, 
-         #month
-         ) %>% 
+         xlarge_bags) %>% 
   cor %>% 
   upper_tri_na %>% 
   melt(na.rm = TRUE) %>% 
   mutate(value = round(value, 2))
+```
 
+Correlation Matrix Chart
+
+```{r chart}
 ggplot(corr_df) + 
   geom_tile(aes(Var1, Var2, fill = value)) +
   geom_text(aes(Var1, Var2, label = value), color = "black", size = 4) +
-  scale_fill_distiller(palette="GnBu", direction=1) +
-  labs(title="Correlation Matrix",
+  scale_fill_distiller(palette = "GnBu", direction = 1) +
+  labs(title = "Correlation Matrix",
        subtitle = "Avocado Data",
-       fill="Pearson's\nCorrelation") +
+       fill = "Pearson's\nCorrelation") +
   coord_fixed() +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
@@ -66,3 +78,35 @@ ggplot(corr_df) +
                                title.position = "top", 
                                title.hjust = 0.5))
 ```
+
+(this is temporary)
+
+High correlation, > 90%
+
+* `total_bags` and `small_bags`
+* `total_bags` and `large_bags`
+* `small_bags` and `large_bags`
+* `PLU_4225` and `total_bags`
+* `PLU_4225` and `small_bags`
+* `PLU_4046` and `PLU_4225`
+* `PLU_4046` and `total_bags`
+* `total_volume` and `PLU_4046`
+* `total_volume` and `PLU_4225`
+* `total_volume` and `total_bags`
+* `total_volume` and `small_bags`
+* `total_volume` and `large_bags`
+
+TODO: Write a blurb on correlation observations.
+
+## Multicollinearity
+
+Create linear model and comput VIF scores from car [@car] package.
+
+```{r multicoll}
+model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
+            data = df)
+
+car::vif(model)
+```
+
+## References
