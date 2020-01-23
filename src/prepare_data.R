@@ -31,7 +31,7 @@ check_args <- function(args) {
 
   # make sure path exists
   if (!dir.exists(path.expand(args$out))) {
-    dir.create(path, recursive = TRUE)
+    dir.create(path.expand(args$out), recursive = TRUE)
   }
 }
 
@@ -45,13 +45,17 @@ pre_process <- function(datafile, out) {
   # Read data from CSV
   df <- read_csv(path.expand(datafile))
 
-  # Gather some columns
+  # Rename some columns
   df <- df %>%
-    gather(key = "PLU", value = "no_sold", `4046`, `4225`, `4770`) %>%
-    gather(key = "bag_size", value = "bags_sold", `Small Bags`, `Large Bags`, `XLarge Bags`) %>%
     rename(date = Date,
+           PLU_4046 = `4046`,
+           PLU_4225 = `4225`,
+           PLU_4770 = `4770`,
            total_volume = `Total Volume`,
            total_bags = `Total Bags`,
+           small_bags = `Small Bags`,
+           large_bags = `Large Bags`,
+           xlarge_bags = `XLarge Bags`,
            average_price = AveragePrice)
 
   # Creating columns for month and year-month
