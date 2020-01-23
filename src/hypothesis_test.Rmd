@@ -91,3 +91,4 @@ At a significance level of 0.05, it appears that the following features are sign
 - region
 
 However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
+
