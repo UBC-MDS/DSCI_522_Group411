@@ -7,8 +7,8 @@ output: github_document
 ## **Research Question**: What is the strongest predictor of avocado prices in the United States?
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+```{r setup, include=FALSE, fig.height=8}
+knitr::opts_chunk$set(warning = FALSE, message=FALSE)
 
 # Loading necessary packages for EDA
 library(tidyverse)
@@ -21,14 +21,11 @@ library(feather)
 
 # Loading in the dataset.
 # (See README for how to download dataset.)
-# avocado <- read_csv("../data/avocado.csv") # Uncomment when push
-
-# Loading in the dataset 
-avocado <- read_feather("data/train.feather")
+avocado <- read_feather("../data/train.feather")
 ```
 
 
-```{r checking packaging and looking at top and bottom of data, include=FALSE}
+```{r checking packaging and looking at top and bottom of data}
 # Check the number of rows
 nrow(avocado)
 
@@ -67,25 +64,14 @@ Preliminary exploration of the dataset has given some insight to the potential f
 Since we want to ensure the prices in this dataset are relatively accurate, we compared the average prices in this dataset to another [study](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) published by M. Shahbandeh in February 2019. According to the dataset we selected, the average price of avocados from 2015 to 2018 was \$1.41.
 
 ```{r validating with external data sources}
-broom::tidy(summary(avocado$AveragePrice))
+broom::tidy(summary(avocado$average_price))
 ```
-
-**Table 1.** Summary statistics for the average price of avocados in the United States. 
 
 According to Shahbandeh's study, the average price of avocados in 2015 was \$1.03, in 2016 was \$1.04, in 2017 was \$1.28, and in 2018 was \$1.10. Thus, the average price from our dataset is slightly higher compared to Shahbandeh's study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
 
 ## Splitting the data into train and test sets 
 
 Before we begin visualizing the data, we will split the dataset into 80% training data and 20% test data. The test data will not be used for the exploratory dataset, and will only be used for testing the finalized model at the end of the project. 
-
-```{r}
-ggplot(avocado, aes(x=region, y=average_price)) +
-  geom_jitter(alpha=0.1, width=0.1) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=90, size = 5),
-        axis.title.x = element_blank()) 
-```
-
 
 ## Exploratory analysis on the training dataset 
 
@@ -94,6 +80,54 @@ We wanted to determine which features might be the most important to include in 
 ```{r}
 # What is the distribution of the different categorical features?
 # Make tables
+
+region_summary <- avocado %>%
+  count(region)
+
+region_summary <- avocado %>%
+  group_by(region) %>%
+  summarize(min = min(average_price),
+            lower_quartile = quantile(average_price, 0.25),
+            mean = mean(average_price),
+            median = median(average_price),
+            upper_quantile = quantile(average_price, 0.75),
+            max = max(average_price))  %>%
+  left_join(region_summary)
+
+region_summary_table <- kable(region_summary,
+                              caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.")
+
+type_summary <- avocado %>%
+  count(type)
+
+type_summary <- avocado %>%
+  group_by(type) %>%
+  summarize(min = min(average_price),
+            lower_quartile = quantile(average_price, 0.25),
+            mean = mean(average_price),
+            median = median(average_price),
+            upper_quantile = quantile(average_price, 0.75),
+            max = max(average_price))  %>%
+  left_join(type_summary)
+
+type_summary_table <- kable(type_summary, 
+                            caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.")
+
+month_summary <- avocado %>%
+  count(month)
+
+month_summary <- avocado %>%
+  group_by(month) %>%
+  summarize(min = min(average_price),
+            lower_quartile = quantile(average_price, 0.25),
+            mean = mean(average_price),
+            median = median(average_price),
+            upper_quantile = quantile(average_price, 0.75),
+            max = max(average_price))  %>%
+  left_join(month_summary)
+
+month_summary_table <- kable(month_summary, 
+                            caption = "Table 2. Summary statistics for the average price of avocados for each month of the year.")
 
 ```
 
@@ -107,11 +141,15 @@ avocado_by_region <- avocado %>%
 # There are many regions here, so it might make sense to group them
 price_per_region <- ggplot(avocado, aes(x=reorder(region, -average_price), y=average_price)) +
   geom_boxplot(alpha=0.1) +
-  geom_point(aes(x=reorder(region, -ave_price), y=ave_price),
-             data=avocado_by_region, colour="red") +
+  geom_point(aes(x=reorder(region, -ave_price), y=ave_price, colour="red"),
+             data=avocado_by_region) +
   xlab("Regions") +
-  ylab("Average Price") +
-  ggtitle("Region") +
+  ylab("Average Price ($)") +
+  ggtitle("Avocado Price by Region") +
+  scale_colour_manual(values=c("red"),
+                    breaks=c("red"),
+                    labels=c("Mean"),
+                    name=c("")) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, size = 8),
         axis.title.x = element_blank()) 
@@ -123,11 +161,15 @@ avocado_by_type <- avocado %>%
 
 price_per_type <- ggplot(avocado, aes(x=reorder(type, -average_price), y=average_price)) +
   geom_boxplot(alpha=0.2) +
-  geom_point(aes(x=reorder(type, -ave_price), y=ave_price),
-             data=avocado_by_type, colour="red") +
+  geom_point(aes(x=reorder(type, -ave_price), y=ave_price, colour="red"),
+             data=avocado_by_type) +
   xlab("Type") +
-  ylab("Average Price") +
-  ggtitle("Type") +
+  ylab("Average Price ($)") +
+  ggtitle("Avocado Price by Type") +
+  scale_colour_manual(values=c("red"),
+                    breaks=c("red"),
+                    labels=c("Mean"),
+                    name=c("")) +
   theme_bw() +
   theme(axis.title.x = element_blank())
 
@@ -138,16 +180,21 @@ avocado_by_month <- avocado %>%
 
 price_per_month <- ggplot(avocado, aes(x=month, y=average_price)) +
   geom_boxplot(alpha=0.2) +
-  geom_point(aes(x=month, y=ave_price),
-             data=avocado_by_month, colour="red") +
+  geom_point(aes(x=month, y=ave_price, colour="red"),
+             data=avocado_by_month) +
   xlab("Month") +
-  ylab("Average Price") +
-  ggtitle("Month") +
+  ylab("Average Price ($)") +
+  ggtitle("Avocado Price by Month") +
+  scale_colour_manual(values=c("red"),
+                    breaks=c("red"),
+                    labels=c("Mean"),
+                    name=c("")) +
   theme_bw() +
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank(),
+        legend.position = "right")
 ```
 
-```{r,  fig.height=20}
+```{r,  fig.height=12}
 gridExtra::grid.arrange(price_per_region, price_per_type,
                         price_per_month,
                         ncol=1, nrow=3)
@@ -157,14 +204,17 @@ gridExtra::grid.arrange(price_per_region, price_per_type,
 
 We also plotted the average avocado price over time to get an idea of how the price has fluctuated and whether there were any outlier months in the dataset (figure 2). It appears that there was a sharp incline in avocado prices in August-October of 2017, which may influence our analysis.
 
-```{r}
-ggplot(avocado_by_month2, aes(x=year_month, y=ave_price)) +
-  geom_point(alpha=0.5, colour="darkblue") +
-  xlab("Year-Month") +
-  ylab("Average Price") +
-  #ggtitle("Average Avocado Price Over Time") +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=90)) 
+```{r, fig.height=8}
+avocado %>%
+  group_by(year_month) %>%
+  summarize(average_price = mean(average_price)) %>%
+  ggplot(aes(x=year_month, y=average_price)) +
+    geom_point(alpha=0.5, colour="darkblue") +
+    xlab("Year-Month") +
+    ylab("Average Price") +
+    #ggtitle("Average Avocado Price Over Time") +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle=90)) 
 ```
 
 **Figure 2.** Average number of avocados sold per week between 2015 and 2018.
