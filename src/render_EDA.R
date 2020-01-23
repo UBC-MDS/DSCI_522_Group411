@@ -15,10 +15,13 @@ suppressMessages(library(caret))
 suppressMessages(library(knitr))
 suppressMessages(library(ggpubr))
 suppressMessages(library(feather))
+suppressMessages(library(gridExtra))
+suppressMessages(library(kableExtra))
 
 main <- function(args) {
   check_args(args)
   make_plot(args$datafile, args$out)
+  make_table(args$datafile, args$out)
 }
 
 check_args <- function(args) {
@@ -36,60 +39,98 @@ make_plot <- function(datafile, out) {
   dest_path <- path.expand(out)
   
   # Read in data
-  priceTrain <- read_feather(datafile)
+  avocado <- read_feather(datafile)
   
-  # What is the average avocado price per region?
-  avocado_by_region <- priceTrain %>%
+  ### What is the average avocado price per region?
+  avocado_by_region <- avocado %>%
     group_by(region) %>%
     summarize(ave_price = mean(average_price))
+  
   # There are many regions here, so it might make sense to group them
-  price_per_region <- ggplot(avocado_by_region, aes(x=reorder(region, -ave_price), y=ave_price)) +
-    geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  price_per_region <- ggplot(avocado, aes(x=reorder(region, -average_price), y=average_price)) +
+    geom_boxplot(alpha=0.1) +
+    geom_point(aes(x=reorder(region, -ave_price), y=ave_price, colour="red"),
+               data=avocado_by_region) +
     xlab("Regions") +
-    ylab("Average Price") +
-    ggtitle("Region") +
+    ylab("Average Price ($)") +
+    ggtitle("Avocado Price by Region") +
+    scale_colour_manual(values=c("red"),
+                        breaks=c("red"),
+                        labels=c("Mean"),
+                        name=c("")) +
     theme_bw() +
-    theme(axis.text.x = element_text(angle=90, size = 5),
+    theme(axis.text.x = element_text(angle=90, size = 8),
           axis.title.x = element_blank()) 
   
   # What is the average avocado price by type (organic vs. non-organic)
-  avocado_by_type <- priceTrain %>%
+  avocado_by_type <- avocado %>%
     group_by(type) %>%
     summarize(ave_price = mean(average_price))
-  price_per_type <- ggplot(avocado_by_type, aes(x=reorder(type, -ave_price), y=ave_price)) +
-    geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
+  
+  price_per_type <- ggplot(avocado, aes(x=reorder(type, -average_price), y=average_price)) +
+    geom_boxplot(alpha=0.2) +
+    geom_point(aes(x=reorder(type, -ave_price), y=ave_price, colour="red"),
+               data=avocado_by_type) +
     xlab("Type") +
-    ylab("Average Price") +
-    ggtitle("Type") +
+    ylab("Average Price ($)") +
+    ggtitle("Avocado Price by Type") +
+    scale_colour_manual(values=c("red"),
+                        breaks=c("red"),
+                        labels=c("Mean"),
+                        name=c("")) +
     theme_bw() +
     theme(axis.title.x = element_blank())
   
   # What is the average price per month?
-  avocado_by_month <- priceTrain %>%
+  avocado_by_month <- avocado %>%
     group_by(month) %>%
     summarize(ave_price = mean(average_price))
-  price_per_month <- ggplot(avocado_by_month, aes(x=month, y=ave_price)) +
-    geom_col(fill="darkblue", alpha=0.5, colour="darkblue") +
-    xlab("Month") +
-    ylab("Average Price") +
-    ggtitle("Month") +
-    theme_bw() +
-    theme(axis.title.x = element_blank())
   
-  # Does average price correlate with number total sold?
-  price_per_sold <- ggplot(priceTrain, aes(x=no_sold, y=average_price)) +
-    geom_point(alpha=0.2, colour="darkblue") +
-    ylab("Average Price") +
-    xlab("Number Sold") +
-    ggtitle("Number sold each week") +
+  price_per_month <- ggplot(avocado, aes(x=month, y=average_price)) +
+    geom_boxplot(alpha=0.2) +
+    geom_point(aes(x=month, y=ave_price, colour="red"),
+               data=avocado_by_month) +
+    xlab("Month") +
+    ylab("Average Price ($)") +
+    ggtitle("Avocado Price by Month") +
+    scale_colour_manual(values=c("red"),
+                        breaks=c("red"),
+                        labels=c("Mean"),
+                        name=c("")) +
     theme_bw() +
-    theme(axis.title.x = element_blank())
+    theme(axis.title.x = element_blank(),
+          legend.position = "right")
   
   plot <- gridExtra::arrangeGrob(price_per_region, price_per_type,
-                          price_per_month, price_per_sold,
-                          ncol=2, nrow=2)
+                          price_per_month,
+                          ncol=1, nrow=3)
 
   ggsave('EDA_plot.png',  plot, path = file.path(dest_path))
+}
+
+make_table <- function(datafile, out) {
+  dest_path <- path.expand(out)
+  
+  # Read in data
+  avocado <- read_feather(datafile)
+  
+  # What is the distribution of the different categorical features?
+  region_summary <- avocado %>%
+    count(region)
+  
+  region_summary <- avocado %>%
+    group_by(region) %>%
+    summarize(min = min(average_price),
+              lower_quartile = quantile(average_price, 0.25),
+              mean = mean(average_price),
+              median = median(average_price),
+              upper_quantile = quantile(average_price, 0.75),
+              max = max(average_price))  %>%
+    left_join(region_summary)
+  
+  region_summary_table <- kable(region_summary,
+                                caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.") %>% 
+                          as_image(file = file.path(dest_path, 'EDA_table.png'))
 }
 
 main(docopt(doc))
