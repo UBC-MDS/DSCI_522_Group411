@@ -43,6 +43,7 @@ Rscript src/get_data.R --url=https://raw.githubusercontent.com/ryanhomer/dsci522
 Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
 Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
 Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
+Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
 ```
 
 ### R Package Dependencies
