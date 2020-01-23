@@ -28,7 +28,7 @@ check_args <- function(args) {
   
   # make sure path exists
   if (!dir.exists(path.expand(args$out))) {
-    dir.create(args$out, recursive = TRUE)
+    dir.create(path.expand(args$out), recursive = TRUE)
   }
 }
 
