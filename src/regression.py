@@ -70,8 +70,14 @@ def random_forest_regression(train_x, train_y):
 def plot_feature_importance(feature_df):
   """
   """
-  
-    
+  feature_plot = alt.Chart(feature_df[:10]).mark_bar(color="red", opacity=0.6).encode(
+    x= alt.X("feature_names:N",
+             sort=alt.SortField(field='importance:Q'),
+             title="Features"),
+    y = alt.Y("importance:Q", title="Feature Importance")
+    ).properties(title="10 Most Important Predictors of Avocado Price",
+             width=400)
+  return feature_plot
   
 
 # Call main function
