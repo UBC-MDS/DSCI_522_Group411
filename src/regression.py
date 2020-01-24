@@ -54,6 +54,13 @@ def random_forest_regression(train_x, train_y):
                   'n_estimators': range(1, 100)}
   random_rfr = RandomizedSearchCV(rfr, rfr_parameters, cv=5, scoring='neg_mean_squared_error')
   random_rfr.fit(train_x, train_y)
+  fold_accuracies = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
+  cv_scores_dict = {'Fold': [1, 2, 3, 4, 5],
+                    'Neg Mean Squared Error': fold_accuracies}
+  print(pd.DataFrame(cv_scores_dict))
+  features = pd.get_dummies(train_data[['region', 'type', 'month']])
+  feature_list = list(feature.columns)
+    
   
 
 # Call main function
