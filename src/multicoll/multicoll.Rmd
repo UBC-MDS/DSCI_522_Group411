@@ -1,5 +1,9 @@
 ---
 title: "Multicollinearity"
+author:
+  - Katie Birchard
+  - Ryan Homer
+  - Andrea Lee
 output: github_document
 bibliography: ../../doc/refs.bib
 ---
@@ -14,6 +18,7 @@ library(feather)
 library(reshape2)
 library(kableExtra)
 library(car)
+source(here::here("src/multicoll/support_functions.R"))
 ```
 
 ## Correlation Matrix
@@ -23,18 +28,6 @@ Get training data.
 ```{r data}
 # See README for how to create feather files.
 df <- read_feather(here::here("data/train.feather"))
-```
-
-```{r util}
-#' Set upper triangle of matrix to NA
-#'
-#' @param corr_matrix A matrix
-#'
-#' @return Matrix with upper triangle set to NA
-upper_tri_na <- function(corr_matrix) {
-  corr_matrix[upper.tri(corr_matrix)] <- NA
-  corr_matrix
-}
 ```
 
 Under the assumption that the data can be modelled linearly after observing the residual plot, we select the continuous numerical predictors, compute the correlation matrix and wrangle into a plottable dataframe [@corr].
