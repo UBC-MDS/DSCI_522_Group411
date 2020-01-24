@@ -18,6 +18,7 @@ suppressMessages(library(knitr))
 suppressMessages(library(ggpubr))
 suppressMessages(library(feather))
 suppressMessages(library(kableExtra))
+suppressMessages(library(broom))
 
 main <- function(args) {
   check_args(args)
@@ -63,9 +64,15 @@ make_table <- function(datafile, out) {
   # Fit model
   model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
   
+  # Conduct hypothesis test
+  p_val <- kable(tidy(model), 
+                 caption = "Table 1. Hypothesis Test Table.") %>% 
+    as_image(file = file.path(dest_path, 'hypothesis_test_table.png'))
+  
   # Conduct anova
+  model <- lm(average_price ~ type + year + region + month, data = avocado)
   anova <- kable(anova(model), 
-                caption = "Table 1. Anova Table.") %>% 
+                caption = "Table 2. Anova Table.") %>% 
           as_image(file = file.path(dest_path, 'anova_table.png'))
 }
 
