@@ -1,0 +1,78 @@
+---
+title: "DSCI 522 Hypothesis Test"
+author: "Katie Birchard, Ryan Homer, Andrea Lee"
+output: github_document
+---
+
+## Hypothesis Test: What is the strongest predictor of avocado prices in the United States?
+To conduct a hypothesis test, we will fit an additive linear model and interpret the p-values to determine which features are significant.
+
+The features we will be testing are:
+
+- total_volume: total volume of avocados sold
+- PLU_4046: number of of avocados with a price lookup code of 4046 (small avocado) sold
+- PLU_4225: number of of avocados with a price lookup code of 4225 (large avocado) sold
+- PLU_4770:  number of of avocados with a price lookup code of 4770 (x-large avocado) sold
+- total_bags: total number of bags of avocados sold
+- small_bags: number of small bags of avocados sold
+- large_bags: number of large bags of avocados sold
+- xlarge_bags: number of x-large bags of avocados sold
+- type: type of avocado sold (conventional or organic)
+- year: year avocado was sold in
+- region: U.S. state avocado was sold in
+- month: month avocado was sold in
+
+The target is:
+
+- average_price: average price of avocado sold
+
+We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+
+library(tidyverse)
+library(tidyr)
+library(broom)
+library(lubridate)
+library(caret)
+library(knitr)
+library(feather)
+```
+
+```{r load data, include=FALSE}
+avocado <- read_feather('../data/train.feather')
+```
+
+```{r fit model}
+model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
+
+ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
+  geom_point(colour= "cadetblue", alpha=0.1) +
+  labs(title = 'Residual Plot', x = "Predicted Values", y = "Residuals") +
+  theme_minimal()
+```
+
+Based on the EDA, we chose to fit a linear model to conudct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we will examine its residual plot. Looking at the residual plot, the points are randomly distributed which indicates that a linear model is appropriate in this case.
+
+```{r hypothesis test}
+anova(model)
+```
+
+ANOVA is a special case of linear model that assumes categorical predictors. Because many of our features are categorical with numerous levels, we can use ANOVA to calculate and interpret the features' p-values.
+
+At a significance level of 0.05, it appears that the following features are significant as their p-values are less than the significance level:
+
+- total_volume
+- PLU_4046
+- PLU_4770
+- total_bags
+- small_bags
+- large_bags
+- type
+- year
+- region
+- month
+
+However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
+
