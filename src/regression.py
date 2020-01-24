@@ -34,6 +34,7 @@ def main(file_path, output):
   train_data = pd.read_feather(file_path_train)
   # add function to write to output directory
 
+# Define function to split data into feature and targets
 def feature_target_split(data):
   """
   """
@@ -41,10 +42,11 @@ def feature_target_split(data):
   train_y = train_data['average_price']
   categorical_features = ['region', 'type', 'month']
   preprocessor = ColumnTransformer(transformers=[
-    ('ohe', OneHotEncoder(drop="first"), categorical_features)
+    ('ohe', OneHotEncoder(), categorical_features)
     ])
   train_x = preprocessor.fit_transform(train_x)
-
+  
+# Define function to carry out random forest regression 
 def random_forest_regression(train_x, train_y):
   """
   """
@@ -55,11 +57,20 @@ def random_forest_regression(train_x, train_y):
   random_rfr = RandomizedSearchCV(rfr, rfr_parameters, cv=5, scoring='neg_mean_squared_error')
   random_rfr.fit(train_x, train_y)
   fold_accuracies = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
-  cv_scores_dict = {'Fold': [1, 2, 3, 4, 5],
-                    'Neg Mean Squared Error': fold_accuracies}
-  print(pd.DataFrame(cv_scores_dict))
+  cv_scores = pd.DataFrame({'Fold': [1, 2, 3, 4, 5],
+                    'Neg Mean Squared Error': fold_accuracies})
+  print(cv_scores)
   features = pd.get_dummies(train_data[['region', 'type', 'month']])
   feature_list = list(feature.columns)
+  feature_df = pd.DataFrame({"feature_names": feature_list,
+             "importance": random_rfr.best_estimator_.feature_importances_})
+  feature_df = feature_df.sort_values(["importance"], ascending=False)
+  print(feature_df)
+  
+def plot_feature_importance(feature_df):
+  """
+  """
+  
     
   
 
