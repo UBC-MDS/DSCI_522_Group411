@@ -35,7 +35,7 @@ upper_tri_na <- function(corr_matrix) {
 }
 ```
 
-Select numerical predictors, get correlation matrix and wrangle into plottable dataframe [@corr].
+Under the assumption that the data can be modelled linearly after observing the residual plot, we select the continuous numerical predictors, compute the correlation matrix and wrangle into a plottable dataframe [@corr].
 
 ```{r dataframe}
 # Create dataframe for correlation matrix chart
@@ -79,34 +79,22 @@ ggplot(corr_df) +
                                title.hjust = 0.5))
 ```
 
-(this is temporary)
+Overall, there is fairly high collinarity between many of the predictors. This was expected, since they all deal with volume of avocados sold, be it by PLU code, bag type or total volume.
 
-High correlation, > 90%
+In particular, `total_bags` and `total_volume` were expected to be highly correlated to other predictors that were sub-quantities of these totals.
 
-* `total_bags` and `small_bags`
-* `total_bags` and `large_bags`
-* `small_bags` and `large_bags`
-* `PLU_4225` and `total_bags`
-* `PLU_4225` and `small_bags`
-* `PLU_4046` and `PLU_4225`
-* `PLU_4046` and `total_bags`
-* `total_volume` and `PLU_4046`
-* `total_volume` and `PLU_4225`
-* `total_volume` and `total_bags`
-* `total_volume` and `small_bags`
-* `total_volume` and `large_bags`
-
-TODO: Write a blurb on correlation observations.
+Due to the high correlation, including all these predictors in a prediction model would probably lead to overfitting.
 
 ## Multicollinearity
 
 Create linear model and comput VIF scores from car [@car] package.
 
-```{r multicoll}
-model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
-            data = df)
-
-car::vif(model)
+```{r mc 1}
+lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
+   data = df) %>% 
+  car::vif()
 ```
+
+This suggests extremely high collinearity for these variables in a linear model. We'll be careful about using these features. They are probably not very good predictors of the average avocado price.
 
 ## References

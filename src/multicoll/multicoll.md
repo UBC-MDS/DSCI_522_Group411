@@ -8,14 +8,14 @@ Load
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+    ## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
 
     ## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
     ## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
     ## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
     ## ✓ readr   1.3.1     ✓ forcats 0.4.0
 
-    ## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -76,9 +76,11 @@ upper_tri_na <- function(corr_matrix) {
 }
 ```
 
-Select numerical predictors, get correlation matrix and wrangle into
-plottable dataframe (*Ggplot2 : Quick Correlation Matrix Heatmap - R
-Software and Data Visualization*, n.d.).
+Under the assumption that the data can be modelled linearly after
+observing the residual plot, we select the continuous numerical
+predictors, compute the correlation matrix and wrangle into a plottable
+dataframe (*Ggplot2 : Quick Correlation Matrix Heatmap - R Software and
+Data Visualization*, n.d.).
 
 ``` r
 # Create dataframe for correlation matrix chart
@@ -124,24 +126,16 @@ ggplot(corr_df) +
 
 ![](multicoll_files/figure-gfm/chart-1.png)<!-- -->
 
-(this is temporary)
+Overall, there is fairly high collinarity between many of the
+predictors. This was expected, since they all deal with volume of
+avocados sold, be it by PLU code, bag type or total volume.
 
-High correlation, \> 90%
+In particular, `total_bags` and `total_volume` were expected to be
+highly correlated to other predictors that were sub-quantities of these
+totals.
 
-  - `total_bags` and `small_bags`
-  - `total_bags` and `large_bags`
-  - `small_bags` and `large_bags`
-  - `PLU_4225` and `total_bags`
-  - `PLU_4225` and `small_bags`
-  - `PLU_4046` and `PLU_4225`
-  - `PLU_4046` and `total_bags`
-  - `total_volume` and `PLU_4046`
-  - `total_volume` and `PLU_4225`
-  - `total_volume` and `total_bags`
-  - `total_volume` and `small_bags`
-  - `total_volume` and `large_bags`
-
-TODO: Write a blurb on correlation observations.
+Due to the high correlation, including all these predictors in a
+prediction model would probably lead to overfitting.
 
 ## Multicollinearity
 
@@ -150,16 +144,17 @@ Create linear model and comput VIF scores from car (Fox and Weisberg
 package.
 
 ``` r
-model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
-            data = df)
-
-car::vif(model)
+car::vif(lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags, data = df))
 ```
 
     ## total_volume     PLU_4046     PLU_4225     PLU_4770   total_bags   small_bags 
     ## 4.375098e+09 5.707626e+08 5.165779e+08 4.140131e+06 2.489906e+14 1.426942e+14 
     ##   large_bags  xlarge_bags 
     ## 1.488220e+13 8.212601e+10
+
+This suggests extremely high collinearity for these variables in a
+linear model. We’ll be careful about using these features. They are
+probably not very good predictors of the average avocado price.
 
 ## References
 
