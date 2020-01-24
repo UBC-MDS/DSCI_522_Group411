@@ -5,11 +5,12 @@
 a table of the most important features. This script takes a path to an 
 input file and a path to an output directory as arguments.
 
-Usage: regression.py --file_path=<file_path> --output=<output>
+Usage: regression.py --file_path_train=<file_path_train> --output=<output>
 
 Options:
---file_path=<file_path>   Path (including filename) to a cleaned feather dataset.
---output=<output> Path (including filename) to the figures/tables output 
+--file_path_train=<file_path_train>   Path (including filename) to thecleaned feather 
+training dataset.
+--output=<output>                     Path (including filename) to the figures/tables output 
 by the regression analysis
 """
 
@@ -30,11 +31,31 @@ opt = docopt(__doc__)
 # Define main function
 def main(file_path, output):
   # read in the data
-  data = pd.read_feather(file_path)
+  train_data = pd.read_feather(file_path_train)
   # add function to write to output directory
 
-# load in the cleaned feather dataset
+def feature_target_split(data):
+  """
+  """
+  train_x = train_data[['region', 'type', 'month']]
+  train_y = train_data['average_price']
+  categorical_features = ['region', 'type', 'month']
+  preprocessor = ColumnTransformer(transformers=[
+    ('ohe', OneHotEncoder(drop="first"), categorical_features)
+    ])
+  train_x = preprocessor.fit_transform(train_x)
+
+def random_forest_regression(train_x, train_y):
+  """
+  """
+  rfr = RandomForestRegression()
+  rfr.fit(train_x, train_y)
+  rfr_parameters = {'max_depth': range(1, 20),
+                  'n_estimators': range(1, 100)}
+  random_rfr = RandomizedSearchCV(rfr, rfr_parameters, cv=5, scoring='neg_mean_squared_error')
+  random_rfr.fit(train_x, train_y)
+  
 
 # Call main function
 if __name__ == "__main__":
-  main(opt["--file_path"], opt["--statistic"])
+  main(opt["--file_path_train"], opt["--output"])
