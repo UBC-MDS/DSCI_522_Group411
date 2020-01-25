@@ -22,7 +22,7 @@ Next, we will need to determine if the features are correlated with the target. 
 
 To get a better understanding of our features, we will also test for multicollinearity by computing their variance inflation factors. We will then check for and remove any redundancies between features. This will allow us to build a more accurate model in the next step.
 
-Once we have confirmed which features are correlated with the target and are non-redundant, we will fit a Random Forest Regressor model. We will then compute the feature importances using the `feature_importances_` attribute. This attribute will return an importance value for each feature that indicates how important that feature is at explaining the target (the higher the value, the more important the feature is). The importance value is based on the decrease in impurity measure. The decrease in impurity is calculated by the model by computing how much each feature contributes to decreasing the weighted impurity. The model then averages each feature's impurity decrease over the trees.
+Once we have confirmed which features are correlated with the target and are non-redundant, we will fit a Random Forest Regressor model using these features. We will then compute the feature importances using the `feature_importances_` attribute. This attribute will return an importance value for each feature that indicates how important that feature is at explaining the target (the higher the value, the more important the feature is). The importance value is based on the decrease in impurity measure. The decrease in impurity is calculated by the model by computing how much each feature contributes to decreasing the weighted impurity. The model then averages each feature's impurity decrease over the trees.
 
 Lastly, we will plot our results in order to find out which feature is the strongest predictor of avocado prices.
 
@@ -39,20 +39,29 @@ To communicate our results, we will create a bar chart ranking the features by i
 To replicate this analysis, clone this repository and make sure that the dependencies below are installed. Then, run the following in your terminal from the root directory of the project.
 
 ```
+Rscript -e "webshot::install_phantomjs()"
 Rscript src/get_data.R --url=https://raw.githubusercontent.com/ryanhomer/dsci522-group411-data/master/avocado.csv --destfile=data/avocado.csv
 Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
 Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
+Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
+Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
 ```
 
 ### R Package Dependencies
 Package Name|Version
 -|-
-tidyverse|1.2.1
-lubridate|1.7.4
+broom|0.5.3
 caret|6.0-85
-knitr|1.25
-ggpubr|0.2.4
+car|3.0-6
 feather|0.3.5
+ggpubr|0.2.4
+ggpubr|0.2.4
+kableExtra|1.1.0
+knitr|1.25
+lubridate|1.7.4
+RCurl|1.98-1.1
+reshape2|1.4.3
+tidyverse|1.2.1
 
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
