@@ -8,6 +8,8 @@ bibliography: refs.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(tidyverse)
 ```
 
 # What is the strongest predictor of avocado prices in the United States?
@@ -22,7 +24,7 @@ We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromu
 
 # Analysis
 
-A random forest model was used to build a regression model to determine what the strongest predictors of avocado prices were. Before we fitted the model, we first conducted a hypothesis test and a multicollinearity test to determine which features are significant and should be used in the model.
+We used a random forest regression model to determine the strongest predictors of avocado prices. Before we fitted the model, we first conducted a hypothesis test and a multicollinearity test to determine which features are significant and should be used in the model. These tests also identified features that were strongly correlated with one another, and therefore would be redundant to include in the model.
 
 The features we tested were:
 
@@ -39,10 +41,9 @@ The features we tested were:
 - `region`: U.S. state avocado was sold in
 - `month`: month avocado was sold in
 
-The features we used in the random forest model were:
+The features we used in the random forest regression model were:
 
 - `type`: type of avocado sold (conventional or organic)
-- `year`: year avocado was sold in
 - `region`: U.S. state avocado was sold in
 - `month`: month avocado was sold in
 
@@ -50,11 +51,11 @@ The target was:
   
 - `average_price`: average price of avocado sold
 
-To perform this anlaysis, the R and Python programming languages [@r; @Python] as well as the following R and Python packages were used: caret [@caret], docopt [@docopt], feather [@feather], tidyverse [@tidyverse], lubridate [@lubridate], corr [@corr], car [@car], kableExtra [@kableExtra], reshape2 [@reshape2], tidyverse [@tidyverse], broom [@broom], knitr [@knitr], ADD PACKAGES USED FOR ML.
+To perform this anlaysis, the R and Python programming languages [@r; @Python] as well as the following R and Python packages were used: caret [@caret], docopt [@docopt], feather [@feather], tidyverse [@tidyverse], lubridate [@lubridate], corr [@corr], car [@car], kableExtra [@kableExtra], reshape2 [@reshape2], tidyverse [@tidyverse], broom [@broom], knitr [@knitr], pandas [@pandas], numpy[@numpy], scikit-learn[@scikit-learn], and altair[@2018-altair].
 
 # Exploratory Data Analysis
 
-We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, month, and number sold each week against the average price to visualize the relationships between these variables. We did not plot number of avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the relationship between avocado prices and avocados sold could be reciprocal (i.e. avocados sold may influence the price and vice versa), leading to a false interpretation. From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. We can also clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados. Finally, when we observe the monthly trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months.
+We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, and month against the average price to visualize the relationships between these variables. We did not plot number of avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the relationship between avocado prices and avocados sold could be reciprocal (i.e. avocados sold may influence the price and vice versa), leading to a false interpretation. From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. We can also clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados. Finally, when we observe the monthly trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months.
 
 ![](../doc/img/EDA_plot.png)
 **Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week.
@@ -82,44 +83,69 @@ However, region and month are categorical variables that have numerous levels. T
 ![](../doc/img/hypothesis_test_table.png)
 **Figure 3.** Hypothesis test.
 
-We can also use ANOVA to calculate and interpret the features’ p-values, as ANOVA is a special case of linear model that assumes categorical predictors. This will act as a validation for the categorical variables we determined as significant above. The results of our ANOVA test below confirms that the features `type`, `year`, `region`, and `month` are significant at a 0.05 significance level.
+We also used ANOVA to calculate and interpret the features’ p-values, as ANOVA is a special case of linear model that assumes categorical predictors. This test will act as a validation for the categorical variables we determined as significant above. The results of our ANOVA test below confirms that the features `type`, `year`, `region`, and `month` are significant at a 0.05 significance level.
 ![](../doc/img/anova_table.png)
 **Figure 4.** Hypothesis test of significant features using ANOVA.
 
-However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
+However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We also conducted a multicollinearity test to determine if any of the features are redundant. We then used these results to inform which features should be included in the feature importances model.
 
 ## Multicollinearity Test
 
-Next we conducted a multicollinearity test to check for any redundancies between features. Under the assumption that the data can be modelled linearly after observing the residual plot, we select the continuous numerical predictors, compute the correlation matrix and wrangle into a plottable dataframe [3].
+Next we conducted a multicollinearity test to check for any redundancies between features. Under the assumption that the data can be modelled linearly after observing the residual plot, we selected the continuous numerical predictors, computed the correlation matrix, and wrangled the data into a plottable dataframe [3].
 ![](../doc/img/correlation_matrix.png)
 **Figure 5.** Correlation matrix of continuous features.
 
-Overall, there is fairly high collinarity between many of the predictors. This was expected, since they all deal with volume of avocados sold, be it by PLU code, bag type or total volume. In particular, `total_bags` and `total_volume` were expected to be highly correlated to other predictors that were sub-quantities of these totals. Due to the high correlation, including all these predictors in a prediction model would probably lead to overfitting.
+Overall, there is fairly high collinarity between many of the predictors. This was expected, since they all deal with volume or number of avocados sold, be it by PLU code, bag type or total volume. In particular, `total_bags` and `total_volume` were expected to be highly correlated to other predictors that were sub-quantities of these totals. Due to the high correlation, including all these predictors in a prediction model would probably lead to overfitting.
 
-To verify the result from the correlation matrix above, we also computed the variance inflation (VIF) scores from the car package.
+To verify the result from the correlation matrix above, we also computed the variance inflation (VIF) scores from the `car` package.
+
 ![](../doc/img/collinearity.png)
 **Figure 6.** Variance inflation scores of continuous features.
 
-This suggests extremely high collinearity for these variables in a linear model. Therefore, we will be careful about using these features as they are probably not very good predictors of the average avocado price.
+The high VIF scores suggest extremely high collinearity for these variables in a linear model. Therefore, we will be careful about using these features as they are probably ineffective predictors of the average avocado price.
 
 ## Random Forest Feature Importances
 
-Lastly, we fitted a random forest regressor model using the features that we determined as significant from the analysis above (`region`, `type`, and `month`). We used one hot encoding on these categorical features and used cross validation to determine the optimal hyperparameters. We found that our top predictor of avocado prices is `type` (i.e. whether the avocado is organic or convenional).
+Lastly, we fitted a random forest regressor model using the features that we determined as significant from the analysis above (`region`, `type`, and `month`). We used one hot encoding on these categorical features and used randomized cross validation to determine the optimal hyperparameters, maximum depth and number of estimators. We calculated the cross-validation scores to determine how well our model was performing.
 
-![](../doc/img/feature_plot.png)
+```{r}
+cv_scores <- read_csv("../results/cv_scores.csv")
+cv_scores <- cv_scores %>%
+  select(`Fold`, `Neg Mean Squared Error`)
+kable(cv_scores,
+      caption="Table 1. Cross-validation scores for each of the folds in the random forest regression model.")
+```
+
+From this model, we were able to determine the relative importance of each feature.
+
+```{r}
+feat_imp <- read_csv("../results/feature_importance.csv")
+feat_imp <- feat_imp %>%
+  select(`Feature Names` = `feature_names`,
+         `Importance` = `importance`)
+feat_imp <- feat_imp[1:15, ]
+kable(feat_imp,
+      caption="Table 2. The relative feature importances of the top 15 most important features determined by random forest regression model.")
+```
+
+
+We found that our top predictor of avocado prices is `type` (i.e. whether the avocado is organic or conventional).
+
+![](../results/feature_plot.png)
+
 **Figure 7.** Plot ranking features by importance.
 
-Our model performed okay with the data, with a training accuracy score of 0.71. The result from our model aligned with our expectations as our EDA did show a different distribution in prices among organic and conventional avocados.
+Our model had a training accuracy score of 0.71. The result from our model aligned with our expectations as our EDA depicted differences in distributions between organic and conventional acovado prices.
 
 We also fitted a linear regression model, however, the training accuracy score was 0.61, which is much lower than the accuracy of the random forest model. Therefore, we decided to use the random forest model to continue on with our analysis of computing feature importances.
 
 # Discussion
 
-Our random forest model may not be as accurate as it could be as we treated the month and region features as categorical variables. 
+Our random forest model could be improved substantially by modifying the `month` and `region` features.  
 
-Month is ordinal and related to one another, thus it should be treated as a continuous variable. That being said, we could treat month as a categorical variable if we group the months into seasons and use season as a feature instead. 
+`Month` is ordinal, thus it should be treated as a numerical variable. However, it is difficult to convert month into its numerical form since December and January would be interpreted as furthest apart from one another, when in reality they should be interpreted as close to one another. That being said, we could treat month as a categorical variable if we group the months into seasons and use season as a feature instead. 
 
-Region is also related to each other as some regions are closer to one another than other regions. Therefore, we should transform region into continuous latitude and longitude variables and use latitude and longitude as featues instead.
+Similarly, the different regions within the `region` feature are also related to one other as some regions are closer to one another geographically, while others are further apart. Therefore, a more accurate way to depict `region` would be to transform each region into its respective latitude and longitude.
 
 # References
 
@@ -127,4 +153,4 @@ Region is also related to each other as some regions are closer to one another t
 
 [2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/).
 
-[3] Ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data Visualization. n.d. STHTDA. [Web Link](http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization).
+[3] ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data Visualization. n.d. STHTDA. [Web Link](http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization).
