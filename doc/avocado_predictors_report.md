@@ -146,7 +146,7 @@ their p-values from this model.
 
 ![](../doc/img/hypothesis_test_table.png)
 
-**Figure 3.** Hypothesis test.
+**Table 1.** Hypothesis test.
 
 We also used ANOVA to calculate and interpret the features’ p-values, as
 ANOVA is a special case of linear model that assumes categorical
@@ -157,7 +157,7 @@ test below confirms that the features `type`, `year`, `region`, and
 
 ![](../doc/img/anova_table.png)
 
-**Figure 4.** Hypothesis test of significant features using ANOVA.
+**Table 2.** Hypothesis test of significant features using ANOVA.
 
 However, we should be cautious not to use the p-value significance as a
 stand alone measure to determine if these features are correlated with
@@ -173,7 +173,7 @@ linearly after observing the residual plot, we selected the continuous
 numerical predictors, computed the correlation matrix, and wrangled the
 data into a plottable dataframe (*Ggplot2 : Quick Correlation Matrix
 Heatmap - R Software and Data Visualization*, n.d.).
-![](../doc/img/correlation_matrix.png) **Figure 5.** Correlation matrix
+![](../doc/img/correlation_matrix.png) **Figure 3.** Correlation matrix
 of continuous features.
 
 Overall, there is fairly high collinarity between many of the
@@ -189,7 +189,7 @@ the variance inflation (VIF) scores from the `car` package.
 
 ![](../doc/img/collinearity.png)
 
-**Figure 6.** Variance inflation scores of continuous features.
+**Table 3.** Variance inflation scores of continuous features.
 
 The high VIF scores suggest extremely high collinearity for these
 variables in a linear model. Therefore, we will be careful about using
@@ -214,7 +214,7 @@ well our model was performing.
 |    4 |            \-0.1310914 |
 |    5 |            \-0.1385528 |
 
-**Table 1**. Cross-validation scores for each of the folds in the random
+**Table 4**. Cross-validation scores for each of the folds in the random
 forest regression model.
 
 From this model, we were able to determine the relative importance of
@@ -238,7 +238,7 @@ each feature.
 | region\_Charlotte           |  0.0109272 |
 | region\_Sacramento          |  0.0097175 |
 
-**Table 2**. The relative feature importances of the top 15 most
+**Table 5**. The relative feature importances of the top 15 most
 important features determined by random forest regression model.
 
 We found that our top predictor of avocado prices is `type`
@@ -246,7 +246,7 @@ We found that our top predictor of avocado prices is `type`
 
 ![](../results/feature_plot.png)
 
-**Figure 7.** Plot ranking features by importance.
+**Figure 4.** Plot ranking features by importance.
 
 Our model had a training accuracy score of 0.71. The result from our
 model aligned with our expectations as our EDA depicted differences in

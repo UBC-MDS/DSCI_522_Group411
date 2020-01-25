@@ -83,13 +83,13 @@ However, region and month are categorical variables that have numerous levels. T
 
 ![](../doc/img/hypothesis_test_table.png)
 
-**Figure 3.** Hypothesis test.
+**Table 1.** Hypothesis test.
 
 We also used ANOVA to calculate and interpret the features’ p-values, as ANOVA is a special case of linear model that assumes categorical predictors. This test will act as a validation for the categorical variables we determined as significant above. The results of our ANOVA test below confirms that the features `type`, `year`, `region`, and `month` are significant at a 0.05 significance level.
 
 ![](../doc/img/anova_table.png)
 
-**Figure 4.** Hypothesis test of significant features using ANOVA.
+**Table 2.** Hypothesis test of significant features using ANOVA.
 
 However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We also conducted a multicollinearity test to determine if any of the features are redundant. We then used these results to inform which features should be included in the feature importances model.
 
@@ -97,7 +97,7 @@ However, we should be cautious not to use the p-value significance as a stand al
 
 Next we conducted a multicollinearity test to check for any redundancies between features. Under the assumption that the data can be modelled linearly after observing the residual plot, we selected the continuous numerical predictors, computed the correlation matrix, and wrangled the data into a plottable dataframe [@corr].
 ![](../doc/img/correlation_matrix.png)
-**Figure 5.** Correlation matrix of continuous features.
+**Figure 3.** Correlation matrix of continuous features.
 
 Overall, there is fairly high collinarity between many of the predictors. This was expected, since they all deal with volume or number of avocados sold, be it by PLU code, bag type or total volume. In particular, `total_bags` and `total_volume` were expected to be highly correlated to other predictors that were sub-quantities of these totals. Due to the high correlation, including all these predictors in a prediction model would probably lead to overfitting.
 
@@ -105,7 +105,7 @@ To verify the result from the correlation matrix above, we also computed the var
 
 ![](../doc/img/collinearity.png)
 
-**Figure 6.** Variance inflation scores of continuous features.
+**Table 3.** Variance inflation scores of continuous features.
 
 The high VIF scores suggest extremely high collinearity for these variables in a linear model. Therefore, we will be careful about using these features as they are probably ineffective predictors of the average avocado price.
 
@@ -118,7 +118,7 @@ cv_scores <- read_csv("../results/cv_scores.csv")
 cv_scores <- cv_scores %>%
   select(`Fold`, `Neg Mean Squared Error`)
 kable(cv_scores,
-      caption="**Table 1**. Cross-validation scores for each of the folds in the random forest regression model.")
+      caption="**Table 4**. Cross-validation scores for each of the folds in the random forest regression model.")
 ```
 
 From this model, we were able to determine the relative importance of each feature.
@@ -130,7 +130,7 @@ feat_imp <- feat_imp %>%
          `Importance` = `importance`)
 feat_imp <- feat_imp[1:15, ]
 kable(feat_imp,
-      caption="**Table 2**. The relative feature importances of the top 15 most important features determined by random forest regression model.")
+      caption="**Table 5**. The relative feature importances of the top 15 most important features determined by random forest regression model.")
 ```
 
 
@@ -138,7 +138,7 @@ We found that our top predictor of avocado prices is `type` (i.e. whether the av
 
 ![](../results/feature_plot.png)
 
-**Figure 7.** Plot ranking features by importance.
+**Figure 4.** Plot ranking features by importance.
 
 Our model had a training accuracy score of 0.71. The result from our model aligned with our expectations as our EDA depicted differences in distributions between organic and conventional acovado prices.
 
