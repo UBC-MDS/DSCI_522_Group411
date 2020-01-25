@@ -18,7 +18,6 @@ library(knitr)
 library(ggpubr)
 library(feather)
 
-
 # Loading in the dataset.
 # (See README for how to download dataset.)
 avocado <- read_feather("../data/train.feather")
