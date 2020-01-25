@@ -88,7 +88,6 @@ create_assets <- function(datafile, out) {
 
 
     # multicollinearity table
-    webshot::install_phantomjs()
     lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
        data = df) %>%
       vif() %>%
