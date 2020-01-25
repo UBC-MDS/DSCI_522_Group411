@@ -89,6 +89,7 @@ here|0.1
 kableExtra|1.1.0
 knitr|1.25
 lubridate|1.7.4
+magick|2.3
 RCurl|1.98-1.1
 reshape2|1.4.3
 tidyverse|1.2.1
@@ -108,7 +109,7 @@ selenium|3.141.0
 
 Package Name|Version
 -|-
-chromedrive|79.0.3945.36
+chromedriver|79.0.3945.36
 
 ## Reports
 
