@@ -57,7 +57,7 @@ altair|4.0.0
 broom|0.5.3
 caret|6.0-85
 car|3.0-6
-chromedrive os|
+ChromeDriver os|
 docopt|0.6.1
 feather|0.3.5
 ggpubr|0.2.4
