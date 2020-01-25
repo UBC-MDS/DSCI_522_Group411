@@ -70,8 +70,9 @@ Python packages were used: `caret` (Kuhn 2020), `docopt` (de Jonge
 `kableExtra` (Zhu 2019), `reshape2` (Wickham 2007), `tidyverse` (Wickham
 et al. 2019), `broom` (Robinson and Hayes 2019), `knitr` (Xie 2014),
 `ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `pandas`
-(McKinney and others 2010), `numpy` (Oliphant 2006), `scikit-learn`
-(Pedregosa et al. 2011), and `altair` (Sievert 2018).
+(McKinney and others 2010), `numpy` (Oliphant 2006), `selenium` (Salunke
+2014), `scikit-learn` (Pedregosa et al. 2011), and `altair` (Sievert
+2018).
 
 # Exploratory Data Analysis
 
@@ -365,6 +366,14 @@ Computing*. Vienna, Austria: R Foundation for Statistical Computing.
 Robinson, David, and Alex Hayes. 2019. *Broom: Convert Statistical
 Analysis Objects into Tidy Tibbles*.
 <https://CRAN.R-project.org/package=broom>.
+
+</div>
+
+<div id="ref-selenium">
+
+Salunke, Sagar Shivaji. 2014. *Selenium Webdriver in Python: Learn with
+Examples*. 1st ed. North Charleston, SC, USA: CreateSpace Independent
+Publishing Platform.
 
 </div>
 
