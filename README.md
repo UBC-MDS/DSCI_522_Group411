@@ -111,21 +111,25 @@ Package Name|Version
 chromedrive|79.0.3945.36
 
 ## Reports
+
 - [Exploratory Data Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/DSCI_522_EDA.md)
 - [Hypothesis Test (Intermediate Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/hypothesis_test.md)
 - [Multicollinearity Test (Intermediate Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/multicoll/multicoll.md)
 - [Random Forest Feature Importances (Final Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/ML_analysis.ipynb)
 - [Final Report](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/doc/avocado_predictors_report.md)
 
-### Scripts
+## Scripts
+
 - [Download Data](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/get_data.R)
 - [Prepare Data](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/prepare_data.R)
 - [Render EDA](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/render_EDA.R)
 - [Conduct Hypothesis Test](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/conduct_hypothesis_test.R)
 - [Conduct Multicollinearity Test](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/multicoll/mc_create_assets.R)
 - [Conduct Feature Importances Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/regression.py)
+- [Final Report](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/run_all.sh)
 
 ## References
+
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
 
 [2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/).
