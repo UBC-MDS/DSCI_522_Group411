@@ -10,8 +10,8 @@ Usage: regression.py --file_path_train=<file_path_train> --output=<output>
 Options:
 --file_path_train=<file_path_train>   Path (including filename) to thecleaned feather 
 training dataset.
---output=<output>                     Path (including filename) to the figures/tables output 
-by the regression analysis
+--output=<output>                     Path (excluding filename) to the figures/tables output 
+directory
 """
 
 # Import all necessary packages
@@ -22,20 +22,23 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import RandomizedSearchCV, cross_val_score
 import altair as alt
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 from pyarrow import feather
+from docopt import docopt
 
 opt = docopt(__doc__)
 
 # Define main function
-def main(file_path, output):
+def main(file_path_train, output):
   # read in the data
   train_data = pd.read_feather(file_path_train)
+  train_x, train_y = feature_target_split(train_data)
+  feature_df = random_forest_regression(train_x, train_y)
+  plot_feature_importance(feature_df)
+  
   # add function to write to output directory
 
 # Define function to split data into feature and targets
-def feature_target_split(data):
+def feature_target_split(train_data):
   """
   """
   train_x = train_data[['region', 'type', 'month']]
@@ -45,6 +48,7 @@ def feature_target_split(data):
     ('ohe', OneHotEncoder(), categorical_features)
     ])
   train_x = preprocessor.fit_transform(train_x)
+  return train_x, train_y
   
 # Define function to carry out random forest regression 
 def random_forest_regression(train_x, train_y):
@@ -59,14 +63,17 @@ def random_forest_regression(train_x, train_y):
   fold_accuracies = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
   cv_scores = pd.DataFrame({'Fold': [1, 2, 3, 4, 5],
                     'Neg Mean Squared Error': fold_accuracies})
-  print(cv_scores)
+  cv_score.to_csv(output + "cv_scores.csv")
   features = pd.get_dummies(train_data[['region', 'type', 'month']])
   feature_list = list(feature.columns)
   feature_df = pd.DataFrame({"feature_names": feature_list,
              "importance": random_rfr.best_estimator_.feature_importances_})
   feature_df = feature_df.sort_values(["importance"], ascending=False)
-  print(feature_df)
-  
+  # print(feature_df)
+  feature_df.to_csv(output + "feature_importance.csv")
+  return feature_df
+
+# Define plot function  
 def plot_feature_importance(feature_df):
   """
   """
@@ -77,8 +84,7 @@ def plot_feature_importance(feature_df):
     y = alt.Y("importance:Q", title="Feature Importance")
     ).properties(title="10 Most Important Predictors of Avocado Price",
              width=400)
-  return feature_plot
-  
+  feature_plot.save(output + "feature_plot.png", webdriver="chrome")
 
 # Call main function
 if __name__ == "__main__":
