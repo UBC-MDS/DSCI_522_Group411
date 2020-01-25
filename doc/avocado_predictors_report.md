@@ -19,11 +19,11 @@ our results, we can also compute a rank of features by importance.
 We will be analyzing the [avocado prices
 dataset](https://www.kaggle.com/neuromusic/avocado-prices) retrieved
 from Kaggle and compiled by the Hass Avocado Board using retail scan
-data from the United States \[1\]. The dataset consists of approximately
-18,000 records over 4 years (2015 - 2018). The dataset contains
-information about avocado prices, Price Look-Up (PLU) codes, types
-(organic or conventional), region purchased in the United States, volume
-sold, bags sold, and date sold.
+data from the United States (Kiggins 2018). The dataset consists of
+approximately 18,000 records over 4 years (2015 - 2018). The dataset
+contains information about avocado prices, Price Look-Up (PLU) codes,
+types (organic or conventional), region purchased in the United States,
+volume sold, bags sold, and date sold.
 
 # Analysis
 
@@ -103,11 +103,12 @@ accurate, we compared the average prices in this dataset to another
 published by M. Shahbandeh in February 2019. According to the dataset we
 selected, the average price of avocados from 2015 to 2018 was $1.41.
 According to Shahbandeh’s study, the average price of avocados from 2015
-to 2018 was $1.11 \[2\]. Thus, the average price from our dataset is
-slightly higher compared to Shahbandeh’s study. This discrepancy could
-be due to the inclusion of organic avocados in this dataset, which tend
-to be more expensive. However, the prices are still similar enough that
-the observations from this dataset are likely accurate.
+to 2018 was $1.11 (Shahbandeh 2019). Thus, the average price from our
+dataset is slightly higher compared to Shahbandeh’s study. This
+discrepancy could be due to the inclusion of organic avocados in this
+dataset, which tend to be more expensive. However, the prices are still
+similar enough that the observations from this dataset are likely
+accurate.
 
 # Results
 
@@ -197,26 +198,6 @@ hyperparameters, maximum depth and number of estimators. We calculated
 the cross-validation scores to determine how well our model was
 performing.
 
-``` r
-cv_scores <- read_csv("../results/cv_scores.csv")
-```
-
-    ## Warning: Missing column names filled in: 'X1' [1]
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   X1 = col_double(),
-    ##   Fold = col_double(),
-    ##   `Neg Mean Squared Error` = col_double()
-    ## )
-
-``` r
-cv_scores <- cv_scores %>%
-  select(`Fold`, `Neg Mean Squared Error`)
-kable(cv_scores,
-      caption="Table 1. Cross-validation scores for each of the folds in the random forest regression model.")
-```
-
 | Fold | Neg Mean Squared Error |
 | ---: | ---------------------: |
 |    1 |            \-0.0634236 |
@@ -225,33 +206,11 @@ kable(cv_scores,
 |    4 |            \-0.1310914 |
 |    5 |            \-0.1385528 |
 
-Table 1. Cross-validation scores for each of the folds in the random
+**Table 1**. Cross-validation scores for each of the folds in the random
 forest regression model.
 
 From this model, we were able to determine the relative importance of
 each feature.
-
-``` r
-feat_imp <- read_csv("../results/feature_importance.csv")
-```
-
-    ## Warning: Missing column names filled in: 'X1' [1]
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   X1 = col_double(),
-    ##   feature_names = col_character(),
-    ##   importance = col_double()
-    ## )
-
-``` r
-feat_imp <- feat_imp %>%
-  select(`Feature Names` = `feature_names`,
-         `Importance` = `importance`)
-feat_imp <- feat_imp[1:15, ]
-kable(feat_imp,
-      caption="Table 2. The relative feature importances of the top 15 most important features determined by random forest regression model.")
-```
 
 | Feature Names               | Importance |
 | :-------------------------- | ---------: |
@@ -271,8 +230,8 @@ kable(feat_imp,
 | region\_Charlotte           |  0.0109272 |
 | region\_Sacramento          |  0.0097175 |
 
-Table 2. The relative feature importances of the top 15 most important
-features determined by random forest regression model.
+**Table 2**. The relative feature importances of the top 15 most
+important features determined by random forest regression model.
 
 We found that our top predictor of avocado prices is `type`
 (i.e. whether the avocado is organic or conventional).
@@ -292,6 +251,20 @@ continue on with our analysis of computing feature importances.
 
 # Discussion
 
+The random forest regression model predicted that `type` is the most
+important feature for predicting avocado price. This result is expected,
+since we observed a significant difference in the distribution of
+average prices between organic and conventional avocados during the
+exploratory data analysis and hypothesis testing. We also expected this
+result from previous experience buying avocados. Organic avocados are
+grown without the use of pesticides, and therefore produce a lower yield
+per growing season, ultimately resulting in a more expensive avocado.
+
+The `region` feature also seemed to play some importance in the pricing
+of avocados. For instance, regions such as Hartford-Springfield and San
+Francisco were the third and fourth most important predictors of average
+avocado price. It is unclear how these regions affect avocado prices.
+
 Our random forest model could be improved substantially by modifying the
 `month` and `region` features.
 
@@ -309,18 +282,6 @@ accurate way to depict `region` would be to transform each region into
 its respective latitude and longitude.
 
 # References
-
-\[1\] Kiggins, J. “Avocado Prices: Historical data on avocado prices and
-sales volume in multiple US markets.” May 2018. [Web
-Link](https://www.kaggle.com/neuromusic/avocado-prices).
-
-\[2\] Shahbandeh, M. “Average sales price of avocados in the U.S.
-2012-2018.” February 2019. [Web
-Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/).
-
-\[3\] ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data
-Visualization. n.d. STHTDA. [Web
-Link](http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization).
 
 <div id="refs" class="references">
 
@@ -352,6 +313,14 @@ Visualization*. n.d. STHTDA.
 Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy
 with lubridate.” *Journal of Statistical Software* 40 (3): 1–25.
 <http://www.jstatsoft.org/v40/i03/>.
+
+</div>
+
+<div id="ref-avocado-data">
+
+Kiggins, J. 2018. “Avocado Prices: Historical Data on Avocado Prices and
+Sales Volume in Multiple Us Markets.”
+<https://www.kaggle.com/neuromusic/avocado-prices>.
 
 </div>
 
@@ -397,6 +366,14 @@ Computing*. Vienna, Austria: R Foundation for Statistical Computing.
 Robinson, David, and Alex Hayes. 2019. *Broom: Convert Statistical
 Analysis Objects into Tidy Tibbles*.
 <https://CRAN.R-project.org/package=broom>.
+
+</div>
+
+<div id="ref-avocado-study">
+
+Shahbandeh, M. 2019. “Average Sales Price of Avocados in the U.s.
+2012-2018.”
+<https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/>.
 
 </div>
 

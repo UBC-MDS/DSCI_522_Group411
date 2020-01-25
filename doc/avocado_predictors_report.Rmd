@@ -20,7 +20,7 @@ Our goal is to find the feature that most strongly predicts the price of avocado
 
 # Dataset
 
-We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromusic/avocado-prices) retrieved from Kaggle and compiled by the Hass Avocado Board using retail scan data from the United States [1]. The dataset consists of approximately 18,000 records over 4 years (2015 - 2018). The dataset contains information about avocado prices, Price Look-Up (PLU) codes, types (organic or conventional), region purchased in the United States, volume sold, bags sold, and date sold.
+We will be analyzing the [avocado prices dataset](https://www.kaggle.com/neuromusic/avocado-prices) retrieved from Kaggle and compiled by the Hass Avocado Board using retail scan data from the United States [@avocado-data]. The dataset consists of approximately 18,000 records over 4 years (2015 - 2018). The dataset contains information about avocado prices, Price Look-Up (PLU) codes, types (organic or conventional), region purchased in the United States, volume sold, bags sold, and date sold.
 
 # Analysis
 
@@ -60,7 +60,7 @@ We wanted to determine which features might be the most important to include in 
 ![](../doc/img/EDA_plot.png)
 **Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week.
 
-Since we want to ensure the prices in this dataset are relatively accurate, we compared the average prices in this dataset to another [study](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) published by M. Shahbandeh in February 2019. According to the dataset we selected, the average price of avocados from 2015 to 2018 was \$1.41. According to Shahbandeh’s study, the average price of avocados from 2015 to 2018 was \$1.11 [2]. Thus, the average price from our dataset is slightly higher compared to Shahbandeh’s study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
+Since we want to ensure the prices in this dataset are relatively accurate, we compared the average prices in this dataset to another [study](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) published by M. Shahbandeh in February 2019. According to the dataset we selected, the average price of avocados from 2015 to 2018 was \$1.41. According to Shahbandeh’s study, the average price of avocados from 2015 to 2018 was \$1.11 [@avocado-study]. Thus, the average price from our dataset is slightly higher compared to Shahbandeh’s study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
 
 # Results
 
@@ -108,24 +108,24 @@ The high VIF scores suggest extremely high collinearity for these variables in a
 
 Lastly, we fitted a random forest regressor model using the features that we determined as significant from the analysis above (`region`, `type`, and `month`). We used one hot encoding on these categorical features and used randomized cross validation to determine the optimal hyperparameters, maximum depth and number of estimators. We calculated the cross-validation scores to determine how well our model was performing.
 
-```{r}
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
 cv_scores <- read_csv("../results/cv_scores.csv")
 cv_scores <- cv_scores %>%
   select(`Fold`, `Neg Mean Squared Error`)
 kable(cv_scores,
-      caption="Table 1. Cross-validation scores for each of the folds in the random forest regression model.")
+      caption="**Table 1**. Cross-validation scores for each of the folds in the random forest regression model.")
 ```
 
 From this model, we were able to determine the relative importance of each feature.
 
-```{r}
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
 feat_imp <- read_csv("../results/feature_importance.csv")
 feat_imp <- feat_imp %>%
   select(`Feature Names` = `feature_names`,
          `Importance` = `importance`)
 feat_imp <- feat_imp[1:15, ]
 kable(feat_imp,
-      caption="Table 2. The relative feature importances of the top 15 most important features determined by random forest regression model.")
+      caption="**Table 2**. The relative feature importances of the top 15 most important features determined by random forest regression model.")
 ```
 
 
@@ -141,6 +141,10 @@ We also fitted a linear regression model, however, the training accuracy score w
 
 # Discussion
 
+The random forest regression model predicted that `type` is the most important feature for predicting avocado price. This result is expected, since we observed a significant difference in the distribution of average prices between organic and conventional avocados during the exploratory data analysis and hypothesis testing. We also expected this result from previous experience buying avocados. Organic avocados are grown without the use of pesticides, and therefore produce a lower yield per growing season, ultimately resulting in a more expensive avocado.
+
+The `region` feature also seemed to play some importance in the pricing of avocados. For instance, regions such as Hartford-Springfield and San Francisco were the third and fourth most important predictors of average avocado price. It is unclear how these regions affect avocado prices.
+
 Our random forest model could be improved substantially by modifying the `month` and `region` features.  
 
 `Month` is ordinal, thus it should be treated as a numerical variable. However, it is difficult to convert month into its numerical form since December and January would be interpreted as furthest apart from one another, when in reality they should be interpreted as close to one another. That being said, we could treat month as a categorical variable if we group the months into seasons and use season as a feature instead. 
@@ -148,9 +152,3 @@ Our random forest model could be improved substantially by modifying the `month`
 Similarly, the different regions within the `region` feature are also related to one other as some regions are closer to one another geographically, while others are further apart. Therefore, a more accurate way to depict `region` would be to transform each region into its respective latitude and longitude.
 
 # References
-
-[1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
-
-[2] Shahbandeh, M. "Average sales price of avocados in the U.S. 2012-2018." February 2019. [Web Link](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/).
-
-[3] ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data Visualization. n.d. STHTDA. [Web Link](http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization).
