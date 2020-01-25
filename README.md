@@ -45,6 +45,8 @@ Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
 Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
 Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
+python src/regression.py data/train.feather results/
+Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 ```
 
 ### R Package Dependencies
