@@ -65,6 +65,7 @@ here|0.1
 kableExtra|1.1.0
 knitr|1.25
 lubridate|1.7.4
+magick|2.3
 numpy|1.17
 pandas|0.25.3
 pyarrow|0.15.1
