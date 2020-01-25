@@ -59,6 +59,8 @@ We wanted to determine which features might be the most important to include in 
 ![](../doc/img/EDA_plot.png)
 **Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week.
 
+Since we want to ensure the prices in this dataset are relatively accurate, we compared the average prices in this dataset to another [study](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) published by M. Shahbandeh in February 2019. According to the dataset we selected, the average price of avocados from 2015 to 2018 was \$1.41. According to Shahbandeh’s study, the average price of avocados from 2015 to 2018 was \$1.11 [2]. Thus, the average price from our dataset is slightly higher compared to Shahbandeh’s study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
+
 # Results
 
 ## Hypothesis Test
