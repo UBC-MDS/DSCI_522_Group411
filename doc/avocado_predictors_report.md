@@ -66,13 +66,12 @@ To perform this anlaysis, the R and Python programming languages (R Core
 Team 2019; Van Rossum and Drake 2009) as well as the following R and
 Python packages were used: `caret` (Kuhn 2020), `docopt` (de Jonge
 2018), `feather` (Wickham 2019), `tidyverse` (Wickham et al. 2019),
-`lubridate` (Grolemund and Wickham 2011), `corr` (*Ggplot2 : Quick
-Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.),
-`car` (Fox and Weisberg 2019), `kableExtra` (Zhu 2019), `reshape2`
-(Wickham 2007), `tidyverse` (Wickham et al. 2019), `broom` (Robinson and
-Hayes 2019), `knitr` (Xie 2014), `pandas` (McKinney and others 2010),
-`numpy` (Oliphant 2006), `scikit-learn` (Pedregosa et al. 2011), and
-`altair` (Sievert 2018).
+`lubridate` (Grolemund and Wickham 2011), `car` (Fox and Weisberg 2019),
+`kableExtra` (Zhu 2019), `reshape2` (Wickham 2007), `tidyverse` (Wickham
+et al. 2019), `broom` (Robinson and Hayes 2019), `knitr` (Xie 2014),
+`ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `pandas`
+(McKinney and others 2010), `numpy` (Oliphant 2006), `scikit-learn`
+(Pedregosa et al. 2011), and `altair` (Sievert 2018).
 
 # Exploratory Data Analysis
 
@@ -301,19 +300,18 @@ Regression*. Third. Thousand Oaks CA: Sage.
 
 </div>
 
-<div id="ref-corr">
-
-*Ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data
-Visualization*. n.d. STHTDA.
-<http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization>.
-
-</div>
-
 <div id="ref-lubridate">
 
 Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy
 with lubridate.” *Journal of Statistical Software* 40 (3): 1–25.
 <http://www.jstatsoft.org/v40/i03/>.
+
+</div>
+
+<div id="ref-ggpubr">
+
+Kassambara, Alboukadel. 2018. *Ggpubr: ’Ggplot2’ Based Publication Ready
+Plots*. <https://CRAN.R-project.org/package=ggpubr>.
 
 </div>
 
@@ -385,6 +383,13 @@ Dominik Moritz AND Kanit Wongsuphasawat AND Arvind Satyanarayan AND
 Eitan Lees AND Ilia Timofeev AND Ben Welsh AND Scott. 2018. “Altair:
 Interactive Statistical Visualizations for Python.” *The Journal of Open
 Source Software* 3 (32). <http://idl.cs.washington.edu/papers/altair>.
+
+</div>
+
+<div id="ref-RCurl">
+
+Temple Lang, Duncan. 2020. *RCurl: General Network (Http/Ftp/...) Client
+Interface for R*. <https://CRAN.R-project.org/package=RCurl>.
 
 </div>
 
