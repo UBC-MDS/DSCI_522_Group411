@@ -69,6 +69,12 @@ python src/regression.py data/train.feather results/
 Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 ```
 
+To run all of the above, you can use the following bash script:
+
+```
+bash run-all.sh
+```
+
 ### R Package Dependencies
 Package Name|Version
 -|-
