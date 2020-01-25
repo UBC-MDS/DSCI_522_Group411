@@ -51,6 +51,8 @@ Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/im
 Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc/img
 Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 python src/regression.py data/train.feather results/
+
+Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 ```
 
 ### R Package Dependencies
