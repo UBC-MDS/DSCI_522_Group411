@@ -39,6 +39,7 @@ To communicate our results, we will create a bar chart ranking the features by i
 To replicate this analysis, clone this repository and make sure that the dependencies below are installed. Then, run the following in your terminal from the root directory of the project.
 
 ```
+Rscript webshot::install_phantomjs()
 Rscript src/get_data.R --url=https://raw.githubusercontent.com/ryanhomer/dsci522-group411-data/master/avocado.csv --destfile=data/avocado.csv
 Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
 Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
@@ -49,12 +50,18 @@ Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/im
 ### R Package Dependencies
 Package Name|Version
 -|-
-tidyverse|1.2.1
-lubridate|1.7.4
+broom|0.5.3
 caret|6.0-85
-knitr|1.25
-ggpubr|0.2.4
+car|3.0-6
 feather|0.3.5
+ggpubr|0.2.4
+ggpubr|0.2.4
+kableExtra|1.1.0
+knitr|1.25
+lubridate|1.7.4
+RCurl|1.98-1.1
+reshape2|1.4.3
+tidyverse|1.2.1
 
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
