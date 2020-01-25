@@ -12,10 +12,6 @@ Options:
 
 suppressMessages(library(docopt))
 suppressMessages(library(tidyverse))
-suppressMessages(library(lubridate))
-suppressMessages(library(caret))
-suppressMessages(library(knitr))
-suppressMessages(library(ggpubr))
 suppressMessages(library(feather))
 suppressMessages(library(kableExtra))
 suppressMessages(library(broom))

@@ -32,11 +32,7 @@ We chose a significance level of 0.05 as it is the industry standard. We chose n
 knitr::opts_chunk$set(warning = FALSE, message=FALSE)
 
 library(tidyverse)
-library(tidyr)
 library(broom)
-library(lubridate)
-library(caret)
-library(knitr)
 library(feather)
 ```
 
