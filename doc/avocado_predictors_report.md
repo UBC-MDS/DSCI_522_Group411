@@ -64,14 +64,15 @@ The target was:
 
 To perform this anlaysis, the R and Python programming languages (R Core
 Team 2019; Van Rossum and Drake 2009) as well as the following R and
-Python packages were used: caret (Kuhn 2020), docopt (de Jonge 2018),
-feather (Wickham 2019), tidyverse (Wickham et al. 2019), lubridate
-(Grolemund and Wickham 2011), corr (*Ggplot2 : Quick Correlation Matrix
-Heatmap - R Software and Data Visualization*, n.d.), car (Fox and
-Weisberg 2019), kableExtra (Zhu 2019), reshape2 (Wickham 2007),
-tidyverse (Wickham et al. 2019), broom (Robinson and Hayes 2019), knitr
-(Xie 2014), pandas (McKinney and others 2010), numpy(Oliphant 2006),
-scikit-learn(Pedregosa et al. 2011), and altair(Sievert 2018).
+Python packages were used: `caret` (Kuhn 2020), `docopt` (de Jonge
+2018), `feather` (Wickham 2019), `tidyverse` (Wickham et al. 2019),
+`lubridate` (Grolemund and Wickham 2011), `corr` (*Ggplot2 : Quick
+Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.),
+`car` (Fox and Weisberg 2019), `kableExtra` (Zhu 2019), `reshape2`
+(Wickham 2007), `tidyverse` (Wickham et al. 2019), `broom` (Robinson and
+Hayes 2019), `knitr` (Xie 2014), `pandas` (McKinney and others 2010),
+`numpy` (Oliphant 2006), `scikit-learn` (Pedregosa et al. 2011), and
+`altair` (Sievert 2018).
 
 # Exploratory Data Analysis
 
