@@ -45,6 +45,7 @@ Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
 Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
 Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
+Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc/img
 python src/regression.py data/train.feather results/
 Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 ```
@@ -52,18 +53,41 @@ Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format
 ### R Package Dependencies
 Package Name|Version
 -|-
+altair|4.0.0
 broom|0.5.3
 caret|6.0-85
 car|3.0-6
+chromedrive os|
+docopt|0.6.1
 feather|0.3.5
 ggpubr|0.2.4
-ggpubr|0.2.4
+here|0.1
 kableExtra|1.1.0
 knitr|1.25
 lubridate|1.7.4
+numpy|1.17
+pandas|0.25.3
+pyarrow|0.15.1
 RCurl|1.98-1.1
 reshape2|1.4.3
+scikit-learn|0.22.1
+selenium|3.141.0
 tidyverse|1.2.1
+
+### Reports
+- [Exploratory Data Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/DSCI_522_EDA.md)
+- [Hypothesis Test (Intermediate Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/hypothesis_test.md)
+- [Multicollinearity Test (Intermediate Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/multicoll/multicoll.md)
+- [Random Forest Feature Importances (Final Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/ML_analysis.ipynb)
+- [Final Report](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/doc/avocado_predictors_report.md)
+
+### Scripts
+- [Download Data](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/get_data.R)
+- [Prepare Data](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/prepare_data.R)
+- [Render EDA](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/render_EDA.R)
+- [Conduct Hypothesis Test](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/conduct_hypothesis_test.R)
+- [Conduct Multicollinearity Test](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/multicoll/mc_create_assets.R)
+- [Conduct Feature Importances Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/regression.py)
 
 ## References
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
