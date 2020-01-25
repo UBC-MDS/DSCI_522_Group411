@@ -57,7 +57,7 @@ altair|4.0.0
 broom|0.5.3
 caret|6.0-85
 car|3.0-6
-chromedrive os|
+ChromeDriver os|
 docopt|0.6.1
 feather|0.3.5
 ggpubr|0.2.4
@@ -65,6 +65,7 @@ here|0.1
 kableExtra|1.1.0
 knitr|1.25
 lubridate|1.7.4
+magick|2.3
 numpy|1.17
 pandas|0.25.3
 pyarrow|0.15.1

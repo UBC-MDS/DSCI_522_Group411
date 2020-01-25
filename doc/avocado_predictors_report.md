@@ -72,7 +72,7 @@ et al. 2019), `broom` (Robinson and Hayes 2019), `knitr` (Xie 2014),
 `ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `here`(Müller
 2017), `pandas` (McKinney and others 2010), `numpy` (Oliphant 2006),
 `selenium` (Salunke 2014), `scikit-learn` (Pedregosa et al. 2011), and
-`altair` (Sievert 2018).
+`altair` (Sievert 2018), `magick`(Ooms 2020).
 
 # Exploratory Data Analysis
 
@@ -143,7 +143,10 @@ the significance level:
 However, region and month are categorical variables that have numerous
 levels. Therefore, with all these levels, it is difficult to interpret
 their p-values from this model.
-![](../doc/img/hypothesis_test_table.png) **Figure 3.** Hypothesis test.
+
+![](../doc/img/hypothesis_test_table.png)
+
+**Table 1.** Hypothesis test.
 
 We also used ANOVA to calculate and interpret the features’ p-values, as
 ANOVA is a special case of linear model that assumes categorical
@@ -151,8 +154,10 @@ predictors. This test will act as a validation for the categorical
 variables we determined as significant above. The results of our ANOVA
 test below confirms that the features `type`, `year`, `region`, and
 `month` are significant at a 0.05 significance level.
-![](../doc/img/anova_table.png) **Figure 4.** Hypothesis test of
-significant features using ANOVA.
+
+![](../doc/img/anova_table.png)
+
+**Table 2.** Hypothesis test of significant features using ANOVA.
 
 However, we should be cautious not to use the p-value significance as a
 stand alone measure to determine if these features are correlated with
@@ -166,8 +171,9 @@ Next we conducted a multicollinearity test to check for any redundancies
 between features. Under the assumption that the data can be modelled
 linearly after observing the residual plot, we selected the continuous
 numerical predictors, computed the correlation matrix, and wrangled the
-data into a plottable dataframe \[3\].
-![](../doc/img/correlation_matrix.png) **Figure 5.** Correlation matrix
+data into a plottable dataframe (*Ggplot2 : Quick Correlation Matrix
+Heatmap - R Software and Data Visualization*, n.d.).
+![](../doc/img/correlation_matrix.png) **Figure 3.** Correlation matrix
 of continuous features.
 
 Overall, there is fairly high collinarity between many of the
@@ -181,8 +187,9 @@ prediction model would probably lead to overfitting.
 To verify the result from the correlation matrix above, we also computed
 the variance inflation (VIF) scores from the `car` package.
 
-![](../doc/img/collinearity.png) **Figure 6.** Variance inflation scores
-of continuous features.
+![](../doc/img/collinearity.png)
+
+**Table 3.** Variance inflation scores of continuous features.
 
 The high VIF scores suggest extremely high collinearity for these
 variables in a linear model. Therefore, we will be careful about using
@@ -207,7 +214,7 @@ well our model was performing.
 |    4 |            \-0.1310914 |
 |    5 |            \-0.1385528 |
 
-**Table 1**. Cross-validation scores for each of the folds in the random
+**Table 4**. Cross-validation scores for each of the folds in the random
 forest regression model.
 
 From this model, we were able to determine the relative importance of
@@ -231,7 +238,7 @@ each feature.
 | region\_Charlotte           |  0.0109272 |
 | region\_Sacramento          |  0.0097175 |
 
-**Table 2**. The relative feature importances of the top 15 most
+**Table 5**. The relative feature importances of the top 15 most
 important features determined by random forest regression model.
 
 We found that our top predictor of avocado prices is `type`
@@ -239,7 +246,7 @@ We found that our top predictor of avocado prices is `type`
 
 ![](../results/feature_plot.png)
 
-**Figure 7.** Plot ranking features by importance.
+**Figure 4.** Plot ranking features by importance.
 
 Our model had a training accuracy score of 0.71. The result from our
 model aligned with our expectations as our EDA depicted differences in
@@ -301,6 +308,14 @@ Regression*. Third. Thousand Oaks CA: Sage.
 
 </div>
 
+<div id="ref-corr">
+
+*Ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data
+Visualization*. n.d. STHTDA.
+<http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization>.
+
+</div>
+
 <div id="ref-lubridate">
 
 Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy
@@ -349,6 +364,13 @@ Müller, Kirill. 2017. *Here: A Simpler Way to Find Your Files*.
 <div id="ref-numpy">
 
 Oliphant, Travis E. 2006. “A Guide to Numpy.” Trelgol Publishing USA.
+
+</div>
+
+<div id="ref-magick">
+
+Ooms, Jeroen. 2020. *Magick: Advanced Graphics and Image-Processing in
+R*. <https://CRAN.R-project.org/package=magick>.
 
 </div>
 
