@@ -33,7 +33,7 @@ def main(file_path_train, output):
   train_x, train_y = feature_target_split(train_data)
   feature_df = random_forest_regression(train_x, train_y, output, train_data)
   plot_feature_importance(feature_df, output)
-  print("Finished loading data...")
+  print("Finished")
   
   # add function to write to output directory
 
