@@ -41,10 +41,16 @@ To replicate this analysis, clone this repository and make sure that the depende
 ```
 Rscript -e "webshot::install_phantomjs()"
 Rscript src/get_data.R --url=https://raw.githubusercontent.com/ryanhomer/dsci522-group411-data/master/avocado.csv --destfile=data/avocado.csv
-Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
 Rscript src/prepare_data.R --datafile=data/avocado.csv --out=data
-Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
+
+Rscript -e "rmarkdown::render('src/DSCI_522_EDA.Rmd')"
+Rscript -e "rmarkdown::render('src/hypothesis_test.Rmd')"
+Rscript -e "rmarkdown::render('src/multicoll/multicoll.Rmd')"
+
 Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
+Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc/img
+Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
+python src/regression.py data/train.feather results/
 ```
 
 ### R Package Dependencies
