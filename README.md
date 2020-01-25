@@ -76,13 +76,12 @@ bash run-all.sh
 ```
 
 ### R Package Dependencies
+
 Package Name|Version
 -|-
-altair|4.0.0
 broom|0.5.3
 caret|6.0-85
 car|3.0-6
-chromedrive os|
 docopt|0.6.1
 feather|0.3.5
 ggpubr|0.2.4
@@ -90,16 +89,28 @@ here|0.1
 kableExtra|1.1.0
 knitr|1.25
 lubridate|1.7.4
+RCurl|1.98-1.1
+reshape2|1.4.3
+tidyverse|1.2.1
+
+### Python Package Dependencies
+
+Package Name|Version
+-|-
+altair|4.0.0
 numpy|1.17
 pandas|0.25.3
 pyarrow|0.15.1
-RCurl|1.98-1.1
-reshape2|1.4.3
 scikit-learn|0.22.1
 selenium|3.141.0
-tidyverse|1.2.1
 
-### Reports
+### OS-level Dependencies
+
+Package Name|Version
+-|-
+chromedrive|79.0.3945.36
+
+## Reports
 - [Exploratory Data Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/DSCI_522_EDA.md)
 - [Hypothesis Test (Intermediate Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/hypothesis_test.md)
 - [Multicollinearity Test (Intermediate Analysis)](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/multicoll/multicoll.md)
