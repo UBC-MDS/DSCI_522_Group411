@@ -85,6 +85,18 @@ create_assets <- function(datafile, out) {
                                    title.hjust = 0.5))
 
     ggsave("correlation_matrix.png", p, path = dest_path)
+
+
+    # multicollinearity table
+    webshot::install_phantomjs()
+    lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
+       data = df) %>%
+      vif() %>%
+      enframe() %>%
+      pivot_wider(id_cols = "name") %>%
+      kable("html") %>%
+      kable_styling() %>%
+      save_kable(file = file.path(dest_path, "collinearity.png"))
 }
 
 main(docopt(doc))
