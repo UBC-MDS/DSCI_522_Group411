@@ -69,10 +69,10 @@ Python packages were used: `caret` (Kuhn 2020), `docopt` (de Jonge
 `lubridate` (Grolemund and Wickham 2011), `car` (Fox and Weisberg 2019),
 `kableExtra` (Zhu 2019), `reshape2` (Wickham 2007), `tidyverse` (Wickham
 et al. 2019), `broom` (Robinson and Hayes 2019), `knitr` (Xie 2014),
-`ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `pandas`
-(McKinney and others 2010), `numpy` (Oliphant 2006), `selenium` (Salunke
-2014), `scikit-learn` (Pedregosa et al. 2011), and `altair` (Sievert
-2018).
+`ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `here`(Müller
+2017), `pandas` (McKinney and others 2010), `numpy` (Oliphant 2006),
+`selenium` (Salunke 2014), `scikit-learn` (Pedregosa et al. 2011), and
+`altair` (Sievert 2018).
 
 # Exploratory Data Analysis
 
@@ -336,6 +336,13 @@ Kuhn, Max. 2020. *Caret: Classification and Regression Training*.
 McKinney, Wes, and others. 2010. “Data Structures for Statistical
 Computing in Python.” In *Proceedings of the 9th Python in Science
 Conference*, 445:51–56. Austin, TX.
+
+</div>
+
+<div id="ref-here">
+
+Müller, Kirill. 2017. *Here: A Simpler Way to Find Your Files*.
+<https://CRAN.R-project.org/package=here>.
 
 </div>
 

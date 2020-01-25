@@ -51,7 +51,7 @@ The target was:
   
 - `average_price`: average price of avocado sold
 
-To perform this anlaysis, the R and Python programming languages [@r; @Python] as well as the following R and Python packages were used: `caret` [@caret], `docopt` [@docopt], `feather` [@feather], `tidyverse` [@tidyverse], `lubridate` [@lubridate], `car` [@car], `kableExtra` [@kableExtra], `reshape2` [@reshape2], `tidyverse` [@tidyverse], `broom` [@broom], `knitr` [@knitr], `ggpubr` [@ggpubr], `RCurl` [@RCurl], `pandas` [@pandas], `numpy` [@numpy], `selenium` [@selenium], `scikit-learn` [@scikit-learn], and `altair` [@2018-altair].
+To perform this anlaysis, the R and Python programming languages [@r; @Python] as well as the following R and Python packages were used: `caret` [@caret], `docopt` [@docopt], `feather` [@feather], `tidyverse` [@tidyverse], `lubridate` [@lubridate], `car` [@car], `kableExtra` [@kableExtra], `reshape2` [@reshape2], `tidyverse` [@tidyverse], `broom` [@broom], `knitr` [@knitr], `ggpubr` [@ggpubr], `RCurl` [@RCurl], `here`[@here], `pandas` [@pandas], `numpy` [@numpy], `selenium` [@selenium], `scikit-learn` [@scikit-learn], and `altair` [@2018-altair].
 
 # Exploratory Data Analysis
 
