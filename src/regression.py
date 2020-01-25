@@ -78,7 +78,7 @@ def random_forest_regression(train_x, train_y, output, train_data):
   print("Finished random forest regression...")
 
 # Define plot function  
-def plot_feature_importance(feature_df):
+def plot_feature_importance(feature_df, output):
   """
   """
   print("Starting to plot most important features...")
