@@ -5,6 +5,7 @@ author:
   - Ryan Homer
   - Andrea Lee
 output: github_document
+always_allow_html: true
 bibliography: ../../doc/refs.bib
 ---
 
