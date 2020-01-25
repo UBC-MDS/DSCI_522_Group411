@@ -106,7 +106,7 @@ The high VIF scores suggest extremely high collinearity for these variables in a
 
 ## Random Forest Feature Importances
 
-Lastly, we fitted a random forest regressor model using the features that we determined as significant from the analysis above (`region`, `type`, and `month`). We used one hot encoding on these categorical features and used randomized cross validation to determine the optimal hyperparameters, maximum depth and number of estimators. We calculated the cross-validation scores to determine how well our model was performing.
+Lastly, we fitted a random forest regressor model using the features that we determined as significant from the analysis above (`region`, `type`, and `month`). We used one hot encoding on these categorical features and used randomized cross validation to determine the optimal hyperparameters, maximum depth and number of estimators. We calculated the average (validation) scores using cross validation to determine how well our model was performing.
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 cv_scores <- read_csv("../results/cv_scores.csv")

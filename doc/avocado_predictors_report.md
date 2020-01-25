@@ -196,8 +196,8 @@ that we determined as significant from the analysis above (`region`,
 `type`, and `month`). We used one hot encoding on these categorical
 features and used randomized cross validation to determine the optimal
 hyperparameters, maximum depth and number of estimators. We calculated
-the cross-validation scores to determine how well our model was
-performing.
+the average (validation) scores using cross validation to determine how
+well our model was performing.
 
 | Fold | Neg Mean Squared Error |
 | ---: | ---------------------: |
