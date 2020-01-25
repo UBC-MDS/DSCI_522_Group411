@@ -72,7 +72,7 @@ et al. 2019), `broom` (Robinson and Hayes 2019), `knitr` (Xie 2014),
 `ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `here`(Müller
 2017), `pandas` (McKinney and others 2010), `numpy` (Oliphant 2006),
 `selenium` (Salunke 2014), `scikit-learn` (Pedregosa et al. 2011), and
-`altair` (Sievert 2018).
+`altair` (Sievert 2018), `magick`(Ooms 2020).
 
 # Exploratory Data Analysis
 
@@ -143,7 +143,10 @@ the significance level:
 However, region and month are categorical variables that have numerous
 levels. Therefore, with all these levels, it is difficult to interpret
 their p-values from this model.
-![](../doc/img/hypothesis_test_table.png) **Figure 3.** Hypothesis test.
+
+![](../doc/img/hypothesis_test_table.png)
+
+**Figure 3.** Hypothesis test.
 
 We also used ANOVA to calculate and interpret the features’ p-values, as
 ANOVA is a special case of linear model that assumes categorical
@@ -151,8 +154,10 @@ predictors. This test will act as a validation for the categorical
 variables we determined as significant above. The results of our ANOVA
 test below confirms that the features `type`, `year`, `region`, and
 `month` are significant at a 0.05 significance level.
-![](../doc/img/anova_table.png) **Figure 4.** Hypothesis test of
-significant features using ANOVA.
+
+![](../doc/img/anova_table.png)
+
+**Figure 4.** Hypothesis test of significant features using ANOVA.
 
 However, we should be cautious not to use the p-value significance as a
 stand alone measure to determine if these features are correlated with
@@ -166,7 +171,8 @@ Next we conducted a multicollinearity test to check for any redundancies
 between features. Under the assumption that the data can be modelled
 linearly after observing the residual plot, we selected the continuous
 numerical predictors, computed the correlation matrix, and wrangled the
-data into a plottable dataframe \[3\].
+data into a plottable dataframe (*Ggplot2 : Quick Correlation Matrix
+Heatmap - R Software and Data Visualization*, n.d.).
 ![](../doc/img/correlation_matrix.png) **Figure 5.** Correlation matrix
 of continuous features.
 
@@ -181,8 +187,9 @@ prediction model would probably lead to overfitting.
 To verify the result from the correlation matrix above, we also computed
 the variance inflation (VIF) scores from the `car` package.
 
-![](../doc/img/collinearity.png) **Figure 6.** Variance inflation scores
-of continuous features.
+![](../doc/img/collinearity.png)
+
+**Figure 6.** Variance inflation scores of continuous features.
 
 The high VIF scores suggest extremely high collinearity for these
 variables in a linear model. Therefore, we will be careful about using
@@ -301,6 +308,14 @@ Regression*. Third. Thousand Oaks CA: Sage.
 
 </div>
 
+<div id="ref-corr">
+
+*Ggplot2 : Quick Correlation Matrix Heatmap - R Software and Data
+Visualization*. n.d. STHTDA.
+<http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization>.
+
+</div>
+
 <div id="ref-lubridate">
 
 Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy
@@ -349,6 +364,13 @@ Müller, Kirill. 2017. *Here: A Simpler Way to Find Your Files*.
 <div id="ref-numpy">
 
 Oliphant, Travis E. 2006. “A Guide to Numpy.” Trelgol Publishing USA.
+
+</div>
+
+<div id="ref-magick">
+
+Ooms, Jeroen. 2020. *Magick: Advanced Graphics and Image-Processing in
+R*. <https://CRAN.R-project.org/package=magick>.
 
 </div>
 
