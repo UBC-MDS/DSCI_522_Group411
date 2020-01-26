@@ -51,7 +51,7 @@ The target was:
   
 - `average_price`: average price of avocado sold
 
-To perform this anlaysis, the R and Python programming languages [@r; @Python] as well as the following R and Python packages were used: `caret` [@caret], `docopt` [@docopt], `feather` [@feather], `tidyverse` [@tidyverse], `lubridate` [@lubridate], `car` [@car], `kableExtra` [@kableExtra], `reshape2` [@reshape2], `tidyverse` [@tidyverse], `broom` [@broom], `knitr` [@knitr], `ggpubr` [@ggpubr], `RCurl` [@RCurl], `here`[@here], `pandas` [@pandas], `numpy` [@numpy], `selenium` [@selenium], `scikit-learn` [@scikit-learn], and `altair` [@2018-altair], `magick`[@magick].
+To perform this anlaysis, the R and Python programming languages [@r; @Python]. As well, the following R packages were used: `broom` [@broom], `caret` [@caret], `car` [@car], `docopt` [@docopt], `feather` [@feather], `ggpubr` [@ggpubr], `here`[@here], `kableExtra` [@kableExtra], `knitr` [@knitr], `lubridate` [@lubridate], `magick`[@magick], `RCurl` [@RCurl], `reshape2` [@reshape2], and `tidyverse` [@tidyverse]. The following Python packages were used: `altair` [@2018-altair], `numpy` [@numpy], `pandas` [@pandas], `pyarrow`[@pyarrow], `scikit-learn` [@scikit-learn], and `selenium` [@selenium]. And the following OS package was used: `chromedriver`[@chromedriver].
 
 # Exploratory Data Analysis
 

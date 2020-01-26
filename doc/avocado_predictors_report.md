@@ -63,16 +63,17 @@ The target was:
   - `average_price`: average price of avocado sold
 
 To perform this anlaysis, the R and Python programming languages (R Core
-Team 2019; Van Rossum and Drake 2009) as well as the following R and
-Python packages were used: `caret` (Kuhn 2020), `docopt` (de Jonge
-2018), `feather` (Wickham 2019), `tidyverse` (Wickham et al. 2019),
-`lubridate` (Grolemund and Wickham 2011), `car` (Fox and Weisberg 2019),
-`kableExtra` (Zhu 2019), `reshape2` (Wickham 2007), `tidyverse` (Wickham
-et al. 2019), `broom` (Robinson and Hayes 2019), `knitr` (Xie 2014),
-`ggpubr` (Kassambara 2018), `RCurl` (Temple Lang 2020), `here`(Müller
-2017), `pandas` (McKinney and others 2010), `numpy` (Oliphant 2006),
-`selenium` (Salunke 2014), `scikit-learn` (Pedregosa et al. 2011), and
-`altair` (Sievert 2018), `magick`(Ooms 2020).
+Team 2019; Van Rossum and Drake 2009). As well, the following R packages
+were used: `broom` (Robinson and Hayes 2019), `caret` (Kuhn 2020), `car`
+(Fox and Weisberg 2019), `docopt` (de Jonge 2018), `feather` (Wickham
+2019), `ggpubr` (Kassambara 2018), `here`(Müller 2017), `kableExtra`
+(Zhu 2019), `knitr` (Xie 2014), `lubridate` (Grolemund and Wickham
+2011), `magick`(Ooms 2020), `RCurl` (Temple Lang 2020), `reshape2`
+(Wickham 2007), and `tidyverse` (Wickham et al. 2019). The following
+Python packages were used: `altair` (Sievert 2018), `numpy` (Oliphant
+2006), `pandas` (McKinney and others 2010), `pyarrow`(Team 2017),
+`scikit-learn` (Pedregosa et al. 2011), and `selenium` (Salunke 2014).
+And the following OS package was used: `chromedriver`(Google, n.d.).
 
 # Exploratory Data Analysis
 
@@ -316,6 +317,13 @@ Visualization*. n.d. STHTDA.
 
 </div>
 
+<div id="ref-chromedriver">
+
+Google. n.d. *ChromeDriver - Webdriver for Chrome*.
+<https://chromedriver.chromium.org/downloads>.
+
+</div>
+
 <div id="ref-lubridate">
 
 Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy
@@ -421,6 +429,13 @@ Dominik Moritz AND Kanit Wongsuphasawat AND Arvind Satyanarayan AND
 Eitan Lees AND Ilia Timofeev AND Ben Welsh AND Scott. 2018. “Altair:
 Interactive Statistical Visualizations for Python.” *The Journal of Open
 Source Software* 3 (32). <http://idl.cs.washington.edu/papers/altair>.
+
+</div>
+
+<div id="ref-pyarrow">
+
+Team, Apache Arrow. 2017. *Pyarrow Documentation*.
+<https://buildmedia.readthedocs.org/media/pdf/pyarrow/latest/pyarrow.pdf>.
 
 </div>
 
