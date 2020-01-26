@@ -1,13 +1,13 @@
 # authors: Katie Birchard, Ryan Homer, Andrea Lee
 # date: 2020-01-18
-# Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
+#
 "Conduct hypothesis test and save figures.
 
-Usage: render_EDA.R --datafile=<path to the dataset> --out=<path to output directory>
+Usage: conduct_hypothesis_test.R --datafile=<path to the dataset> --out=<path to output directory>
 
 Options:
-<datafile>      Complete URL to the dataset.
-<out> The destination path to save the EDA figures.
+<datafile>      Complete URL to the feather dataset.
+<out> The destination path to save the hypothesis test figures.
 " -> doc
 
 suppressMessages(library(docopt))
@@ -23,6 +23,10 @@ main <- function(args) {
 }
 
 check_args <- function(args) {
+  #' Check input args
+  #'
+  #' @param args Vector of args from docopt
+
   if (!file.exists(path.expand(args$datafile))) {
     stop("Unable to find datafile.")
   }
@@ -34,6 +38,12 @@ check_args <- function(args) {
 }
 
 make_plot <- function(datafile, out) {
+  #' Create plot and save plot as image.
+  #' 
+  #' @param datafile Path to the feather file, including the actual filename.
+  #' @param out The destination path to save the images to to.
+  #' @return png file of plot.
+  
   dest_path <- path.expand(out)
   
   # Read in data
@@ -48,10 +58,17 @@ make_plot <- function(datafile, out) {
     labs(title = 'Residual Plot', x = "Predicted Values", y = "Residuals") +
     theme_minimal()
   
+  # Save plot as png
   ggsave('residual_plot.png',  plot, path = file.path(dest_path))
 }
 
 make_table <- function(datafile, out) {
+  #' Create table and save table as image.
+  #' 
+  #' @param datafile Path to the feather file, including the actual filename.
+  #' @param out The destination path to save the images to to.
+  #' @return png file of table.
+
   dest_path <- path.expand(out)
   
   # Read in data
@@ -60,12 +77,12 @@ make_table <- function(datafile, out) {
   # Fit model
   model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
   
-  # Conduct hypothesis test
+  # Conduct hypothesis test and save table as png
   p_val <- kable(tidy(model), 
                  caption = "Table 1. Hypothesis Test Table.") %>% 
     as_image(file = file.path(dest_path, 'hypothesis_test_table.png'))
   
-  # Conduct anova
+  # Conduct anova and save table as png
   model <- lm(average_price ~ type + year + region + month, data = avocado)
   anova <- kable(anova(model), 
                 caption = "Table 2. Anova Table.") %>% 
