@@ -1,12 +1,12 @@
 # authors: Katie Birchard, Ryan Homer, Andrea Lee
 # date: 2020-01-18
-# Rscript src/render_EDA.R --datafile=data/train.feather --out=doc
+#
 "Create and save exploratory data analysis figures.
 
 Usage: render_EDA.R --datafile=<path to the dataset> --out=<path to output directory>
 
 Options:
-<datafile>      Complete URL to the dataset.
+<datafile>      Complete URL to the feather dataset.
 <out> The destination path to save the EDA figures.
 " -> doc
 
@@ -26,6 +26,10 @@ main <- function(args) {
 }
 
 check_args <- function(args) {
+  #' Check input args
+  #'
+  #' @param args Vector of args from docopt
+
   if (!file.exists(path.expand(args$datafile))) {
     stop("Unable to find datafile.")
   }
@@ -37,17 +41,22 @@ check_args <- function(args) {
 }
 
 make_plot <- function(datafile, out) {
+  #' Create plot and save plot as image.
+  #' 
+  #' @param datafile Path to the feather file, including the actual filename.
+  #' @param out The destination path to save the images to to.
+  #' @return png file of plot.
+
   dest_path <- path.expand(out)
   
   # Read in data
   avocado <- read_feather(datafile)
   
-  ### What is the average avocado price per region?
+  # What is the average avocado price per region?
   avocado_by_region <- avocado %>%
     group_by(region) %>%
     summarize(ave_price = mean(average_price))
-  
-  # There are many regions here, so it might make sense to group them
+  # Make plot
   price_per_region <- ggplot(avocado, aes(x=reorder(region, -average_price), y=average_price)) +
     geom_boxplot(alpha=0.1) +
     geom_point(aes(x=reorder(region, -ave_price), y=ave_price, colour="red"),
@@ -63,11 +72,11 @@ make_plot <- function(datafile, out) {
     theme(axis.text.x = element_text(angle=90, size = 8),
           axis.title.x = element_blank()) 
   
-  # What is the average avocado price by type (organic vs. non-organic)
+  # What is the average avocado price by type (organic vs. non-organic)?
   avocado_by_type <- avocado %>%
     group_by(type) %>%
     summarize(ave_price = mean(average_price))
-  
+  # Make plot
   price_per_type <- ggplot(avocado, aes(x=reorder(type, -average_price), y=average_price)) +
     geom_boxplot(alpha=0.2) +
     geom_point(aes(x=reorder(type, -ave_price), y=ave_price, colour="red"),
@@ -86,7 +95,7 @@ make_plot <- function(datafile, out) {
   avocado_by_month <- avocado %>%
     group_by(month) %>%
     summarize(ave_price = mean(average_price))
-  
+  #Make plot
   price_per_month <- ggplot(avocado, aes(x=month, y=average_price)) +
     geom_boxplot(alpha=0.2) +
     geom_point(aes(x=month, y=ave_price, colour="red"),
@@ -102,10 +111,11 @@ make_plot <- function(datafile, out) {
     theme(axis.title.x = element_blank(),
           legend.position = "right")
   
+  # Combine all plots above
   plot <- gridExtra::arrangeGrob(price_per_region, price_per_type,
                           price_per_month,
                           ncol=1, nrow=3)
-
+  # Save plot as png
   ggsave('EDA_plot.png',  plot, path = file.path(dest_path))
   
   # What is the average price over time?
@@ -119,17 +129,23 @@ make_plot <- function(datafile, out) {
     #ggtitle("Average Avocado Price Over Time") +
     theme_bw() +
     theme(axis.text.x = element_text(angle=90)) 
-  
+  # Save plot as png
   ggsave('EDA_year_plot.png',  year_plot, path = file.path(dest_path))
 }
 
 make_table <- function(datafile, out) {
+  #' Create table and save table as image.
+  #' 
+  #' @param datafile Path to the feather file, including the actual filename.
+  #' @param out The destination path to save the images to to.
+  #' @return png file of table.
+  
   dest_path <- path.expand(out)
   
   # Read in data
   avocado <- read_feather(datafile)
   
-  # What is the distribution of the different categorical features?
+  # Create table showing the distribution of region
   region_summary <- avocado %>%
     count(region)
   region_summary <- avocado %>%
@@ -141,10 +157,12 @@ make_table <- function(datafile, out) {
               upper_quantile = quantile(average_price, 0.75),
               max = max(average_price))  %>%
     left_join(region_summary)
+    # Save table as png
     region_summary_table <- kable(region_summary,
                                 caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.") %>% 
                           as_image(file = file.path(dest_path, 'EDA_region_table.png'))
   
+  # Create table showing the distribution of type
   type_summary <- avocado %>%
     count(type)
     type_summary <- avocado %>%
@@ -156,10 +174,12 @@ make_table <- function(datafile, out) {
               upper_quantile = quantile(average_price, 0.75),
               max = max(average_price))  %>%
     left_join(type_summary)
+    # Save table as png
     type_summary_table <- kable(type_summary, 
                               caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.") %>% 
                         as_image(file = file.path(dest_path, 'EDA_type_table.png'))
   
+  # Create table showing the distribution of month
   month_summary <- avocado %>%
     count(month)
   month_summary <- avocado %>%
@@ -171,6 +191,7 @@ make_table <- function(datafile, out) {
               upper_quantile = quantile(average_price, 0.75),
               max = max(average_price))  %>%
     left_join(month_summary)
+    # Save table as png
     month_summary_table <- kable(month_summary, 
                                caption = "Table 3. Summary statistics for the average price of avocados for each month of the year.") %>% 
                          as_image(file = file.path(dest_path, 'EDA_month_table.png'))
