@@ -63,7 +63,7 @@ pre_process <- function(datafile, out) {
   df$year_month <- as.POSIXct(df$date)
   df$year_month <- format(df$year_month, "%Y-%m")
   
-  # Create transform region into lat and lon, transform month into season
+  # Transform region into lat and lon, transform month into season
   df <- df %>% 
     mutate(
       lat = case_when(
