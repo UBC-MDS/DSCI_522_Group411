@@ -1,9 +1,10 @@
 # author: Katie Birchard
 # date: 2020-01-24
 
-"""This script conducts a random forest regression analysis and outputs 
-a table of the most important features. This script takes a path to an 
-input file and a path to an output directory as arguments.
+"""This script conducts multiple regression analyses and outputs 
+a table of the most important features determined  by each one. 
+This script takes a path to an input file and a path to an output 
+directory as arguments.
 
 Usage: regression.py <file_path_train> <output>
 
@@ -16,9 +17,10 @@ Arguments:
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import RandomizedSearchCV, cross_val_score
+from sklearn.linear_model import Ridge
 import altair as alt
 from pyarrow import feather
 from docopt import docopt
@@ -42,8 +44,6 @@ def main(file_path_train, output):
   feature_df = random_forest_regression(train_x, train_y, output, train_data)
   plot_feature_importance(feature_df, output)
   print("Finished")
-  
-  # add function to write to output directory
 
 # Define function to split data into feature and targets
 def feature_target_split(train_data):
@@ -51,7 +51,7 @@ def feature_target_split(train_data):
   Splits the data into feature and targets and applies
   one hot encoding.
   
-  Paramters:
+  Parameters:
   ----------
   train_data: (dataframe) training data
   
@@ -61,13 +61,19 @@ def feature_target_split(train_data):
   train_y: (list) - target set
   """
   print("Preprocessing data...")
-  train_x = train_data[['region', 'type', 'month']]
+  train_x = train_data[['lat', 'lon', 'type', 'season']]
   train_y = train_data['average_price']
-  categorical_features = ['region', 'type', 'month']
+  numeric_features = ['lat', 'lon']
+  categorical_features = ['type', 'season']
   preprocessor = ColumnTransformer(transformers=[
+    ('scaler', StandardScaler(), numeric_features),
     ('ohe', OneHotEncoder(), categorical_features)
     ])
-  train_x = preprocessor.fit_transform(train_x)
+  train_x = pd.DataFrame(preprocessor.fit_transform(train_x),
+                         index=train_x.index,
+                         columns = (numeric_features +
+                                   list(preprocessor.named_transformers_['ohe']
+                                       .get_feature_names(categorical_features))))
   return train_x, train_y
   print("Finished preprocessing data...")
   
@@ -91,23 +97,23 @@ def random_forest_regression(train_x, train_y, output, train_data):
   csv file of feature importances
   """
   print("Starting random forest regression...")
-  rfr = RandomForestRegressor()
+  rfr = RandomForestRegressor(random_state=123)
   rfr.fit(train_x, train_y)
   rfr_parameters = {'max_depth': range(1, 20),
                   'n_estimators': range(1, 100)}
   random_rfr = RandomizedSearchCV(rfr, rfr_parameters, cv=5, scoring='neg_mean_squared_error')
   random_rfr.fit(train_x, train_y)
-  fold_accuracies = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
+  fold_accuracies_rfr = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
   cv_scores = pd.DataFrame({'Fold': [1, 2, 3, 4, 5],
-                    'Neg Mean Squared Error': fold_accuracies})
+                    'Neg Mean Squared Error': fold_accuracies_rfr})
+  # calculate the average error from these scores in final report
   cv_scores.to_csv(output + "cv_scores.csv")
-  features = pd.get_dummies(train_data[['region', 'type', 'month']])
-  feature_list = list(features.columns)
+  feature_list = list(train_x.columns)
   feature_df = pd.DataFrame({"feature_names": feature_list,
              "importance": random_rfr.best_estimator_.feature_importances_})
   feature_df = feature_df.sort_values(["importance"], ascending=False)
   # print(feature_df)
-  feature_df.to_csv(output + "feature_importance.csv")
+  feature_df.to_csv(output + "feature_importance_rfr.csv")
   return feature_df
   print("Finished random forest regression...")
 
@@ -127,14 +133,14 @@ def plot_feature_importance(feature_df, output):
   image file of feature importance plot
   """
   print("Starting to plot most important features...")
-  feature_plot = alt.Chart(feature_df[:10]).mark_bar(color="red", opacity=0.6).encode(
+  feature_plot = alt.Chart(feature_df).mark_bar(color="red", opacity=0.6).encode(
     x= alt.X("feature_names:N",
              sort=alt.SortField(field="importance:Q"),
              title="Features"),
     y = alt.Y("importance:Q", title="Feature Importance")
-    ).properties(title="10 Most Important Predictors of Avocado Price",
+    ).properties(title="Most Important Predictors of Avocado Price",
              width=400)
-  feature_plot.save(output + "feature_plot.png", webdriver="chrome")
+  feature_plot.save(output + "feature_plot_rfr.png", webdriver="chrome")
   print("Finished plotting most important features...")
 
 # Call main function
