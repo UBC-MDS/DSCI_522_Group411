@@ -24,6 +24,8 @@ from sklearn.linear_model import Ridge
 import altair as alt
 from pyarrow import feather
 from docopt import docopt
+import os.path
+from os import path
 
 opt = docopt(__doc__)
 
@@ -37,6 +39,12 @@ def main(file_path_train, output):
   file_path_train: (filepath) file path to the training data
   output: (filepath) file path to the output
   """
+  # Check if the input file is a valid path
+  assert path.exists(file_path_train) == True, "Input file path does not exist"
+  
+  # Check if the output file is a valid path
+  assert path.exists(output) == True, "Output file path does not exist"
+  
   # read in the data
   print("Starting to load in data...")
   train_data = pd.read_feather(file_path_train)
@@ -44,6 +52,8 @@ def main(file_path_train, output):
   feature_df = random_forest_regression(train_x, train_y, output, train_data)
   plot_feature_importance(feature_df, output)
   print("Finished")
+  
+  
 
 # Define function to split data into feature and targets
 def feature_target_split(train_data):
@@ -64,7 +74,17 @@ def feature_target_split(train_data):
   train_x = train_data[['lat', 'lon', 'type', 'season']]
   train_y = train_data['average_price']
   numeric_features = ['lat', 'lon']
+  
+  # Check if numeric features are really numeric
+  assert type(train_x['lat'][1]) == np.float64, "numeric feature should be type float"
+  assert type(train_x['lon'][1]) == np.float64, "numeric feature should be type float"
+  
   categorical_features = ['type', 'season']
+  
+  # Check if categorical features are 
+  assert type(train_x['type'][1]) == str, "categorical feature should be type string"
+  assert type(train_x['season'][1]) == str, "categorical feature should be type string"
+  
   preprocessor = ColumnTransformer(transformers=[
     ('scaler', StandardScaler(), numeric_features),
     ('ohe', OneHotEncoder(), categorical_features)
@@ -74,6 +94,11 @@ def feature_target_split(train_data):
                          columns = (numeric_features +
                                    list(preprocessor.named_transformers_['ohe']
                                        .get_feature_names(categorical_features))))
+                                       
+  # Check to see if one-hot-encoding added extra 4 columns for season and type
+  assert len(train_x.columns) == 8, "One-Hot-Encoding failed..."
+  
+  # Return the preprocessed training data for regression analysis
   return train_x, train_y
   print("Finished preprocessing data...")
   
@@ -96,7 +121,7 @@ def random_forest_regression(train_x, train_y, output, train_data):
   csv file of cross-validation scores
   csv file of feature importances
   """
-  print("Starting random forest regression...")
+  print("Performing random forest regression...")
   rfr = RandomForestRegressor(random_state=123)
   rfr.fit(train_x, train_y)
   rfr_parameters = {'max_depth': range(1, 20),
@@ -106,16 +131,19 @@ def random_forest_regression(train_x, train_y, output, train_data):
   fold_accuracies_rfr = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
   cv_scores = pd.DataFrame({'Fold': [1, 2, 3, 4, 5],
                     'Neg Mean Squared Error': fold_accuracies_rfr})
+                    
+  # Check that the regression worked and all cv_scores are not equal to zero
+  assert cv_scores['Neg Mean Squared Error'].all() != 0, "Random Forest Regression failed..."
+  
+  # Outputting the cv_scores to the results folder as a csv file                  
   # calculate the average error from these scores in final report
   cv_scores.to_csv(output + "cv_scores.csv")
   feature_list = list(train_x.columns)
   feature_df = pd.DataFrame({"feature_names": feature_list,
              "importance": random_rfr.best_estimator_.feature_importances_})
   feature_df = feature_df.sort_values(["importance"], ascending=False)
-  # print(feature_df)
   feature_df.to_csv(output + "feature_importance_rfr.csv")
   return feature_df
-  print("Finished random forest regression...")
 
 # Define plot function  
 def plot_feature_importance(feature_df, output):
@@ -132,7 +160,7 @@ def plot_feature_importance(feature_df, output):
   --------
   image file of feature importance plot
   """
-  print("Starting to plot most important features...")
+  print("Plotting most important features...")
   feature_plot = alt.Chart(feature_df).mark_bar(color="red", opacity=0.6).encode(
     x= alt.X("feature_names:N",
              sort=alt.SortField(field="importance:Q"),
@@ -140,8 +168,9 @@ def plot_feature_importance(feature_df, output):
     y = alt.Y("importance:Q", title="Feature Importance")
     ).properties(title="Most Important Predictors of Avocado Price",
              width=400)
+             
+  # Saving plot as an output           
   feature_plot.save(output + "feature_plot_rfr.png", webdriver="chrome")
-  print("Finished plotting most important features...")
 
 # Call main function
 if __name__ == "__main__":
