@@ -1,6 +1,7 @@
 ---
 title: "DSCI 522 Exploratory Data Analysis"
-author: "Katie Birchard, Andrea Lee, Ryan Homer"
+date: "January 31, 2020"
+author: "Katie Birchard, Andrea Lee, Ryan Homer" 
 output: github_document
 ---
 
@@ -36,12 +37,12 @@ ncol(avocado)
 str(avocado)
 
 # Looking at the top of the data
-head(avocado[, c(2:7)])
-head(avocado[, c(8:14)])
+head(avocado[, c(2:10)])
+head(avocado[, c(11:19)])
 
 # Looking at the bottom of the data
-tail(avocado[, c(2:7)])
-tail(avocado[, c(8:14)])
+tail(avocado[, c(2:10)])
+tail(avocado[, c(11:19)])
 
 # How many regions in the US are included in the dataset?
 unique(avocado$region)
@@ -74,7 +75,7 @@ Before we begin visualizing the data, we will split the dataset into 80% trainin
 
 ## Exploratory analysis on the training dataset 
 
-We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, month, and number sold each week against the average price to visualize the relationships between these variables (figure 1). We did not plot number of avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the relationship between avocado prices and avocados sold could be reciprocal (i.e. avocados sold may influence the price and vice versa), leading to a false interpretation. From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. We can also clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados. Finally, when we observe the monthly trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months.  
+We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, type, month, and number sold each week against the average price to visualize the relationships between these variables (figure 1). We did not plot number of avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the relationship between avocado prices and avocados sold could be reciprocal (i.e. avocados sold may influence the price and vice versa), leading to a false interpretation. From looking at these relationships, we can clearly see (and we may have already predicted from our own experience) that organic avocados are likely more expensive than non-organic avocados (figure 1). We can also see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston (figure 2). However, when we further looked into how the trend between avocado prices and location, we found that the avocado prices fluctuate wildly with latitude. With longitude, it appears that there could be a relationship, as there is almost a parabolic trend in price as longitude increases. Finally, when we observe the monthly and seasonal trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months (figure 3).  
 
 ```{r}
 # What is the distribution of the different categorical features?
@@ -164,6 +165,40 @@ price_per_region <- ggplot(avocado, aes(x=reorder(region, -average_price), y=ave
   theme(axis.text.x = element_text(angle=90, size = 8),
         axis.title.x = element_blank()) 
 
+# Region may not be the best predictor, so now I will test price by coordinates
+avocado_by_lat <- avocado %>%
+  group_by(lat) %>%
+  summarize(ave_price = mean(average_price))
+
+price_by_lat <- ggplot(avocado, aes(x=lat, y=average_price)) +
+  #geom_line(colour="red") +
+  geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
+  geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
+  scale_colour_manual(values=c("red"),
+                    breaks=c("red"),
+                    labels=c("Mean"),
+                    name=c("")) +
+  xlab("Latitude (Degrees)") +
+  ylab("Average Price ($)") +
+  ggtitle("Avocado Price by Latitude") +
+  theme_bw() 
+  
+avocado_by_lon <- avocado %>%
+  group_by(lon) %>%
+  summarize(ave_price = mean(average_price))
+
+price_by_lon <- ggplot(avocado, aes(x=lon, y=average_price)) +
+  geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
+  geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
+  scale_colour_manual(values=c("red"),
+                    breaks=c("red"),
+                    labels=c("Mean"),
+                    name=c("")) +
+  xlab("Longitude (Degrees)") +
+  ylab("Average Price ($)") +
+  ggtitle("Avocado Price by Longitude") +
+  theme_bw() 
+
 # What is the average avocado price by type (organic vs. non-organic)
 avocado_by_type <- avocado %>%
   group_by(type) %>%
@@ -202,19 +237,50 @@ price_per_month <- ggplot(avocado, aes(x=month, y=average_price)) +
   theme_bw() +
   theme(axis.title.x = element_blank(),
         legend.position = "right")
+
+# What about by season
+avocado_by_season <- avocado %>%
+  group_by(season) %>%
+  summarize(ave_price = mean(average_price))
+
+price_by_season <- ggplot(avocado, aes(x=factor(season, levels=c("Winter", "Spring", "Summer", "Fall")),
+                                       y=average_price)) +
+  geom_boxplot() +
+  geom_point(aes(x=season, y=ave_price, colour="red"), data=avocado_by_season) +
+  scale_colour_manual(values=c("red"),
+                      breaks=c("red"),
+                      labels=c("Mean"),
+                      name=c("")) +
+  xlab("Season") +
+  ylab("Average Price ($)") +
+  ggtitle("Average Price by Season") +
+  theme_bw()
 ```
 
+```{r, fig.height=4}
+price_per_type
+```
+
+**Figure 1.** Average price of avocados in the United States by type.
+
 ```{r,  fig.height=12}
-gridExtra::grid.arrange(price_per_region, price_per_type,
-                        price_per_month,
+gridExtra::grid.arrange(price_per_region, price_by_lat,
+                        price_by_lon,
                         ncol=1, nrow=3)
 ```
 
-**Figure 1.** Average price of avocados in the United States by region, type, month, and number of total avocados sold each week. 
+**Figure 2.** Average price of avocados in the United States by location.
+
+```{r,  fig.height=8}
+gridExtra::grid.arrange(price_per_month, price_by_season,
+                        ncol=1, nrow=2)
+```
+
+**Figure 3.** Monthly and seasonal changes in avocado prices in the United States.
 
 We also plotted the average avocado price over time to get an idea of how the price has fluctuated and whether there were any outlier months in the dataset (figure 2). It appears that there was a sharp incline in avocado prices in August-October of 2017, which may influence our analysis.
 
-```{r, fig.height=8}
+```{r, fig.height=4}
 avocado %>%
   group_by(year_month) %>%
   summarize(average_price = mean(average_price)) %>%
@@ -228,10 +294,6 @@ avocado %>%
 ```
 
 **Figure 2.** Average number of avocados sold per week between 2015 and 2018.
-
-```{r, include=FALSE}
-
-```
 
 
 ## References
