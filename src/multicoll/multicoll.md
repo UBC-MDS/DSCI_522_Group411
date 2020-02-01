@@ -1,59 +1,17 @@
-Multicollinearity
+Multicollinearity Analysis
 ================
-
-Load
-    libraries.
+Katie Birchard
 
 ``` r
 library(tidyverse)
-```
-
-    ## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
-
-    ## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
-    ## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
-    ## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
-    ## ✓ readr   1.3.1     ✓ forcats 0.4.0
-
-    ## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(lubridate)
-```
-
-    ## 
-    ## Attaching package: 'lubridate'
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     date
-
-``` r
 library(caret)
-```
-
-    ## Loading required package: lattice
-
-    ## 
-    ## Attaching package: 'caret'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     lift
-
-``` r
 library(feather)
 library(reshape2)
+library(kableExtra)
+library(car)
+source(here::here("src/multicoll/support_functions.R"))
 ```
-
-    ## 
-    ## Attaching package: 'reshape2'
-
-    ## The following object is masked from 'package:tidyr':
-    ## 
-    ##     smiths
 
 ## Correlation Matrix
 
@@ -64,18 +22,6 @@ Get training data.
 df <- read_feather(here::here("data/train.feather"))
 ```
 
-``` r
-#' Set upper triangle of matrix to NA
-#'
-#' @param corr_matrix A matrix
-#'
-#' @return Matrix with upper triangle set to NA
-upper_tri_na <- function(corr_matrix) {
-  corr_matrix[upper.tri(corr_matrix)] <- NA
-  corr_matrix
-}
-```
-
 Under the assumption that the data can be modelled linearly after
 observing the residual plot, we select the continuous numerical
 predictors, compute the correlation matrix and wrangle into a plottable
@@ -84,25 +30,25 @@ Data Visualization*, n.d.).
 
 ``` r
 # Create dataframe for correlation matrix chart
-corr_df <- df %>% 
-  select(total_volume, 
-         PLU_4046, 
-         PLU_4225, 
-         PLU_4770, 
-         total_bags, 
-         small_bags, 
-         large_bags, 
-         xlarge_bags) %>% 
-  cor %>% 
-  upper_tri_na %>% 
-  melt(na.rm = TRUE) %>% 
+corr_df <- df %>%
+  select(total_volume,
+         PLU_4046,
+         PLU_4225,
+         PLU_4770,
+         total_bags,
+         small_bags,
+         large_bags,
+         xlarge_bags) %>%
+  cor %>%
+  upper_tri_na %>%
+  melt(na.rm = TRUE) %>%
   mutate(value = round(value, 2))
 ```
 
 Correlation Matrix Chart
 
 ``` r
-ggplot(corr_df) + 
+ggplot(corr_df) +
   geom_tile(aes(Var1, Var2, fill = value)) +
   geom_text(aes(Var1, Var2, label = value), color = "black", size = 4) +
   scale_fill_distiller(palette = "GnBu", direction = 1) +
@@ -118,9 +64,9 @@ ggplot(corr_df) +
         legend.justification = c(1, 0),
         legend.position = c(0.55, 0.7),
         legend.direction = "horizontal") +
-  guides(fill = guide_colorbar(barwidth = 7, 
+  guides(fill = guide_colorbar(barwidth = 7,
                                barheight = 1,
-                               title.position = "top", 
+                               title.position = "top",
                                title.hjust = 0.5))
 ```
 
@@ -140,17 +86,179 @@ prediction model would probably lead to overfitting.
 ## Multicollinearity
 
 Create linear model and comput VIF scores from car (Fox and Weisberg
-2019)
-package.
+2019) package.
 
 ``` r
-car::vif(lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags, data = df))
+lm(average_price ~ total_volume +
+                   PLU_4046 +
+                   PLU_4225 +
+                   PLU_4770 +
+                   total_bags +
+                   small_bags +
+                   large_bags +
+                   xlarge_bags, data = df) %>%
+  vif() %>%
+  enframe() %>%
+  rename(Predictor = name, "VIF Score" = value) %>%
+  kable() %>%
+  kable_styling(full_width = FALSE)
 ```
 
-    ## total_volume     PLU_4046     PLU_4225     PLU_4770   total_bags   small_bags 
-    ## 4.375098e+09 5.707626e+08 5.165779e+08 4.140131e+06 2.489906e+14 1.426942e+14 
-    ##   large_bags  xlarge_bags 
-    ## 1.488220e+13 8.212601e+10
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Predictor
+
+</th>
+
+<th style="text-align:right;">
+
+VIF Score
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_volume
+
+</td>
+
+<td style="text-align:right;">
+
+3.775250e+08
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4046
+
+</td>
+
+<td style="text-align:right;">
+
+6.022176e+07
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4225
+
+</td>
+
+<td style="text-align:right;">
+
+5.317631e+07
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4770
+
+</td>
+
+<td style="text-align:right;">
+
+1.060176e+06
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+1.251477e+13
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+small\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+9.390446e+12
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+large\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+6.580236e+11
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+xlarge\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+1.322641e+10
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 This suggests extremely high collinearity for these variables in a
 linear model. We’ll be careful about using these features. They are
