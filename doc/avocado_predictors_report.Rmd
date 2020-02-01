@@ -1,7 +1,7 @@
 ---
 title: "DSCI 522 Avocado Predictors"
 author: "Katie Birchard, Ryan Homer, Andrea Lee"
-date: "24/01/2020"
+date: "02/02/2020"
 output:
   github_document:
     toc: true
@@ -20,7 +20,7 @@ library(kableExtra)
 
 We will be answering the research question: **What is the strongest predictor of avocado prices in the United States?**
 
-As millenials, we love avocados but, as we all know, avocados can be expensive. Therefore, we decided it would be interesting to investigate what drives avocado prices. Hopefully, the results of this investigation can give us insight on how to enjoy our beloved avocado toasts without breaking the bank.
+As millenials, we love avocados, but as we all know, avocados can be expensive. Therefore, we decided it would be interesting to investigate what drives avocado prices. We would like to know things such as what time of year are avocados least expensive, and where are they the cheapest? Hopefully, the results of this investigation can give us insight on how to enjoy our beloved avocado toasts without breaking the bank.
 
 Our goal is to find the feature that most strongly predicts the price of avocados in the United States. A natural inferential sub-question would be to first determine if any of the features correlate with avocado prices and if there is any multicollinearity among the features. From our results, we can also compute a rank of features by importance.
 

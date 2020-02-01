@@ -957,7 +957,7 @@ Neg Mean Squared Error
 
 <td style="text-align:right;">
 
-\-0.0634236
+\-0.0625814
 
 </td>
 
@@ -973,7 +973,7 @@ Neg Mean Squared Error
 
 <td style="text-align:right;">
 
-\-0.0712498
+\-0.0714488
 
 </td>
 
@@ -989,7 +989,7 @@ Neg Mean Squared Error
 
 <td style="text-align:right;">
 
-\-0.0549990
+\-0.0583096
 
 </td>
 
@@ -1005,7 +1005,7 @@ Neg Mean Squared Error
 
 <td style="text-align:right;">
 
-\-0.1310914
+\-0.1198118
 
 </td>
 
@@ -1021,7 +1021,7 @@ Neg Mean Squared Error
 
 <td style="text-align:right;">
 
-\-0.1385528
+\-0.1381594
 
 </td>
 
@@ -1075,7 +1075,7 @@ type\_organic
 
 <td style="text-align:right;">
 
-0.4724502
+0.4043493
 
 </td>
 
@@ -1091,7 +1091,7 @@ type\_conventional
 
 <td style="text-align:right;">
 
-0.1726477
+0.2020112
 
 </td>
 
@@ -1101,13 +1101,13 @@ type\_conventional
 
 <td style="text-align:left;">
 
-region\_HartfordSpringfield
+lon
 
 </td>
 
 <td style="text-align:right;">
 
-0.0395635
+0.1939479
 
 </td>
 
@@ -1117,13 +1117,13 @@ region\_HartfordSpringfield
 
 <td style="text-align:left;">
 
-region\_SanFrancisco
+lat
 
 </td>
 
 <td style="text-align:right;">
 
-0.0352611
+0.1077272
 
 </td>
 
@@ -1133,13 +1133,13 @@ region\_SanFrancisco
 
 <td style="text-align:left;">
 
-month\_Nov
+season\_Fall
 
 </td>
 
 <td style="text-align:right;">
 
-0.0327563
+0.0518542
 
 </td>
 
@@ -1149,13 +1149,13 @@ month\_Nov
 
 <td style="text-align:left;">
 
-month\_Dec
+season\_Summer
 
 </td>
 
 <td style="text-align:right;">
 
-0.0254321
+0.0266493
 
 </td>
 
@@ -1165,13 +1165,13 @@ month\_Dec
 
 <td style="text-align:left;">
 
-region\_NewYork
+season\_Winter
 
 </td>
 
 <td style="text-align:right;">
 
-0.0227305
+0.0105761
 
 </td>
 
@@ -1181,13 +1181,13 @@ region\_NewYork
 
 <td style="text-align:left;">
 
-region\_Houston
+season\_Spring
 
 </td>
 
 <td style="text-align:right;">
 
-0.0212973
+0.0028847
 
 </td>
 
@@ -1197,13 +1197,13 @@ region\_Houston
 
 <td style="text-align:left;">
 
-region\_PhoenixTucson
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0198379
+NA
 
 </td>
 
@@ -1213,13 +1213,13 @@ region\_PhoenixTucson
 
 <td style="text-align:left;">
 
-month\_Feb
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0167626
+NA
 
 </td>
 
@@ -1229,13 +1229,13 @@ month\_Feb
 
 <td style="text-align:left;">
 
-region\_DallasFtWorth
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0149198
+NA
 
 </td>
 
@@ -1245,13 +1245,13 @@ region\_DallasFtWorth
 
 <td style="text-align:left;">
 
-region\_WestTexNewMexico
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0131553
+NA
 
 </td>
 
@@ -1261,13 +1261,13 @@ region\_WestTexNewMexico
 
 <td style="text-align:left;">
 
-region\_SouthCentral
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0123819
+NA
 
 </td>
 
@@ -1277,13 +1277,13 @@ region\_SouthCentral
 
 <td style="text-align:left;">
 
-region\_Charlotte
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0109272
+NA
 
 </td>
 
@@ -1293,13 +1293,13 @@ region\_Charlotte
 
 <td style="text-align:left;">
 
-region\_Sacramento
+NA
 
 </td>
 
 <td style="text-align:right;">
 
-0.0097175
+NA
 
 </td>
 
