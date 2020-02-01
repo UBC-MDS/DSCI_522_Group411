@@ -161,10 +161,10 @@ make_plot <- function(datafile, out) {
     ggtitle("Average Price by Season") +
     theme_bw()
   
-  # Combine region, type, season plots above
-  summary_plot <- gridExtra::arrangeGrob(price_per_region, price_per_type,
+  # Combine type, season plots above
+  summary_plot <- gridExtra::arrangeGrob(price_per_type,
                           price_by_season,
-                          ncol=1, nrow=3)
+                          ncol=1, nrow=2)
   # Save plot as png
   ggsave('EDA_summary_plot.png', summary_plot, path = file.path(dest_path))
   
