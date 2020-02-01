@@ -22,7 +22,7 @@ all : data/train.feather \
       doc/img/anova_table.png doc/img/hypothesis_test_table.png doc/img/residual_plot.png \
       doc/img/collinearity.png doc/img/correlation_matrix.png \
       doc/img/EDA_month_table.png doc/img/EDA_plot.png doc/img/EDA_region_table.png doc/img/EDA_type_table.png doc/img/EDA_year_plot.png \
-      results/cv_scores.csv results/feature_importance.csv results/feature_plot.png \
+      results/cv_scores_lr.csv results/feature_weights_lr.csv results/feature_importance_rfr.csv results/feature_weights_lr.csv results/feature_plot.png \
       doc/avocado_predictors_report.md
 
 # Get the data
@@ -58,7 +58,7 @@ doc/img/EDA_month_table.png doc/img/EDA_plot.png doc/img/EDA_region_table.png do
 	Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 
 # Run regression analysis
-results/cv_scores.csv results/feature_importance.csv results/feature_plot.png : data/train.feather
+results/cv_scores_lr.csv results/feature_weights_lr.csv results/cv_scores_rfr.csv results/feature_importance_rfr.csv results/feature_plot.png : data/train.feather
 	python src/regression.py data/train.feather results/
 
 # Generate final report
