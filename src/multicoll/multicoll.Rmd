@@ -1,17 +1,18 @@
 ---
-title: "Multicollinearity"
+title: "Multicollinearity Analysis"
 author:
   - Katie Birchard
   - Ryan Homer
   - Andrea Lee
-output: github_document
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
 always_allow_html: true
 bibliography: ../../doc/refs.bib
 ---
 
-Load libraries.
-
-```{r libraries}
+```{r libraries, message=FALSE}
 library(tidyverse)
 library(lubridate)
 library(caret)
@@ -35,25 +36,25 @@ Under the assumption that the data can be modelled linearly after observing the 
 
 ```{r dataframe}
 # Create dataframe for correlation matrix chart
-corr_df <- df %>% 
-  select(total_volume, 
-         PLU_4046, 
-         PLU_4225, 
-         PLU_4770, 
-         total_bags, 
-         small_bags, 
-         large_bags, 
-         xlarge_bags) %>% 
-  cor %>% 
-  upper_tri_na %>% 
-  melt(na.rm = TRUE) %>% 
+corr_df <- df %>%
+  select(total_volume,
+         PLU_4046,
+         PLU_4225,
+         PLU_4770,
+         total_bags,
+         small_bags,
+         large_bags,
+         xlarge_bags) %>%
+  cor %>%
+  upper_tri_na %>%
+  melt(na.rm = TRUE) %>%
   mutate(value = round(value, 2))
 ```
 
 Correlation Matrix Chart
 
 ```{r chart}
-ggplot(corr_df) + 
+ggplot(corr_df) +
   geom_tile(aes(Var1, Var2, fill = value)) +
   geom_text(aes(Var1, Var2, label = value), color = "black", size = 4) +
   scale_fill_distiller(palette = "GnBu", direction = 1) +
@@ -69,9 +70,9 @@ ggplot(corr_df) +
         legend.justification = c(1, 0),
         legend.position = c(0.55, 0.7),
         legend.direction = "horizontal") +
-  guides(fill = guide_colorbar(barwidth = 7, 
+  guides(fill = guide_colorbar(barwidth = 7,
                                barheight = 1,
-                               title.position = "top", 
+                               title.position = "top",
                                title.hjust = 0.5))
 ```
 
@@ -86,13 +87,19 @@ Due to the high correlation, including all these predictors in a prediction mode
 Create linear model and comput VIF scores from car [@car] package.
 
 ```{r mc 1}
-lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
-   data = df) %>% 
-  vif() %>% 
-  enframe() %>% 
-  pivot_wider(id_cols = "name") %>% 
-  kable() %>% 
-  kable_styling()
+lm(average_price ~ total_volume +
+                   PLU_4046 +
+                   PLU_4225 +
+                   PLU_4770 +
+                   total_bags +
+                   small_bags +
+                   large_bags +
+                   xlarge_bags, data = df) %>%
+  vif() %>%
+  enframe() %>%
+  rename(Predictor = name, "VIF Score" = value) %>%
+  kable() %>%
+  kable_styling(full_width = FALSE)
 ```
 
 This suggests extremely high collinearity for these variables in a linear model. We'll be careful about using these features. They are probably not very good predictors of the average avocado price.
