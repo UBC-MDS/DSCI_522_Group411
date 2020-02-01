@@ -8,6 +8,12 @@ Katie Birchard, Ryan Homer, Andrea Lee
 We will be answering the research question: **What is the strongest
 predictor of avocado prices in the United States?**
 
+As millenials, we love avocados but, as we all know, avocados can be
+expensive. Therefore, we decided it would be interesting to investigate
+what drives avocado prices. Hopefully, the results of this investigation
+can give us insight on how to enjoy our beloved avocado toasts without
+breaking the bank.
+
 Our goal is to find the feature that most strongly predicts the price of
 avocados in the United States. A natural inferential sub-question would
 be to first determine if any of the features correlate with avocado
@@ -49,14 +55,18 @@ The features we tested were:
   - `xlarge_bags`: number of x-large bags of avocados sold
   - `type`: type of avocado sold (conventional or organic)
   - `year`: year avocado was sold in
-  - `region`: U.S. state avocado was sold in
-  - `month`: month avocado was sold in
+  - `lat`: latitude of the U.S. region the avocado was sold in
+  - `lon`: longitude of the U.S. region the avocado was sold in
+  - `season`: season avocado was sold in
 
 The features we used in the random forest regression model were:
 
   - `type`: type of avocado sold (conventional or organic)
-  - `region`: U.S. state avocado was sold in
-  - `month`: month avocado was sold in
+  - `lat`: latitude of the U.S. region the avocado was sold in
+  - `lon`: longitude of the U.S. region the avocado was sold in
+  - `season`: season avocado was sold in
+  - *The intuition behind these selected features will be explained
+    later on in the report.*
 
 The target was:
 
@@ -112,25 +122,24 @@ dataset, which tend to be more expensive. However, the prices are still
 similar enough that the observations from this dataset are likely
 accurate.
 
-# Results
-
 ## Hypothesis Test
 
-First, we conducted a hypothesis test to determine if any of the
-features are correlated to the target. To conduct a hypothesis test, we
-fitted an additive linear model and interpreted the p-values to
-determine which features are significant. We chose a significance level
-of 0.05 as it is the industry standard. We chose not to choose a
-stricter significance level (i.e. 0.01 or 0.001) as we do not believe
-that predicting avocado prices requires as conservative of a test.
+Before undergoing our main analysis, we first conducted a hypothesis
+test to determine if any of the features are correlated to the target.
+To conduct a hypothesis test, we fitted an additive linear model and
+interpreted the p-values to determine which features are significant. We
+chose a significance level of 0.05 as it is the industry standard. We
+chose not to choose a stricter significance level (i.e. 0.01 or 0.001)
+as we do not believe that predicting avocado prices requires as
+conservative of a test.
 
-Based on our EDA, we chose to fit a linear model to conudct our
+Based on our EDA, we chose to fit a linear model to conduct our
 hypothesis test. To confirm that a linear model would be appropriate for
-this dataset, examined its residual plot. Looking at the residual plot
-below, the points are randomly distributed which indicates that a linear
-model is appropriate in this case. ![](../doc/img/residual_plot.png)
-**Figure 2.** Residual plot to examine appropriateness of using a linear
-model.
+this dataset, we examined its residual plot. Looking at the residual
+plot below, the points are randomly distributed which indicates that a
+linear model is appropriate in this case.
+![](../doc/img/residual_plot.png) **Figure 2.** Residual plot to examine
+appropriateness of using a linear model.
 
 At a significance level of 0.05, it appears from the model below that
 the following features are significant as their p-values are less than
@@ -138,46 +147,51 @@ the significance level:
 
   - `type`
   - `year`
-  - `region`
-  - `month`
+  - `lat`
+  - `lon`
+  - `season`
+  - `total_volume`
+  - `PLU_4046`
+  - `PLU_4225`
+  - `PLU_4770`
 
-However, region and month are categorical variables that have numerous
-levels. Therefore, with all these levels, it is difficult to interpret
-their p-values from this model.
+| term          |      estimate | std.error |    statistic |   p.value |
+| :------------ | ------------: | --------: | -----------: | --------: |
+| (Intercept)   | \-126.5846962 | 5.8377380 | \-21.6838604 | 0.0000000 |
+| total\_volume |   \-0.0001696 | 0.0000632 |  \-2.6828953 | 0.0073080 |
+| PLU\_4046     |     0.0001694 | 0.0000632 |    2.6798369 | 0.0073751 |
+| PLU\_4225     |     0.0001698 | 0.0000632 |    2.6866911 | 0.0072256 |
+| PLU\_4770     |     0.0001692 | 0.0000632 |    2.6759652 | 0.0074608 |
+| total\_bags   |   \-0.0304085 | 0.0403553 |  \-0.7535183 | 0.4511522 |
+| small\_bags   |     0.0305780 | 0.0403553 |    0.7577192 | 0.4486329 |
+| large\_bags   |     0.0305770 | 0.0403553 |    0.7576960 | 0.4486468 |
+| xlarge\_bags  |     0.0305811 | 0.0403553 |    0.7577960 | 0.4485869 |
+| typeorganic   |     0.4649471 | 0.0058180 |   79.9147221 | 0.0000000 |
+| year          |     0.0634157 | 0.0028957 |   21.8999114 | 0.0000000 |
+| lat           |     0.0045224 | 0.0005441 |    8.3116710 | 0.0000000 |
+| lon           |     0.0011681 | 0.0001653 |    7.0670097 | 0.0000000 |
+| seasonSpring  |   \-0.1872143 | 0.0073685 | \-25.4072382 | 0.0000000 |
+| seasonSummer  |   \-0.0690990 | 0.0076073 |  \-9.0832990 | 0.0000000 |
+| seasonWinter  |   \-0.2515148 | 0.0073416 | \-34.2587737 | 0.0000000 |
 
-![](../doc/img/hypothesis_test_table.png)
-
-**Table 1.** Hypothesis test.
-
-We also used ANOVA to calculate and interpret the features’ p-values, as
-ANOVA is a special case of linear model that assumes categorical
-predictors. This test will act as a validation for the categorical
-variables we determined as significant above. The results of our ANOVA
-test below confirms that the features `type`, `year`, `region`, and
-`month` are significant at a 0.05 significance level.
-
-![](../doc/img/anova_table.png)
-
-**Table 2.** Hypothesis test of significant features using ANOVA.
+**Table 1**. Hypothesis Test Table.
 
 However, we should be cautious not to use the p-value significance as a
 stand alone measure to determine if these features are correlated with
-the target. We also conducted a multicollinearity test to determine if
-any of the features are redundant. We then used these results to inform
-which features should be included in the feature importances model.
+the target.
 
 ## Multicollinearity Test
 
-Next we conducted a multicollinearity test to check for any redundancies
-between features. Under the assumption that the data can be modelled
-linearly after observing the residual plot, we selected the continuous
-numerical predictors, computed the correlation matrix, and wrangled the
-data into a plottable dataframe (*Ggplot2 : Quick Correlation Matrix
-Heatmap - R Software and Data Visualization*, n.d.).
+Next, we conducted a multicollinearity test to check for any
+redundancies between features. Under the assumption that the data can be
+modelled linearly after observing the residual plot, we selected the
+continuous numerical predictors, computed the correlation matrix, and
+wrangled the data into a plottable dataframe (*Ggplot2 : Quick
+Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.).
 ![](../doc/img/correlation_matrix.png) **Figure 3.** Correlation matrix
 of continuous features.
 
-Overall, there is fairly high collinarity between many of the
+Overall, there is fairly high collinearity between many of the
 predictors. This was expected, since they all deal with volume or number
 of avocados sold, be it by PLU code, bag type or total volume. In
 particular, `total_bags` and `total_volume` were expected to be highly
@@ -190,12 +204,14 @@ the variance inflation (VIF) scores from the `car` package.
 
 ![](../doc/img/collinearity.png)
 
-**Table 3.** Variance inflation scores of continuous features.
+**Table 2.** Variance inflation scores of continuous features.
 
 The high VIF scores suggest extremely high collinearity for these
 variables in a linear model. Therefore, we will be careful about using
 these features as they are probably ineffective predictors of the
 average avocado price.
+
+# Results
 
 ## Random Forest Feature Importances
 
@@ -215,7 +231,7 @@ well our model was performing.
 |    4 |            \-0.1310914 |
 |    5 |            \-0.1385528 |
 
-**Table 4**. Cross-validation scores for each of the folds in the random
+**Table 3**. Cross-validation scores for each of the folds in the random
 forest regression model.
 
 From this model, we were able to determine the relative importance of
@@ -239,7 +255,7 @@ each feature.
 | region\_Charlotte           |  0.0109272 |
 | region\_Sacramento          |  0.0097175 |
 
-**Table 5**. The relative feature importances of the top 15 most
+**Table 4**. The relative feature importances of the top 15 most
 important features determined by random forest regression model.
 
 We found that our top predictor of avocado prices is `type`
@@ -260,6 +276,8 @@ continue on with our analysis of computing feature importances.
 
 # Discussion
 
+## Conclusion
+
 The random forest regression model predicted that `type` is the most
 important feature for predicting avocado price. This result is expected,
 since we observed a significant difference in the distribution of
@@ -272,7 +290,15 @@ per growing season, ultimately resulting in a more expensive avocado.
 The `region` feature also seemed to play some importance in the pricing
 of avocados. For instance, regions such as Hartford-Springfield and San
 Francisco were the third and fourth most important predictors of average
-avocado price. It is unclear how these regions affect avocado prices.
+avocado price. It is unclear how these regions affect avocado prices. A
+possible explanation could be that some regions, such as San Francisco,
+have significantly higher priced avocados because of the fact that the
+cost of living in these regions significantly higher than other regions
+in the United States. On the other hand, other regions, such as Texas,
+have significantly lower priced avocados because avocados are grown
+these regions.
+
+## Areas of Improvement
 
 Our random forest model could be improved substantially by modifying the
 `month` and `region` features.
