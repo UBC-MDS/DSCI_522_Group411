@@ -79,7 +79,7 @@ Before undergoing our main analysis, we first conducted a hypothesis test to det
 Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we examined its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
 
 <div style="text-align: center">
-  <img src="../doc/img/residual_plot.png" width="600px" />
+  <img src="../doc/img/residual_plot.png" width="680px" />
   <div>**Figure 2.** Residual plot to examine appropriateness of using a linear model.</div>
 </div>
 
