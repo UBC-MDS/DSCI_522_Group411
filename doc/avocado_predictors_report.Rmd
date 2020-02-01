@@ -2,7 +2,7 @@
 title: "DSCI 522 Avocado Predictors"
 author: "Katie Birchard, Ryan Homer, Andrea Lee"
 date: "24/01/2020"
-output: 
+output:
   github_document:
     toc: true
 always_allow_html: yes
@@ -57,7 +57,7 @@ The features we used in the random forest regression model were:
 - *The intuition behind these selected features will be explained later on in the report.*
 
 The target was:
-  
+
 - `average_price`: average price of avocado sold
 
 To perform this anlaysis, the R and Python programming languages [@r; @Python]. As well, the following R packages were used: `broom` [@broom], `caret` [@caret], `car` [@car], `docopt` [@docopt], `feather` [@feather], `ggpubr` [@ggpubr], `here`[@here], `kableExtra` [@kableExtra], `knitr` [@knitr], `lubridate` [@lubridate], `magick`[@magick], `RCurl` [@RCurl], `reshape2` [@reshape2], and `tidyverse` [@tidyverse]. The following Python packages were used: `altair` [@2018-altair], `numpy` [@numpy], `pandas` [@pandas], `pyarrow`[@pyarrow], `scikit-learn` [@scikit-learn], and `selenium` [@selenium]. And the following OS package was used: `chromedriver`[@chromedriver].
@@ -73,7 +73,7 @@ Since we want to ensure the prices in this dataset are relatively accurate, we c
 
 ## Hypothesis Test
 
-Before undergoing our main analysis, we first conducted a hypothesis test to determine if any of the features are correlated to the target. To conduct a hypothesis test, we fitted an additive linear model and interpreted the p-values to determine which features are significant. We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test. 
+Before undergoing our main analysis, we first conducted a hypothesis test to determine if any of the features are correlated to the target. To conduct a hypothesis test, we fitted an additive linear model and interpreted the p-values to determine which features are significant. We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test.
 
 Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we examined its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
 ![](../doc/img/residual_plot.png)
@@ -112,7 +112,7 @@ To verify the result from the correlation matrix above, we also computed the var
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 col <- read_csv("img/collinearity.csv")
 kable(col,
-      caption = "**Table 2.** Variance inflation scores of continuous features.") %>% 
+      caption = "**Table 2.** Variance inflation scores of continuous features.") %>%
   kable_styling(latex_options="scale_down")
 ```
 
@@ -125,7 +125,7 @@ The high VIF scores suggest extremely high collinearity for these variables in a
 Lastly, we fitted a random forest regressor model using the features that we determined as significant from the analysis above (`region`, `type`, and `month`). We used one hot encoding on these categorical features and used randomized cross validation to determine the optimal hyperparameters, maximum depth and number of estimators. We calculated the average (validation) scores using cross validation to determine how well our model was performing.
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-cv_scores <- read_csv("../results/cv_scores.csv")
+cv_scores <- read_csv("../results/cv_scores_rfr.csv")
 cv_scores <- cv_scores %>%
   select(`Fold`, `Neg Mean Squared Error`)
 kable(cv_scores,
@@ -135,7 +135,7 @@ kable(cv_scores,
 From this model, we were able to determine the relative importance of each feature.
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-feat_imp <- read_csv("../results/feature_importance.csv")
+feat_imp <- read_csv("../results/feature_importance_rfr.csv")
 feat_imp <- feat_imp %>%
   select(`Feature Names` = `feature_names`,
          `Importance` = `importance`)
@@ -164,9 +164,9 @@ The `region` feature also seemed to play some importance in the pricing of avoca
 
 ## Areas of Improvement
 
-Our random forest model could be improved substantially by modifying the `month` and `region` features.  
+Our random forest model could be improved substantially by modifying the `month` and `region` features.
 
-`Month` is ordinal, thus it should be treated as a numerical variable. However, it is difficult to convert month into its numerical form since December and January would be interpreted as furthest apart from one another, when in reality they should be interpreted as close to one another. That being said, we could treat month as a categorical variable if we group the months into seasons and use season as a feature instead. 
+`Month` is ordinal, thus it should be treated as a numerical variable. However, it is difficult to convert month into its numerical form since December and January would be interpreted as furthest apart from one another, when in reality they should be interpreted as close to one another. That being said, we could treat month as a categorical variable if we group the months into seasons and use season as a feature instead.
 
 Similarly, the different regions within the `region` feature are also related to one other as some regions are closer to one another geographically, while others are further apart. Therefore, a more accurate way to depict `region` would be to transform each region into its respective latitude and longitude.
 

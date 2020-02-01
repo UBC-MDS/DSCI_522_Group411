@@ -44,6 +44,22 @@ You may need to install the following package to help with rendering the reports
 Rscript -e "webshot::install_phantomjs()"
 ```
 
+### Run Process End-to-End
+
+To run the entire process and generate analysis report:
+
+```
+make
+```
+
+To clean out all temporary files:
+
+```
+make clean
+```
+
+### Run Individual Pieces
+
 To retrieve and prepare the data:
 
 ```
@@ -67,12 +83,6 @@ Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc
 Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 python src/regression.py data/train.feather results/
 Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
-```
-
-To run all of the above, you can use the following bash script:
-
-```
-bash run-all.sh
 ```
 
 ### R Package Dependencies
