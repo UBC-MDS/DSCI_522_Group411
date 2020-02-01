@@ -72,6 +72,38 @@ make_plot <- function(datafile, out) {
     theme(axis.text.x = element_text(angle=90, size = 8),
           axis.title.x = element_blank()) 
   
+  # Region may not be the best predictor, so now I will test price by coordinates
+  avocado_by_lat <- avocado %>%
+    group_by(lat) %>%
+    summarize(ave_price = mean(average_price))
+  avocado_by_lon <- avocado %>%
+    group_by(lon) %>%
+    summarize(ave_price = mean(average_price))
+  # Make plot
+  price_by_lat <- ggplot(avocado, aes(x=lat, y=average_price)) +
+    #geom_line(colour="red") +
+    geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
+    geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
+    scale_colour_manual(values=c("red"),
+                        breaks=c("red"),
+                        labels=c("Mean"),
+                        name=c("")) +
+    xlab("Latitude (Degrees)") +
+    ylab("Average Price ($)") +
+    ggtitle("Avocado Price by Latitude") +
+    theme_bw() 
+  price_by_lon <- ggplot(avocado, aes(x=lon, y=average_price)) +
+    geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
+    geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
+    scale_colour_manual(values=c("red"),
+                        breaks=c("red"),
+                        labels=c("Mean"),
+                        name=c("")) +
+    xlab("Longitude (Degrees)") +
+    ylab("Average Price ($)") +
+    ggtitle("Avocado Price by Longitude") +
+    theme_bw() 
+  
   # What is the average avocado price by type (organic vs. non-organic)?
   avocado_by_type <- avocado %>%
     group_by(type) %>%
@@ -111,12 +143,43 @@ make_plot <- function(datafile, out) {
     theme(axis.title.x = element_blank(),
           legend.position = "right")
   
-  # Combine all plots above
-  plot <- gridExtra::arrangeGrob(price_per_region, price_per_type,
-                          price_per_month,
+  # What is the price by season?
+  avocado_by_season <- avocado %>%
+    group_by(season) %>%
+    summarize(ave_price = mean(average_price))
+  # Make plot
+  price_by_season <- ggplot(avocado, aes(x=factor(season, levels=c("Winter", "Spring", "Summer", "Fall")),
+                                         y=average_price)) +
+    geom_boxplot() +
+    geom_point(aes(x=season, y=ave_price, colour="red"), data=avocado_by_season) +
+    scale_colour_manual(values=c("red"),
+                        breaks=c("red"),
+                        labels=c("Mean"),
+                        name=c("")) +
+    xlab("Season") +
+    ylab("Average Price ($)") +
+    ggtitle("Average Price by Season") +
+    theme_bw()
+  
+  # Combine region, type, season plots above
+  summary_plot <- gridExtra::arrangeGrob(price_per_region, price_per_type,
+                          price_by_season,
                           ncol=1, nrow=3)
   # Save plot as png
-  ggsave('EDA_plot.png',  plot, path = file.path(dest_path))
+  ggsave('EDA_summary_plot.png', summary_plot, path = file.path(dest_path))
+  
+  # Combine region, lat,  lon plots above
+  region_plot <- gridExtra::grid.arrange(price_per_region, price_by_lat,
+                          price_by_lon,
+                          ncol=1, nrow=3)
+  # Save plot as png
+  ggsave('EDA_region_plot.png', region_plot, path = file.path(dest_path))
+  
+  # Combine moth, season plots above
+  month_plot <- gridExtra::grid.arrange(price_per_month, price_by_season,
+                          ncol=1, nrow=2)
+  # Save plot as png
+  ggsave('EDA_month_plot.png',  month_plot, path = file.path(dest_path))
   
   # What is the average price over time?
   year_plot <- avocado %>%
@@ -131,9 +194,9 @@ make_plot <- function(datafile, out) {
     theme(axis.text.x = element_text(angle=90)) 
   # Save plot as png
   ggsave('EDA_year_plot.png',  year_plot, path = file.path(dest_path))
-}
-
-make_table <- function(datafile, out) {
+  }
+  
+  make_table <- function(datafile, out) {
   #' Create table and save table as image.
   #' 
   #' @param datafile Path to the feather file, including the actual filename.
