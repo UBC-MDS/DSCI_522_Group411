@@ -76,8 +76,11 @@ Since we want to ensure the prices in this dataset are relatively accurate, we c
 Before undergoing our main analysis, we first conducted a hypothesis test to determine if any of the features are correlated to the target. To conduct a hypothesis test, we fitted an additive linear model and interpreted the p-values to determine which features are significant. We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test.
 
 Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we examined its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
-![](../doc/img/residual_plot.png)
-**Figure 2.** Residual plot to examine appropriateness of using a linear model.
+
+<div style="text-align: center">
+  <img src="../doc/img/residual_plot.png" width="600px" />
+  <div>**Figure 2.** Residual plot to examine appropriateness of using a linear model.</div>
+</div>
 
 At a significance level of 0.05, it appears from the model below that the following features are significant as their p-values are less than the significance level:
 
@@ -102,8 +105,11 @@ However, we should be cautious not to use the p-value significance as a stand al
 ## Multicollinearity Test
 
 Next, we conducted a multicollinearity test to check for any redundancies between features. Under the assumption that the data can be modelled linearly after observing the residual plot, we selected the continuous numerical predictors, computed the correlation matrix, and wrangled the data into a plottable dataframe [@corr].
-![](../doc/img/correlation_matrix.png)
-**Figure 3.** Correlation matrix of continuous features.
+
+<div style="text-align: center">
+  <img src="../doc/img/correlation_matrix.png" width="600px" />
+  <div>**Figure 3.** Correlation matrix of continuous features.</div>
+</div>
 
 Overall, there is fairly high collinearity between many of the predictors. This was expected, since they all deal with volume or number of avocados sold, be it by PLU code, bag type or total volume. In particular, `total_bags` and `total_volume` were expected to be highly correlated to other predictors that were sub-quantities of these totals. Due to the high correlation, including all these predictors in a prediction model would probably lead to overfitting.
 
