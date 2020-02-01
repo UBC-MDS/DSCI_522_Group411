@@ -26,7 +26,7 @@ all : data/train.feather \
       src/DSCI_522_EDA.md \
       src/hypothesis_test.md \
       src/multicoll/multicoll.md \
-      doc/img/anova_table.png doc/img/hypothesis_test_table.png doc/img/residual_plot.png \
+      doc/img/hypothesis_test_table.png doc/img/residual_plot.png \
       doc/img/collinearity.png doc/img/correlation_matrix.png \
       doc/img/EDA_month_table.png doc/img/EDA_plot.png doc/img/EDA_region_table.png doc/img/EDA_type_table.png doc/img/EDA_year_plot.png \
       results/cv_scores_lr.csv results/feature_weights_lr.csv results/feature_importance_rfr.csv results/feature_weights_lr.csv results/feature_plot.png \
@@ -55,7 +55,7 @@ src/multicoll/multicoll.md : src/multicoll/multicoll.Rmd data/train.feather
 
 # Generate assets required for final report
 
-doc/img/anova_table.png doc/img/hypothesis_test_table.png doc/img/residual_plot.png : data/train.feather
+doc/img/hypothesis_test_table.png doc/img/residual_plot.png : data/train.feather
 	Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
 
 doc/img/collinearity.png doc/img/correlation_matrix.png : data/train.feather
@@ -65,7 +65,7 @@ doc/img/EDA_month_table.png doc/img/EDA_plot.png doc/img/EDA_region_table.png do
 	Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 
 # Run regression analyses
-results/cv_scores_lr.csv results/feature_weights_lr.csv results/cv_scores_rfr.csv results/feature_importance_rfr.csv results/feature_plot.png : data/train.feather
+results/cv_scores_lr.csv results/feature_weights_lr.csv results/cv_scores_rfr.csv results/feature_importance_rfr.csv results/feature_plot.png : data/train.feather src/regression.py
 	python src/regression.py data/train.feather results/
 
 # Generate final report
