@@ -96,7 +96,8 @@ At a significance level of 0.05, it appears from the model below that the follow
 - `PLU_4770`
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-p_val <- read_csv("img/hypothesis_test_table.csv")
+p_val <- read_csv("img/hypothesis_test_table.csv") %>% 
+  mutate(p.value = as.character(signif(p.value, 3)))
 kable(p_val,
       caption = "**Table 1**. Hypothesis Test Table.")
 ```
