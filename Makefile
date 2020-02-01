@@ -60,9 +60,11 @@ data/train.feather \
 src/multicoll/mc_create_assets.R
 	Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc/img
 
+doc/img/EDA_month_plot.png \
 doc/img/EDA_month_table.png \
-doc/img/EDA_plot.png \
+doc/img/EDA_region_plot.png \
 doc/img/EDA_region_table.png \
+doc/img/EDA_summary_plot.png \
 doc/img/EDA_type_table.png \
 doc/img/EDA_year_plot.png : \
 data/train.feather src/render_EDA.R
@@ -91,9 +93,11 @@ results/feature_weights_lr.csv \
 doc/img/collinearity.csv \
 doc/img/correlation_matrix.png \
 doc/img/hypothesis_test_table.csv \
+doc/img/EDA_month_plot.png \
 doc/img/EDA_month_table.png \
-doc/img/EDA_plot.png \
+doc/img/EDA_region_plot.png \
 doc/img/EDA_region_table.png \
+doc/img/EDA_summary_plot.png \
 doc/img/EDA_type_table.png \
 doc/img/EDA_year_plot.png
 	Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
