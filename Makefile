@@ -69,7 +69,7 @@ results/cv_scores_lr.csv results/feature_weights_lr.csv results/cv_scores_rfr.cs
 	python src/regression.py data/train.feather results/
 
 # Generate final report
-doc/avocado_predictors_report.md : doc/avocado_predictors_report.Rmd
+doc/avocado_predictors_report.md : doc/avocado_predictors_report.Rmd src/multicoll/multicoll.md src/hypothesis_test.md results/cv_scores_lr.csv results/cv_scores_rfr.csv results/feature_importance_rfr.csv results/feature_plot.png results/feature_weights_lr.csv
 	Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 
 #
