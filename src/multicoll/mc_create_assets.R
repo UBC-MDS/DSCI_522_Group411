@@ -88,11 +88,15 @@ create_assets <- function(datafile, out) {
 
 
     # multicollinearity table
-    lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
+    table <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags,
        data = df) %>%
-      vif() %>%
+      vif() %>% 
       enframe() %>%
-      pivot_wider(id_cols = "name") %>%
+      pivot_wider(id_cols = "name")
+    
+    write_csv(table, path = file.path(dest_path, 'collinearity.csv'))
+    
+    table %>%
       kable("html") %>%
       kable_styling() %>%
       save_kable(file = file.path(dest_path, "collinearity.png"))
