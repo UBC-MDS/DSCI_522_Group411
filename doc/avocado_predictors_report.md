@@ -130,8 +130,19 @@ hypothesis test. To confirm that a linear model would be appropriate for
 this dataset, we examined its residual plot. Looking at the residual
 plot below, the points are randomly distributed which indicates that a
 linear model is appropriate in this case.
-![](../doc/img/residual_plot.png) **Figure 2.** Residual plot to examine
-appropriateness of using a linear model.
+
+<div style="text-align: center">
+
+<img src="../doc/img/residual_plot.png" width="680px" />
+
+<div>
+
+**Figure 2.** Residual plot to examine appropriateness of using a linear
+model.
+
+</div>
+
+</div>
 
 At a significance level of 0.05, it appears from the model below that
 the following features are significant as their p-values are less than
@@ -183,7 +194,7 @@ statistic
 
 </th>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
 p.value
 
@@ -221,9 +232,9 @@ p.value
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+1.91e-102
 
 </td>
 
@@ -255,9 +266,9 @@ total\_volume
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0073080
+0.00731
 
 </td>
 
@@ -289,9 +300,9 @@ PLU\_4046
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0073751
+0.00738
 
 </td>
 
@@ -323,9 +334,9 @@ PLU\_4225
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0072256
+0.00723
 
 </td>
 
@@ -357,9 +368,9 @@ PLU\_4770
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0074608
+0.00746
 
 </td>
 
@@ -391,9 +402,9 @@ total\_bags
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4511522
+0.451
 
 </td>
 
@@ -425,9 +436,9 @@ small\_bags
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4486329
+0.449
 
 </td>
 
@@ -459,9 +470,9 @@ large\_bags
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4486468
+0.449
 
 </td>
 
@@ -493,9 +504,9 @@ xlarge\_bags
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.4485869
+0.449
 
 </td>
 
@@ -527,9 +538,9 @@ typeorganic
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+0
 
 </td>
 
@@ -561,9 +572,9 @@ year
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+2.01e-104
 
 </td>
 
@@ -595,9 +606,9 @@ lat
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+1.04e-16
 
 </td>
 
@@ -629,9 +640,9 @@ lon
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+1.66e-12
 
 </td>
 
@@ -663,9 +674,9 @@ seasonSpring
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+5.14e-139
 
 </td>
 
@@ -697,9 +708,9 @@ seasonSummer
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+1.2e-19
 
 </td>
 
@@ -731,9 +742,9 @@ seasonWinter
 
 </td>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-0.0000000
+2.59e-246
 
 </td>
 
@@ -755,8 +766,18 @@ modelled linearly after observing the residual plot, we selected the
 continuous numerical predictors, computed the correlation matrix, and
 wrangled the data into a plottable dataframe (*Ggplot2 : Quick
 Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.).
-![](../doc/img/correlation_matrix.png) **Figure 3.** Correlation matrix
-of continuous features.
+
+<div style="text-align: center">
+
+<img src="../doc/img/correlation_matrix.png" width="600px" />
+
+<div>
+
+**Figure 3.** Correlation matrix of continuous features.
+
+</div>
+
+</div>
 
 Overall, there is fairly high collinearity between many of the
 predictors. This was expected, since they all deal with volume or number
@@ -781,51 +802,15 @@ the variance inflation (VIF) scores from the `car` package.
 
 <tr>
 
-<th style="text-align:right;">
+<th style="text-align:left;">
 
-total\_volume
-
-</th>
-
-<th style="text-align:right;">
-
-PLU\_4046
+name
 
 </th>
 
 <th style="text-align:right;">
 
-PLU\_4225
-
-</th>
-
-<th style="text-align:right;">
-
-PLU\_4770
-
-</th>
-
-<th style="text-align:right;">
-
-total\_bags
-
-</th>
-
-<th style="text-align:right;">
-
-small\_bags
-
-</th>
-
-<th style="text-align:right;">
-
-large\_bags
-
-</th>
-
-<th style="text-align:right;">
-
-xlarge\_bags
+value
 
 </th>
 
@@ -837,51 +822,127 @@ xlarge\_bags
 
 <tr>
 
-<td style="text-align:right;">
+<td style="text-align:left;">
 
-377380697
-
-</td>
-
-<td style="text-align:right;">
-
-60200928
+total\_volume
 
 </td>
 
 <td style="text-align:right;">
 
-53154366
+3.775250e+08
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4046
 
 </td>
 
 <td style="text-align:right;">
 
-1059822
+6.022176e+07
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4225
 
 </td>
 
 <td style="text-align:right;">
 
-1.250602e+13
+5.317631e+07
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4770
 
 </td>
 
 <td style="text-align:right;">
 
-9.385298e+12
+1.060176e+06
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_bags
 
 </td>
 
 <td style="text-align:right;">
 
-657876309471
+1.251477e+13
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+small\_bags
 
 </td>
 
 <td style="text-align:right;">
 
-13221432358
+9.390446e+12
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+large\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+6.580236e+11
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+xlarge\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+1.322641e+10
 
 </td>
 
@@ -951,7 +1012,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0625814
+\-0.0624845
 
 </td>
 
@@ -967,7 +1028,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0714488
+\-0.0714751
 
 </td>
 
@@ -983,7 +1044,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0583096
+\-0.0623316
 
 </td>
 
@@ -999,7 +1060,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.1198118
+\-0.1281574
 
 </td>
 
@@ -1015,7 +1076,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.1381594
+\-0.1396265
 
 </td>
 
@@ -1025,7 +1086,7 @@ Neg Mean Squared
 
 </table>
 
-    ## [1] "The average cross-validation score for random forest regression is: 0.09"
+    ## [1] "The average cross-validation score for random forest regression is: 0.093"
 
 From this model, we identified the relative importance of each feature.
 
@@ -1070,7 +1131,7 @@ type\_organic
 
 <td style="text-align:right;">
 
-0.4043493
+0.3969294
 
 </td>
 
@@ -1086,7 +1147,7 @@ type\_conventional
 
 <td style="text-align:right;">
 
-0.2020112
+0.2099989
 
 </td>
 
@@ -1102,7 +1163,7 @@ lon
 
 <td style="text-align:right;">
 
-0.1939479
+0.1958670
 
 </td>
 
@@ -1118,7 +1179,7 @@ lat
 
 <td style="text-align:right;">
 
-0.1077272
+0.1044871
 
 </td>
 
@@ -1134,7 +1195,7 @@ season\_Fall
 
 <td style="text-align:right;">
 
-0.0518542
+0.0518205
 
 </td>
 
@@ -1150,7 +1211,7 @@ season\_Summer
 
 <td style="text-align:right;">
 
-0.0266493
+0.0274426
 
 </td>
 
@@ -1166,7 +1227,7 @@ season\_Winter
 
 <td style="text-align:right;">
 
-0.0105761
+0.0105028
 
 </td>
 
@@ -1182,7 +1243,7 @@ season\_Spring
 
 <td style="text-align:right;">
 
-0.0028847
+0.0029517
 
 </td>
 
