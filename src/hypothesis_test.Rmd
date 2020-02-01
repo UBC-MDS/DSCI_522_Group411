@@ -9,22 +9,23 @@ To conduct a hypothesis test, we will fit an additive linear model and interpret
 
 The features we will be testing are:
 
-- total_volume: total volume of avocados sold
-- PLU_4046: number of of avocados with a price lookup code of 4046 (small avocado) sold
-- PLU_4225: number of of avocados with a price lookup code of 4225 (large avocado) sold
-- PLU_4770:  number of of avocados with a price lookup code of 4770 (x-large avocado) sold
-- total_bags: total number of bags of avocados sold
-- small_bags: number of small bags of avocados sold
-- large_bags: number of large bags of avocados sold
-- xlarge_bags: number of x-large bags of avocados sold
-- type: type of avocado sold (conventional or organic)
-- year: year avocado was sold in
-- region: U.S. state avocado was sold in
-- month: month avocado was sold in
+- `total_volume`: total volume of avocados sold
+- `PLU_4046`: number of of avocados with a price lookup code of 4046 (small avocado) sold
+- `PLU_4225`: number of of avocados with a price lookup code of 4225 (large avocado) sold
+- `PLU_4770`:  number of of avocados with a price lookup code of 4770 (x-large avocado) sold
+- `total_bags`: total number of bags of avocados sold
+- `small_bags`: number of small bags of avocados sold
+- `large_bags`: number of large bags of avocados sold
+- `xlarge_bags`: number of x-large bags of avocados sold
+- `type`: type of avocado sold (conventional or organic)
+- `year`: year avocado was sold in
+- `lat`: latitude of the U.S. region the avocado was sold in
+- `lon`: longitude of the U.S. region the avocado was sold in
+- `season`: season avocado was sold in
 
 The target is:
 
-- average_price: average price of avocado sold
+- `average_price`: average price of avocado sold
 
 We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test.
 
@@ -36,40 +37,35 @@ library(broom)
 library(feather)
 ```
 
-Based on our EDA, we chose to fit a linear model to conudct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we will examine its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
+Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we will examine its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
 
 ```{r load data}
 avocado <- read_feather('../data/train.feather')
 ```
 
 ```{r fit model}
-model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + region + month, data = avocado)
+model <- lm(average_price ~ total_volume + PLU_4046 + PLU_4225 + PLU_4770 + total_bags + small_bags + large_bags + xlarge_bags + type + year + lat + lon + season, data = avocado)
 
 ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
   geom_point(colour= "cadetblue", alpha=0.1) +
-  labs(title = 'Residual Plot', x = "Predicted Values", y = "Residuals") +
+  labs(title = 'Residual Plot (Linear Model)', x = "Predicted Values", y = "Residuals") +
   theme_minimal()
 ```
 
 At a significance level of 0.05, it appears from the model below that the following features are significant as their p-values are less than the significance level:
 
-- type
-- year
-- region
-- month
-
-However, region and month are categorical variables that have numerous levels. Therefore, with all these levels, it is difficult to interpret their p-values from this model.
+- `type`
+- `year`
+- `lat`
+- `lon`
+- `season`
+- `total_volume`
+- `PLU_4046`
+- `PLU_4225`
+- `PLU_4770`
 
 ```{r hypothesis test}
 tidy(model)
 ```
 
-ANOVA is a special case of linear model that assumes categorical predictors. We can also use ANOVA to calculate and interpret the features' p-values. This will act as a validation for the categorical variables we determined as significant above. The results of our ANOVA test below confirms that the features type, year, region, and month are significant at a 0.05 significance level.
-
-```{r hypothesis test anova}
-model <- lm(average_price ~ type + year + region + month, data = avocado)
-anova(model)
-```
-
 However, we should be cautious not to use the p-value significance as a stand alone measure to determine if these features are correlated with the target. We will also conduct a multicollinearity test to determine if any of the features are redundant. We will then use these results to serve as a validation for our final feature importances model.
-

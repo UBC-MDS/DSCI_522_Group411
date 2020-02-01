@@ -8,6 +8,12 @@ Katie Birchard, Ryan Homer, Andrea Lee
 We will be answering the research question: **What is the strongest
 predictor of avocado prices in the United States?**
 
+As millenials, we love avocados but, as we all know, avocados can be
+expensive. Therefore, we decided it would be interesting to investigate
+what drives avocado prices. Hopefully, the results of this investigation
+can give us insight on how to enjoy our beloved avocado toasts without
+breaking the bank.
+
 Our goal is to find the feature that most strongly predicts the price of
 avocados in the United States. A natural inferential sub-question would
 be to first determine if any of the features correlate with avocado
@@ -49,14 +55,18 @@ The features we tested were:
   - `xlarge_bags`: number of x-large bags of avocados sold
   - `type`: type of avocado sold (conventional or organic)
   - `year`: year avocado was sold in
-  - `region`: U.S. state avocado was sold in
-  - `month`: month avocado was sold in
+  - `lat`: latitude of the U.S. region the avocado was sold in
+  - `lon`: longitude of the U.S. region the avocado was sold in
+  - `season`: season avocado was sold in
 
 The features we used in the random forest regression model were:
 
   - `type`: type of avocado sold (conventional or organic)
-  - `region`: U.S. state avocado was sold in
-  - `month`: month avocado was sold in
+  - `lat`: latitude of the U.S. region the avocado was sold in
+  - `lon`: longitude of the U.S. region the avocado was sold in
+  - `season`: season avocado was sold in
+  - *The intuition behind these selected features will be explained
+    later on in the report.*
 
 The target was:
 
@@ -112,25 +122,24 @@ dataset, which tend to be more expensive. However, the prices are still
 similar enough that the observations from this dataset are likely
 accurate.
 
-# Results
-
 ## Hypothesis Test
 
-First, we conducted a hypothesis test to determine if any of the
-features are correlated to the target. To conduct a hypothesis test, we
-fitted an additive linear model and interpreted the p-values to
-determine which features are significant. We chose a significance level
-of 0.05 as it is the industry standard. We chose not to choose a
-stricter significance level (i.e. 0.01 or 0.001) as we do not believe
-that predicting avocado prices requires as conservative of a test.
+Before undergoing our main analysis, we first conducted a hypothesis
+test to determine if any of the features are correlated to the target.
+To conduct a hypothesis test, we fitted an additive linear model and
+interpreted the p-values to determine which features are significant. We
+chose a significance level of 0.05 as it is the industry standard. We
+chose not to choose a stricter significance level (i.e. 0.01 or 0.001)
+as we do not believe that predicting avocado prices requires as
+conservative of a test.
 
-Based on our EDA, we chose to fit a linear model to conudct our
+Based on our EDA, we chose to fit a linear model to conduct our
 hypothesis test. To confirm that a linear model would be appropriate for
-this dataset, examined its residual plot. Looking at the residual plot
-below, the points are randomly distributed which indicates that a linear
-model is appropriate in this case. ![](../doc/img/residual_plot.png)
-**Figure 2.** Residual plot to examine appropriateness of using a linear
-model.
+this dataset, we examined its residual plot. Looking at the residual
+plot below, the points are randomly distributed which indicates that a
+linear model is appropriate in this case.
+![](../doc/img/residual_plot.png) **Figure 2.** Residual plot to examine
+appropriateness of using a linear model.
 
 At a significance level of 0.05, it appears from the model below that
 the following features are significant as their p-values are less than
@@ -138,46 +147,626 @@ the significance level:
 
   - `type`
   - `year`
-  - `region`
-  - `month`
+  - `lat`
+  - `lon`
+  - `season`
+  - `total_volume`
+  - `PLU_4046`
+  - `PLU_4225`
+  - `PLU_4770`
 
-However, region and month are categorical variables that have numerous
-levels. Therefore, with all these levels, it is difficult to interpret
-their p-values from this model.
+<table>
 
-![](../doc/img/hypothesis_test_table.png)
+<caption>
 
-**Table 1.** Hypothesis test.
+**Table 1**. Hypothesis Test Table.
 
-We also used ANOVA to calculate and interpret the features’ p-values, as
-ANOVA is a special case of linear model that assumes categorical
-predictors. This test will act as a validation for the categorical
-variables we determined as significant above. The results of our ANOVA
-test below confirms that the features `type`, `year`, `region`, and
-`month` are significant at a 0.05 significance level.
+</caption>
 
-![](../doc/img/anova_table.png)
+<thead>
 
-**Table 2.** Hypothesis test of significant features using ANOVA.
+<tr>
+
+<th style="text-align:left;">
+
+term
+
+</th>
+
+<th style="text-align:right;">
+
+estimate
+
+</th>
+
+<th style="text-align:right;">
+
+std.error
+
+</th>
+
+<th style="text-align:right;">
+
+statistic
+
+</th>
+
+<th style="text-align:right;">
+
+p.value
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+(Intercept)
+
+</td>
+
+<td style="text-align:right;">
+
+\-126.5846962
+
+</td>
+
+<td style="text-align:right;">
+
+5.8377380
+
+</td>
+
+<td style="text-align:right;">
+
+\-21.6838604
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_volume
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0001696
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+\-2.6828953
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073080
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4046
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001694
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+2.6798369
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073751
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4225
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001698
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+2.6866911
+
+</td>
+
+<td style="text-align:right;">
+
+0.0072256
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4770
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001692
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+2.6759652
+
+</td>
+
+<td style="text-align:right;">
+
+0.0074608
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0304085
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.7535183
+
+</td>
+
+<td style="text-align:right;">
+
+0.4511522
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+small\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+0.0305780
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+0.7577192
+
+</td>
+
+<td style="text-align:right;">
+
+0.4486329
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+large\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+0.0305770
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+0.7576960
+
+</td>
+
+<td style="text-align:right;">
+
+0.4486468
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+xlarge\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+0.0305811
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+0.7577960
+
+</td>
+
+<td style="text-align:right;">
+
+0.4485869
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+typeorganic
+
+</td>
+
+<td style="text-align:right;">
+
+0.4649471
+
+</td>
+
+<td style="text-align:right;">
+
+0.0058180
+
+</td>
+
+<td style="text-align:right;">
+
+79.9147221
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+year
+
+</td>
+
+<td style="text-align:right;">
+
+0.0634157
+
+</td>
+
+<td style="text-align:right;">
+
+0.0028957
+
+</td>
+
+<td style="text-align:right;">
+
+21.8999114
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lat
+
+</td>
+
+<td style="text-align:right;">
+
+0.0045224
+
+</td>
+
+<td style="text-align:right;">
+
+0.0005441
+
+</td>
+
+<td style="text-align:right;">
+
+8.3116710
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lon
+
+</td>
+
+<td style="text-align:right;">
+
+0.0011681
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001653
+
+</td>
+
+<td style="text-align:right;">
+
+7.0670097
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+seasonSpring
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1872143
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073685
+
+</td>
+
+<td style="text-align:right;">
+
+\-25.4072382
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+seasonSummer
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0690990
+
+</td>
+
+<td style="text-align:right;">
+
+0.0076073
+
+</td>
+
+<td style="text-align:right;">
+
+\-9.0832990
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+seasonWinter
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.2515148
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073416
+
+</td>
+
+<td style="text-align:right;">
+
+\-34.2587737
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 However, we should be cautious not to use the p-value significance as a
 stand alone measure to determine if these features are correlated with
-the target. We also conducted a multicollinearity test to determine if
-any of the features are redundant. We then used these results to inform
-which features should be included in the feature importances model.
+the target.
 
 ## Multicollinearity Test
 
-Next we conducted a multicollinearity test to check for any redundancies
-between features. Under the assumption that the data can be modelled
-linearly after observing the residual plot, we selected the continuous
-numerical predictors, computed the correlation matrix, and wrangled the
-data into a plottable dataframe (*Ggplot2 : Quick Correlation Matrix
-Heatmap - R Software and Data Visualization*, n.d.).
+Next, we conducted a multicollinearity test to check for any
+redundancies between features. Under the assumption that the data can be
+modelled linearly after observing the residual plot, we selected the
+continuous numerical predictors, computed the correlation matrix, and
+wrangled the data into a plottable dataframe (*Ggplot2 : Quick
+Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.).
 ![](../doc/img/correlation_matrix.png) **Figure 3.** Correlation matrix
 of continuous features.
 
-Overall, there is fairly high collinarity between many of the
+Overall, there is fairly high collinearity between many of the
 predictors. This was expected, since they all deal with volume or number
 of avocados sold, be it by PLU code, bag type or total volume. In
 particular, `total_bags` and `total_volume` were expected to be highly
@@ -188,14 +777,134 @@ prediction model would probably lead to overfitting.
 To verify the result from the correlation matrix above, we also computed
 the variance inflation (VIF) scores from the `car` package.
 
-![](../doc/img/collinearity.png)
+<table class="table" style="margin-left: auto; margin-right: auto;">
 
-**Table 3.** Variance inflation scores of continuous features.
+<caption>
+
+**Table 2.** Variance inflation scores of continuous features.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+total\_volume
+
+</th>
+
+<th style="text-align:right;">
+
+PLU\_4046
+
+</th>
+
+<th style="text-align:right;">
+
+PLU\_4225
+
+</th>
+
+<th style="text-align:right;">
+
+PLU\_4770
+
+</th>
+
+<th style="text-align:right;">
+
+total\_bags
+
+</th>
+
+<th style="text-align:right;">
+
+small\_bags
+
+</th>
+
+<th style="text-align:right;">
+
+large\_bags
+
+</th>
+
+<th style="text-align:right;">
+
+xlarge\_bags
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+377380697
+
+</td>
+
+<td style="text-align:right;">
+
+60200928
+
+</td>
+
+<td style="text-align:right;">
+
+53154366
+
+</td>
+
+<td style="text-align:right;">
+
+1059822
+
+</td>
+
+<td style="text-align:right;">
+
+1.250602e+13
+
+</td>
+
+<td style="text-align:right;">
+
+9.385298e+12
+
+</td>
+
+<td style="text-align:right;">
+
+657876309471
+
+</td>
+
+<td style="text-align:right;">
+
+13221432358
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 The high VIF scores suggest extremely high collinearity for these
 variables in a linear model. Therefore, we will be careful about using
 these features as they are probably ineffective predictors of the
 average avocado price.
+
+# Results
 
 ## Random Forest Feature Importances
 
@@ -207,40 +916,398 @@ hyperparameters, maximum depth and number of estimators. We calculated
 the average (validation) scores using cross validation to determine how
 well our model was performing.
 
-| Fold | Neg Mean Squared Error |
-| ---: | ---------------------: |
-|    1 |            \-0.0634236 |
-|    2 |            \-0.0712498 |
-|    3 |            \-0.0549990 |
-|    4 |            \-0.1310914 |
-|    5 |            \-0.1385528 |
+<table>
 
-**Table 4**. Cross-validation scores for each of the folds in the random
+<caption>
+
+**Table 3**. Cross-validation scores for each of the folds in the random
 forest regression model.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+Fold
+
+</th>
+
+<th style="text-align:right;">
+
+Neg Mean Squared Error
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0634236
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0712498
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0549990
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1310914
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1385528
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 From this model, we were able to determine the relative importance of
 each feature.
 
-| Feature Names               | Importance |
-| :-------------------------- | ---------: |
-| type\_organic               |  0.4724502 |
-| type\_conventional          |  0.1726477 |
-| region\_HartfordSpringfield |  0.0395635 |
-| region\_SanFrancisco        |  0.0352611 |
-| month\_Nov                  |  0.0327563 |
-| month\_Dec                  |  0.0254321 |
-| region\_NewYork             |  0.0227305 |
-| region\_Houston             |  0.0212973 |
-| region\_PhoenixTucson       |  0.0198379 |
-| month\_Feb                  |  0.0167626 |
-| region\_DallasFtWorth       |  0.0149198 |
-| region\_WestTexNewMexico    |  0.0131553 |
-| region\_SouthCentral        |  0.0123819 |
-| region\_Charlotte           |  0.0109272 |
-| region\_Sacramento          |  0.0097175 |
+<table>
 
-**Table 5**. The relative feature importances of the top 15 most
+<caption>
+
+**Table 4**. The relative feature importances of the top 15 most
 important features determined by random forest regression model.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Feature Names
+
+</th>
+
+<th style="text-align:right;">
+
+Importance
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+type\_organic
+
+</td>
+
+<td style="text-align:right;">
+
+0.4724502
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+type\_conventional
+
+</td>
+
+<td style="text-align:right;">
+
+0.1726477
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_HartfordSpringfield
+
+</td>
+
+<td style="text-align:right;">
+
+0.0395635
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_SanFrancisco
+
+</td>
+
+<td style="text-align:right;">
+
+0.0352611
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_Nov
+
+</td>
+
+<td style="text-align:right;">
+
+0.0327563
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_Dec
+
+</td>
+
+<td style="text-align:right;">
+
+0.0254321
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_NewYork
+
+</td>
+
+<td style="text-align:right;">
+
+0.0227305
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_Houston
+
+</td>
+
+<td style="text-align:right;">
+
+0.0212973
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_PhoenixTucson
+
+</td>
+
+<td style="text-align:right;">
+
+0.0198379
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_Feb
+
+</td>
+
+<td style="text-align:right;">
+
+0.0167626
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_DallasFtWorth
+
+</td>
+
+<td style="text-align:right;">
+
+0.0149198
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_WestTexNewMexico
+
+</td>
+
+<td style="text-align:right;">
+
+0.0131553
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_SouthCentral
+
+</td>
+
+<td style="text-align:right;">
+
+0.0123819
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_Charlotte
+
+</td>
+
+<td style="text-align:right;">
+
+0.0109272
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_Sacramento
+
+</td>
+
+<td style="text-align:right;">
+
+0.0097175
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 We found that our top predictor of avocado prices is `type`
 (i.e. whether the avocado is organic or conventional).
@@ -260,6 +1327,8 @@ continue on with our analysis of computing feature importances.
 
 # Discussion
 
+## Conclusion
+
 The random forest regression model predicted that `type` is the most
 important feature for predicting avocado price. This result is expected,
 since we observed a significant difference in the distribution of
@@ -272,7 +1341,15 @@ per growing season, ultimately resulting in a more expensive avocado.
 The `region` feature also seemed to play some importance in the pricing
 of avocados. For instance, regions such as Hartford-Springfield and San
 Francisco were the third and fourth most important predictors of average
-avocado price. It is unclear how these regions affect avocado prices.
+avocado price. It is unclear how these regions affect avocado prices. A
+possible explanation could be that some regions, such as San Francisco,
+have significantly higher priced avocados because of the fact that the
+cost of living in these regions significantly higher than other regions
+in the United States. On the other hand, other regions, such as Texas,
+have significantly lower priced avocados because avocados are grown
+these regions.
+
+## Areas of Improvement
 
 Our random forest model could be improved substantially by modifying the
 `month` and `region` features.
