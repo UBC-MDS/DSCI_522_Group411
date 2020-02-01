@@ -22,15 +22,7 @@
 # target: all
 # Main project dependencies for generating all reports
 #
-all : data/train.feather \
-      src/DSCI_522_EDA.md \
-      src/hypothesis_test.md \
-      src/multicoll/multicoll.md \
-      doc/img/hypothesis_test_table.png doc/img/residual_plot.png \
-      doc/img/collinearity.png doc/img/correlation_matrix.png \
-      doc/img/EDA_month_table.png doc/img/EDA_plot.png doc/img/EDA_region_table.png doc/img/EDA_type_table.png doc/img/EDA_year_plot.png \
-      results/cv_scores_lr.csv results/feature_weights_lr.csv results/feature_importance_rfr.csv results/feature_weights_lr.csv results/feature_plot.png \
-      doc/avocado_predictors_report.md
+all : doc/avocado_predictors_report.md
 
 # Get the data
 data/avocado.csv :
@@ -49,27 +41,65 @@ src/DSCI_522_EDA.md : src/DSCI_522_EDA.Rmd data/train.feather
 src/hypothesis_test.md : src/hypothesis_test.Rmd data/train.feather
 	Rscript -e "rmarkdown::render('src/hypothesis_test.Rmd')"
 
-src/multicoll/multicoll.md : src/multicoll/multicoll.Rmd data/train.feather
-	Rscript -e "rmarkdown::render('src/multicoll/multicoll.Rmd')"
+src/multicoll/multicoll.md src/multicoll/multicoll.html : src/multicoll/multicoll.Rmd data/train.feather
+	Rscript -e "rmarkdown::render('src/multicoll/multicoll.Rmd', output_format = 'all')"
 
 
 # Generate assets required for final report
 
-doc/img/hypothesis_test_table.png doc/img/residual_plot.png : data/train.feather
+doc/img/hypothesis_test_table.csv \
+doc/img/residual_plot.png : \
+data/train.feather \
+src/conduct_hypothesis_test.R
 	Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
 
-doc/img/collinearity.png doc/img/correlation_matrix.png : data/train.feather
+doc/img/collinearity.png \
+doc/img/correlation_matrix.png \
+doc/img/collinearity.csv : \
+data/train.feather \
+src/multicoll/mc_create_assets.R
 	Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc/img
 
-doc/img/EDA_month_table.png doc/img/EDA_plot.png doc/img/EDA_region_table.png doc/img/EDA_type_table.png doc/img/EDA_year_plot.png : data/train.feather
+doc/img/EDA_month_plot.png \
+doc/img/EDA_month_table.png \
+doc/img/EDA_region_plot.png \
+doc/img/EDA_region_table.png \
+doc/img/EDA_summary_plot.png \
+doc/img/EDA_type_table.png \
+doc/img/EDA_year_plot.png : \
+data/train.feather src/render_EDA.R
 	Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 
 # Run regression analyses
-results/cv_scores_lr.csv results/feature_weights_lr.csv results/cv_scores_rfr.csv results/feature_importance_rfr.csv results/feature_plot.png : data/train.feather src/regression.py
+results/cv_scores_lr.csv \
+results/feature_weights_lr.csv \
+results/cv_scores_rfr.csv \
+results/feature_importance_rfr.csv \
+results/feature_plot.png : \
+data/train.feather \
+src/regression.py
 	python src/regression.py data/train.feather results/
 
 # Generate final report
-doc/avocado_predictors_report.md : doc/avocado_predictors_report.Rmd src/multicoll/multicoll.md src/hypothesis_test.md results/cv_scores_lr.csv results/cv_scores_rfr.csv results/feature_importance_rfr.csv results/feature_plot.png results/feature_weights_lr.csv
+doc/avocado_predictors_report.md : \
+doc/avocado_predictors_report.Rmd \
+src/multicoll/multicoll.md \
+src/hypothesis_test.md \
+results/cv_scores_lr.csv \
+results/cv_scores_rfr.csv \
+results/feature_importance_rfr.csv \
+results/feature_plot.png \
+results/feature_weights_lr.csv \
+doc/img/collinearity.csv \
+doc/img/correlation_matrix.png \
+doc/img/hypothesis_test_table.csv \
+doc/img/EDA_month_plot.png \
+doc/img/EDA_month_table.png \
+doc/img/EDA_region_plot.png \
+doc/img/EDA_region_table.png \
+doc/img/EDA_summary_plot.png \
+doc/img/EDA_type_table.png \
+doc/img/EDA_year_plot.png
 	Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 
 #
