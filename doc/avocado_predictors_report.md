@@ -155,26 +155,601 @@ the significance level:
   - `PLU_4225`
   - `PLU_4770`
 
-| term          |      estimate | std.error |    statistic |   p.value |
-| :------------ | ------------: | --------: | -----------: | --------: |
-| (Intercept)   | \-126.5846962 | 5.8377380 | \-21.6838604 | 0.0000000 |
-| total\_volume |   \-0.0001696 | 0.0000632 |  \-2.6828953 | 0.0073080 |
-| PLU\_4046     |     0.0001694 | 0.0000632 |    2.6798369 | 0.0073751 |
-| PLU\_4225     |     0.0001698 | 0.0000632 |    2.6866911 | 0.0072256 |
-| PLU\_4770     |     0.0001692 | 0.0000632 |    2.6759652 | 0.0074608 |
-| total\_bags   |   \-0.0304085 | 0.0403553 |  \-0.7535183 | 0.4511522 |
-| small\_bags   |     0.0305780 | 0.0403553 |    0.7577192 | 0.4486329 |
-| large\_bags   |     0.0305770 | 0.0403553 |    0.7576960 | 0.4486468 |
-| xlarge\_bags  |     0.0305811 | 0.0403553 |    0.7577960 | 0.4485869 |
-| typeorganic   |     0.4649471 | 0.0058180 |   79.9147221 | 0.0000000 |
-| year          |     0.0634157 | 0.0028957 |   21.8999114 | 0.0000000 |
-| lat           |     0.0045224 | 0.0005441 |    8.3116710 | 0.0000000 |
-| lon           |     0.0011681 | 0.0001653 |    7.0670097 | 0.0000000 |
-| seasonSpring  |   \-0.1872143 | 0.0073685 | \-25.4072382 | 0.0000000 |
-| seasonSummer  |   \-0.0690990 | 0.0076073 |  \-9.0832990 | 0.0000000 |
-| seasonWinter  |   \-0.2515148 | 0.0073416 | \-34.2587737 | 0.0000000 |
+<table>
+
+<caption>
 
 **Table 1**. Hypothesis Test Table.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+term
+
+</th>
+
+<th style="text-align:right;">
+
+estimate
+
+</th>
+
+<th style="text-align:right;">
+
+std.error
+
+</th>
+
+<th style="text-align:right;">
+
+statistic
+
+</th>
+
+<th style="text-align:right;">
+
+p.value
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+(Intercept)
+
+</td>
+
+<td style="text-align:right;">
+
+\-126.5846962
+
+</td>
+
+<td style="text-align:right;">
+
+5.8377380
+
+</td>
+
+<td style="text-align:right;">
+
+\-21.6838604
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_volume
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0001696
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+\-2.6828953
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073080
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4046
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001694
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+2.6798369
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073751
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4225
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001698
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+2.6866911
+
+</td>
+
+<td style="text-align:right;">
+
+0.0072256
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PLU\_4770
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001692
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000632
+
+</td>
+
+<td style="text-align:right;">
+
+2.6759652
+
+</td>
+
+<td style="text-align:right;">
+
+0.0074608
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+total\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0304085
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.7535183
+
+</td>
+
+<td style="text-align:right;">
+
+0.4511522
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+small\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+0.0305780
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+0.7577192
+
+</td>
+
+<td style="text-align:right;">
+
+0.4486329
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+large\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+0.0305770
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+0.7576960
+
+</td>
+
+<td style="text-align:right;">
+
+0.4486468
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+xlarge\_bags
+
+</td>
+
+<td style="text-align:right;">
+
+0.0305811
+
+</td>
+
+<td style="text-align:right;">
+
+0.0403553
+
+</td>
+
+<td style="text-align:right;">
+
+0.7577960
+
+</td>
+
+<td style="text-align:right;">
+
+0.4485869
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+typeorganic
+
+</td>
+
+<td style="text-align:right;">
+
+0.4649471
+
+</td>
+
+<td style="text-align:right;">
+
+0.0058180
+
+</td>
+
+<td style="text-align:right;">
+
+79.9147221
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+year
+
+</td>
+
+<td style="text-align:right;">
+
+0.0634157
+
+</td>
+
+<td style="text-align:right;">
+
+0.0028957
+
+</td>
+
+<td style="text-align:right;">
+
+21.8999114
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lat
+
+</td>
+
+<td style="text-align:right;">
+
+0.0045224
+
+</td>
+
+<td style="text-align:right;">
+
+0.0005441
+
+</td>
+
+<td style="text-align:right;">
+
+8.3116710
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lon
+
+</td>
+
+<td style="text-align:right;">
+
+0.0011681
+
+</td>
+
+<td style="text-align:right;">
+
+0.0001653
+
+</td>
+
+<td style="text-align:right;">
+
+7.0670097
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+seasonSpring
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1872143
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073685
+
+</td>
+
+<td style="text-align:right;">
+
+\-25.4072382
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+seasonSummer
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0690990
+
+</td>
+
+<td style="text-align:right;">
+
+0.0076073
+
+</td>
+
+<td style="text-align:right;">
+
+\-9.0832990
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+seasonWinter
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.2515148
+
+</td>
+
+<td style="text-align:right;">
+
+0.0073416
+
+</td>
+
+<td style="text-align:right;">
+
+\-34.2587737
+
+</td>
+
+<td style="text-align:right;">
+
+0.0000000
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 However, we should be cautious not to use the p-value significance as a
 stand alone measure to determine if these features are correlated with
@@ -202,9 +777,127 @@ prediction model would probably lead to overfitting.
 To verify the result from the correlation matrix above, we also computed
 the variance inflation (VIF) scores from the `car` package.
 
-![](../doc/img/collinearity.png)
+<table class="table" style="margin-left: auto; margin-right: auto;">
+
+<caption>
 
 **Table 2.** Variance inflation scores of continuous features.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+total\_volume
+
+</th>
+
+<th style="text-align:right;">
+
+PLU\_4046
+
+</th>
+
+<th style="text-align:right;">
+
+PLU\_4225
+
+</th>
+
+<th style="text-align:right;">
+
+PLU\_4770
+
+</th>
+
+<th style="text-align:right;">
+
+total\_bags
+
+</th>
+
+<th style="text-align:right;">
+
+small\_bags
+
+</th>
+
+<th style="text-align:right;">
+
+large\_bags
+
+</th>
+
+<th style="text-align:right;">
+
+xlarge\_bags
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+377380697
+
+</td>
+
+<td style="text-align:right;">
+
+60200928
+
+</td>
+
+<td style="text-align:right;">
+
+53154366
+
+</td>
+
+<td style="text-align:right;">
+
+1059822
+
+</td>
+
+<td style="text-align:right;">
+
+1.250602e+13
+
+</td>
+
+<td style="text-align:right;">
+
+9.385298e+12
+
+</td>
+
+<td style="text-align:right;">
+
+657876309471
+
+</td>
+
+<td style="text-align:right;">
+
+13221432358
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 The high VIF scores suggest extremely high collinearity for these
 variables in a linear model. Therefore, we will be careful about using
@@ -223,40 +916,398 @@ hyperparameters, maximum depth and number of estimators. We calculated
 the average (validation) scores using cross validation to determine how
 well our model was performing.
 
-| Fold | Neg Mean Squared Error |
-| ---: | ---------------------: |
-|    1 |            \-0.0634236 |
-|    2 |            \-0.0712498 |
-|    3 |            \-0.0549990 |
-|    4 |            \-0.1310914 |
-|    5 |            \-0.1385528 |
+<table>
+
+<caption>
 
 **Table 3**. Cross-validation scores for each of the folds in the random
 forest regression model.
 
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+Fold
+
+</th>
+
+<th style="text-align:right;">
+
+Neg Mean Squared Error
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0634236
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0712498
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0549990
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1310914
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1385528
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
 From this model, we were able to determine the relative importance of
 each feature.
 
-| Feature Names               | Importance |
-| :-------------------------- | ---------: |
-| type\_organic               |  0.4724502 |
-| type\_conventional          |  0.1726477 |
-| region\_HartfordSpringfield |  0.0395635 |
-| region\_SanFrancisco        |  0.0352611 |
-| month\_Nov                  |  0.0327563 |
-| month\_Dec                  |  0.0254321 |
-| region\_NewYork             |  0.0227305 |
-| region\_Houston             |  0.0212973 |
-| region\_PhoenixTucson       |  0.0198379 |
-| month\_Feb                  |  0.0167626 |
-| region\_DallasFtWorth       |  0.0149198 |
-| region\_WestTexNewMexico    |  0.0131553 |
-| region\_SouthCentral        |  0.0123819 |
-| region\_Charlotte           |  0.0109272 |
-| region\_Sacramento          |  0.0097175 |
+<table>
+
+<caption>
 
 **Table 4**. The relative feature importances of the top 15 most
 important features determined by random forest regression model.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Feature Names
+
+</th>
+
+<th style="text-align:right;">
+
+Importance
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+type\_organic
+
+</td>
+
+<td style="text-align:right;">
+
+0.4724502
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+type\_conventional
+
+</td>
+
+<td style="text-align:right;">
+
+0.1726477
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_HartfordSpringfield
+
+</td>
+
+<td style="text-align:right;">
+
+0.0395635
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_SanFrancisco
+
+</td>
+
+<td style="text-align:right;">
+
+0.0352611
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_Nov
+
+</td>
+
+<td style="text-align:right;">
+
+0.0327563
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_Dec
+
+</td>
+
+<td style="text-align:right;">
+
+0.0254321
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_NewYork
+
+</td>
+
+<td style="text-align:right;">
+
+0.0227305
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_Houston
+
+</td>
+
+<td style="text-align:right;">
+
+0.0212973
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_PhoenixTucson
+
+</td>
+
+<td style="text-align:right;">
+
+0.0198379
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+month\_Feb
+
+</td>
+
+<td style="text-align:right;">
+
+0.0167626
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_DallasFtWorth
+
+</td>
+
+<td style="text-align:right;">
+
+0.0149198
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_WestTexNewMexico
+
+</td>
+
+<td style="text-align:right;">
+
+0.0131553
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_SouthCentral
+
+</td>
+
+<td style="text-align:right;">
+
+0.0123819
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_Charlotte
+
+</td>
+
+<td style="text-align:right;">
+
+0.0109272
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+region\_Sacramento
+
+</td>
+
+<td style="text-align:right;">
+
+0.0097175
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 We found that our top predictor of avocado prices is `type`
 (i.e. whether the avocado is organic or conventional).

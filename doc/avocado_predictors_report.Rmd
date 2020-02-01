@@ -2,7 +2,10 @@
 title: "DSCI 522 Avocado Predictors"
 author: "Katie Birchard, Ryan Homer, Andrea Lee"
 date: "24/01/2020"
-output: github_document
+output: 
+  github_document:
+    toc: true
+always_allow_html: yes
 bibliography: refs.bib
 ---
 
@@ -10,6 +13,7 @@ bibliography: refs.bib
 knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
 library(tidyverse)
+library(kableExtra)
 ```
 
 # What is the strongest predictor of avocado prices in the United States?
@@ -105,9 +109,12 @@ Overall, there is fairly high collinearity between many of the predictors. This 
 
 To verify the result from the correlation matrix above, we also computed the variance inflation (VIF) scores from the `car` package.
 
-![](../doc/img/collinearity.png)
-
-**Table 2.** Variance inflation scores of continuous features.
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+col <- read_csv("img/collinearity.csv")
+kable(col,
+      caption = "**Table 2.** Variance inflation scores of continuous features.") %>% 
+  kable_styling(latex_options="scale_down")
+```
 
 The high VIF scores suggest extremely high collinearity for these variables in a linear model. Therefore, we will be careful about using these features as they are probably ineffective predictors of the average avocado price.
 
