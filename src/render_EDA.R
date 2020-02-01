@@ -120,8 +120,7 @@ make_plot <- function(datafile, out) {
                         breaks=c("red"),
                         labels=c("Mean"),
                         name=c("")) +
-    theme_bw() +
-    theme(axis.title.x = element_blank())
+    theme_bw() 
   
   # What is the average price per month?
   avocado_by_month <- avocado %>%

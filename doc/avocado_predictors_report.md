@@ -1,28 +1,29 @@
 DSCI 522 Avocado Predictors
 ================
 Katie Birchard, Ryan Homer, Andrea Lee
-24/01/2020
+02/02/2020
 
-# What is the strongest predictor of avocado prices in the United States?
+# Introduction
+
+As millenials, we love avocados. However, as we all know, avocados can
+be expensive. Therefore, we decided it would be interesting to
+investigate what drives avocado prices. We would like to know what time
+of year avocados are least expensive, and where avocados are the
+cheapest. Hopefully, the results of this investigation can give us
+insight on how to enjoy our beloved avocado toasts without breaking the
+bank.
 
 We will be answering the research question: **What is the strongest
-predictor of avocado prices in the United States?**
-
-As millenials, we love avocados but, as we all know, avocados can be
-expensive. Therefore, we decided it would be interesting to investigate
-what drives avocado prices. Hopefully, the results of this investigation
-can give us insight on how to enjoy our beloved avocado toasts without
-breaking the bank.
-
-Our goal is to find the feature that most strongly predicts the price of
-avocados in the United States. A natural inferential sub-question would
-be to first determine if any of the features correlate with avocado
-prices and if there is any multicollinearity among the features. From
-our results, we can also compute a rank of features by importance.
+predictor of avocado prices in the United States?** Thus, our goal is to
+find the feature that most strongly predicts the price of avocados in
+the United States. A natural inferential sub-question would be to first
+determine if any of the features correlate with avocado prices and if
+there is any multicollinearity among the features. From our results, we
+can also compute a rank of features by importance.
 
 # Dataset
 
-We will be analyzing the [avocado prices
+We analyzed the [avocado prices
 dataset](https://www.kaggle.com/neuromusic/avocado-prices) retrieved
 from Kaggle and compiled by the Hass Avocado Board using retail scan
 data from the United States (Kiggins 2018). The dataset consists of
@@ -37,7 +38,7 @@ We used a random forest regression model to determine the strongest
 predictors of avocado prices. Before we fitted the model, we first
 conducted a hypothesis test and a multicollinearity test to determine
 which features are significant and should be used in the model. These
-tests also identified features that were strongly correlated with one
+tests also identified features that are strongly correlated with one
 another, and therefore would be redundant to include in the model.
 
 The features we tested were:
@@ -59,55 +60,46 @@ The features we tested were:
   - `lon`: longitude of the U.S. region the avocado was sold in
   - `season`: season avocado was sold in
 
-The features we used in the random forest regression model were:
+The features we used to train the random forest regression model on
+were:
 
   - `type`: type of avocado sold (conventional or organic)
   - `lat`: latitude of the U.S. region the avocado was sold in
   - `lon`: longitude of the U.S. region the avocado was sold in
   - `season`: season avocado was sold in
-  - *The intuition behind these selected features will be explained
-    later on in the report.*
+  - *The intuition behind training on these selected features will be
+    explained later on in the report.*
 
 The target was:
 
   - `average_price`: average price of avocado sold
 
-To perform this anlaysis, the R and Python programming languages (R Core
-Team 2019; Van Rossum and Drake 2009). As well, the following R packages
-were used: `broom` (Robinson and Hayes 2019), `caret` (Kuhn 2020), `car`
-(Fox and Weisberg 2019), `docopt` (de Jonge 2018), `feather` (Wickham
-2019), `ggpubr` (Kassambara 2018), `here`(Müller 2017), `kableExtra`
-(Zhu 2019), `knitr` (Xie 2014), `lubridate` (Grolemund and Wickham
-2011), `magick`(Ooms 2020), `RCurl` (Temple Lang 2020), `reshape2`
-(Wickham 2007), and `tidyverse` (Wickham et al. 2019). The following
-Python packages were used: `altair` (Sievert 2018), `numpy` (Oliphant
-2006), `pandas` (McKinney and others 2010), `pyarrow`(Team 2017),
-`scikit-learn` (Pedregosa et al. 2011), and `selenium` (Salunke 2014).
-And the following OS package was used: `chromedriver`(Google, n.d.).
-
 # Exploratory Data Analysis
 
 We wanted to determine which features might be the most important to
 include in our random forest regression model. Therefore we plotted
-region, type, and month against the average price to visualize the
-relationships between these variables. We did not plot number of
-avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and
-`PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`,
-`large_bags`, and `xlarge_bags`, because the relationship between
-avocado prices and avocados sold could be reciprocal (i.e. avocados sold
-may influence the price and vice versa), leading to a false
-interpretation. From looking at these relationships, we can see that
-some regions, such as Hartford-Springfield and San Francisco, have
-higher avocado prices than other regions, such as Houston. We can also
-clearly see (and we may have already predicted from our own experience)
-that organic avocados are likely more expensive than non-organic
-avocados. Finally, when we observe the monthly trend of avocado prices,
-we can see that perhaps avocados are most expensive in the fall months,
-and least expensive during the winter months.
+region, latitude, longitude, type, and season against the average price
+to visualize the relationships between these variables (figure 1). We
+did not plot number of avocados sold from each of the PLU codes,
+`PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from
+`total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the
+relationship between avocado prices and avocados sold could be
+reciprocal (i.e. avocados sold may influence the price and vice versa),
+leading to a false interpretation. From looking at these relationships,
+we can see that some regions, such as Hartford-Springfield and San
+Francisco, have higher avocado prices than other regions, such as
+Houston. When looking at latitude and longitude, it looks like latitude
+has no observable trend with average price, but longitude may have a
+slight parabolic trend with average price. We can also clearly see (and
+we may have already predicted from our own experience) that organic
+avocados tend to be more expensive than non-organic avocados. Finally,
+when we observe the seasonal trend of avocado prices, we can see that
+perhaps avocados are most expensive in the fall months, and least
+expensive during the winter months.
 
-![](../doc/img/EDA_plot.png) **Figure 1.** Average price of avocados in
-the United States by region, type, month, and number of total avocados
-sold each week.
+![](../doc/img/EDA_region_plot.png) ![](../doc/img/EDA_summary_plot.png)
+**Figure 1.** Average price of avocados in the United States by region,
+latitude, longitude, type, and season.
 
 Since we want to ensure the prices in this dataset are relatively
 accurate, we compared the average prices in this dataset to another
@@ -125,7 +117,7 @@ accurate.
 ## Hypothesis Test
 
 Before undergoing our main analysis, we first conducted a hypothesis
-test to determine if any of the features are correlated to the target.
+test to determine if any of the features are correlated with the target.
 To conduct a hypothesis test, we fitted an additive linear model and
 interpreted the p-values to determine which features are significant. We
 chose a significance level of 0.05 as it is the industry standard. We
@@ -770,8 +762,8 @@ Overall, there is fairly high collinearity between many of the
 predictors. This was expected, since they all deal with volume or number
 of avocados sold, be it by PLU code, bag type or total volume. In
 particular, `total_bags` and `total_volume` were expected to be highly
-correlated to other predictors that were sub-quantities of these totals.
-Due to the high correlation, including all these predictors in a
+correlated with other predictors that were sub-quantities of these
+totals. Due to the high correlation, including all these predictors in a
 prediction model would probably lead to overfitting.
 
 To verify the result from the correlation matrix above, we also computed
@@ -906,15 +898,16 @@ average avocado price.
 
 # Results
 
-## Random Forest Feature Importances
+## Random Forest
 
-Lastly, we fitted a random forest regressor model using the features
-that we determined as significant from the analysis above (`region`,
-`type`, and `month`). We used one hot encoding on these categorical
-features and used randomized cross validation to determine the optimal
-hyperparameters, maximum depth and number of estimators. We calculated
-the average (validation) scores using cross validation to determine how
-well our model was performing.
+We fitted a random forest regressor model using the significant features
+from the analysis above (`lat`, `lon`, `type`, and `season`). We used
+one hot encoding to scale the categorical features (`type` and `season`)
+and standard scaling tto scale the numerical features(`lat` and `lon`).
+We used randomized cross validation to determine the optimal values for
+maximum depth and number of estimators. We calculated the average
+(validation) scores using cross validation to determine how well our
+model was performing.
 
 <table>
 
@@ -937,7 +930,8 @@ Fold
 
 <th style="text-align:right;">
 
-Neg Mean Squared Error
+Neg Mean Squared
+    Error
 
 </th>
 
@@ -1031,15 +1025,16 @@ Neg Mean Squared Error
 
 </table>
 
-From this model, we were able to determine the relative importance of
-each feature.
+    ## [1] "The average cross-validation score for random forest regression is: 0.09"
+
+From this model, we identified the relative importance of each feature.
 
 <table>
 
 <caption>
 
-**Table 4**. The relative feature importances of the top 15 most
-important features determined by random forest regression model.
+**Table 4**. The relative feature importances determined by random
+forest regression model.
 
 </caption>
 
@@ -1193,17 +1188,67 @@ season\_Spring
 
 </tr>
 
+</tbody>
+
+</table>
+
+According to the random forest regression, the top predictor of avocado
+prices is `type` (i.e. whether the avocado is organic or conventional).
+This result aligned with our expectations, as our EDA depicted
+differences in distributions between organic and conventional avocado
+prices.
+
+## Linear Regression
+
+To compare, we fitted a linear regression model using L2 regularization.
+We also used randomized cross validation to determine the optimal value
+for the complexity penalization factor, alpha. Again, we calculated the
+average (validation) scores using cross validation to determine how well
+our model was performing.
+
+<table>
+
+<caption>
+
+**Table 5**. Cross-validation scores for each of the folds in the linear
+regression model.
+
+</caption>
+
+<thead>
+
 <tr>
 
-<td style="text-align:left;">
+<th style="text-align:right;">
 
-NA
+Fold
+
+</th>
+
+<th style="text-align:right;">
+
+Neg Mean Squared
+    Error
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+1
 
 </td>
 
 <td style="text-align:right;">
 
-NA
+\-0.4589097
 
 </td>
 
@@ -1211,15 +1256,15 @@ NA
 
 <tr>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-NA
+2
 
 </td>
 
 <td style="text-align:right;">
 
-NA
+0.2206909
 
 </td>
 
@@ -1227,15 +1272,15 @@ NA
 
 <tr>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-NA
+3
 
 </td>
 
 <td style="text-align:right;">
 
-NA
+0.4166477
 
 </td>
 
@@ -1243,15 +1288,15 @@ NA
 
 <tr>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-NA
+4
 
 </td>
 
 <td style="text-align:right;">
 
-NA
+\-0.0509614
 
 </td>
 
@@ -1259,47 +1304,15 @@ NA
 
 <tr>
 
-<td style="text-align:left;">
+<td style="text-align:right;">
 
-NA
+5
 
 </td>
 
 <td style="text-align:right;">
 
-NA
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-NA
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-NA
-
-</td>
-
-<td style="text-align:right;">
-
-NA
+0.0048601
 
 </td>
 
@@ -1309,21 +1322,188 @@ NA
 
 </table>
 
-We found that our top predictor of avocado prices is `type`
-(i.e. whether the avocado is organic or conventional).
+    ## [1] "The average cross-validation score for linear regression is: 0.026"
+
+The linear regression model had even lower error than the random forest
+regression model. This may indicate that linear regression may be a
+better model for predicting average avocado prices.
+
+From the linear regression model, we also identified the relative
+weights of each of the coefficients.
+
+<table>
+
+<caption>
+
+**Table 6**. The relative feature weights determined by the linear
+regression model.
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Feature Names
+
+</th>
+
+<th style="text-align:right;">
+
+Weights
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+type\_organic
+
+</td>
+
+<td style="text-align:right;">
+
+0.2497839
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+season\_Fall
+
+</td>
+
+<td style="text-align:right;">
+
+0.1217987
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+season\_Summer
+
+</td>
+
+<td style="text-align:right;">
+
+0.0503069
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lat
+
+</td>
+
+<td style="text-align:right;">
+
+0.0409049
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lon
+
+</td>
+
+<td style="text-align:right;">
+
+0.0369545
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+season\_Spring
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.0617987
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+season\_Winter
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1103069
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+type\_conventional
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.2497839
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+When looking at the relative feature weights from the linear regression
+model, we need to account for the absolute weight. Therefore, comparing
+the two models, random forest regression and linear regression, we can
+see that both indicated `type` as the most important predictor of
+avocado pricing (figure 4).
 
 ![](../results/feature_plot.png)
 
-**Figure 4.** Plot ranking features by importance.
-
-Our model had a training accuracy score of 0.71. The result from our
-model aligned with our expectations as our EDA depicted differences in
-distributions between organic and conventional acovado prices.
-
-We also fitted a linear regression model, however, the training accuracy
-score was 0.61, which is much lower than the accuracy of the random
-forest model. Therefore, we decided to use the random forest model to
-continue on with our analysis of computing feature importances.
+**Figure 4.** Relative feature importances for random forest regression,
+and feature weights for linear regression.
 
 # Discussion
 
@@ -1351,21 +1531,36 @@ these regions.
 
 ## Areas of Improvement
 
-Our random forest model could be improved substantially by modifying the
-`month` and `region` features.
+Our model could be improved by the inclusion of even more predictive
+features or more data. Although it seems the predictors we did have
+worked quite well, we could possibly gain even more insight from
+predictors such as weather, grocery store chain, and popularity in the
+media or public perception. In addition, the data that we do have only
+spans four years. If we have data from a longer time span (e.g. 50
+years), we might be able to more effectively determine the accuracy of
+our chosen predictors.
 
-`Month` is ordinal, thus it should be treated as a numerical variable.
-However, it is difficult to convert month into its numerical form since
-December and January would be interpreted as furthest apart from one
-another, when in reality they should be interpreted as close to one
-another. That being said, we could treat month as a categorical variable
-if we group the months into seasons and use season as a feature instead.
+We could also use more feature selection techniques to support the
+conclusions that we made from our random forest and linear regression
+models. Using techniques such as forward selection or recursive feature
+selection may allow us to make stronger conclusions about which features
+really do predict avocado prices.
 
-Similarly, the different regions within the `region` feature are also
-related to one other as some regions are closer to one another
-geographically, while others are further apart. Therefore, a more
-accurate way to depict `region` would be to transform each region into
-its respective latitude and longitude.
+# R and Python Packages
+
+To perform this analysis, we used the R and Python programming languages
+(R Core Team 2019; Van Rossum and Drake 2009). As well, the following R
+packages were used: `broom` (Robinson and Hayes 2019), `caret` (Kuhn
+2020), `car` (Fox and Weisberg 2019), `docopt` (de Jonge 2018),
+`feather` (Wickham 2019), `ggpubr` (Kassambara 2018), `here`(Müller
+2017), `kableExtra` (Zhu 2019), `knitr` (Xie 2014), `lubridate`
+(Grolemund and Wickham 2011), `magick`(Ooms 2020), `RCurl` (Temple Lang
+2020), `reshape2` (Wickham 2007), and `tidyverse` (Wickham et al. 2019).
+The following Python packages were used: `altair` (Sievert 2018),
+`numpy` (Oliphant 2006), `pandas` (McKinney and others 2010),
+`pyarrow`(Team 2017), `scikit-learn` (Pedregosa et al. 2011), and
+`selenium` (Salunke 2014). And the following OS package was used:
+`chromedriver`(Google, n.d.).
 
 # References
 
