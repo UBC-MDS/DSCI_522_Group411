@@ -43,28 +43,31 @@ pre_process <- function(datafile, out) {
   dest_path <- path.expand(out)
 
   # Read data from CSV
-  df <- read_csv(path.expand(datafile))
-
-  # Rename some columns
-  df <- df %>%
-    rename(date = Date,
-           PLU_4046 = `4046`,
-           PLU_4225 = `4225`,
-           PLU_4770 = `4770`,
-           total_volume = `Total Volume`,
-           total_bags = `Total Bags`,
-           small_bags = `Small Bags`,
-           large_bags = `Large Bags`,
-           xlarge_bags = `XLarge Bags`,
-           average_price = AveragePrice)
+  df <- read_csv(path.expand("data/avocado.csv"),
+                 skip = 1,
+                 col_types = "nDnnnnnnnnncnc",
+                 col_names = c("ix",
+                               "date",
+                               "average_price",
+                               "total_volume",
+                               "PLU_4046",
+                               "PLU_4225",
+                               "PLU_4770",
+                               "total_bags",
+                               "small_bags",
+                               "large_bags",
+                               "xlarge_bags",
+                               "type",
+                               "year",
+                               "region"))
 
   # Creating columns for month and year-month
   df$month <- month(as.Date(df$date), label=TRUE)
   df$year_month <- as.POSIXct(df$date)
   df$year_month <- format(df$year_month, "%Y-%m")
-  
+
   # Transform region into lat and lon, transform month into season
-  df <- df %>% 
+  df <- df %>%
     mutate(
       lat = case_when(
         region == 'Albany' ~ 42.652580,
@@ -114,8 +117,8 @@ pre_process <- function(datafile, out) {
         region == 'StLouis' ~ 38.627003,
         region == 'Syracuse' ~ 43.088947,
         region == 'Tampa' ~ 27.964157,
-        region == 'WestTexNewMexico' ~ 34.307144 
-      )) %>% 
+        region == 'WestTexNewMexico' ~ 34.307144
+      )) %>%
     mutate(
       lon = case_when(
         region == 'Albany' ~ -73.756233,
@@ -165,8 +168,8 @@ pre_process <- function(datafile, out) {
         region == 'StLouis' ~ -90.199402,
         region == 'Syracuse' ~ -76.154480,
         region == 'Tampa' ~ -82.452606,
-        region == 'WestTexNewMexico' ~ -106.018066 
-      )) %>% 
+        region == 'WestTexNewMexico' ~ -106.018066
+      )) %>%
     mutate(
       season = case_when(
         month == 'Jan' ~ 'Winter',
@@ -181,7 +184,7 @@ pre_process <- function(datafile, out) {
         month == 'Oct' ~ 'Fall',
         month == 'Nov' ~ 'Fall',
         month == 'Dec' ~ 'Winter',
-      )) %>% 
+      )) %>%
     filter(!is.na(lat) | !is.na(lon))
 
   #
