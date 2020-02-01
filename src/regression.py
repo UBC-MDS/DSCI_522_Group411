@@ -138,12 +138,12 @@ def random_forest_regression(train_x, train_y, output, train_data):
   
   # Outputting the cv_scores to the results folder as a csv file                  
   # calculate the average error from these scores in final report
-  cv_scores.to_csv(output + "cv_scores_rfr.csv")
+  cv_scores.to_csv(output + "cv_scores_rfr.csv", index=False)
   feature_list = list(train_x.columns)
   feature_df = pd.DataFrame({"feature_names": feature_list,
              "importance": random_rfr.best_estimator_.feature_importances_})
   feature_df = feature_df.sort_values(["importance"], ascending=False)
-  feature_df.to_csv(output + "feature_importance_rfr.csv")
+  feature_df.to_csv(output + "feature_importance_rfr.csv", index=False)
   return feature_df
   
 # Define function to carry out linear regression
@@ -186,12 +186,12 @@ def regularized_linear_regression(train_x, train_y, output, train_data):
   # Check that the regression worked and all cv_scores are not equal to zero
   assert cv_scores_lr['Neg Mean Squared Error'].all() != 0, "Regularized linear regression failed..."   
 
-  cv_scores_lr.to_csv(output + "cv_scores_lr.csv")
+  cv_scores_lr.to_csv(output + "cv_scores_lr.csv", index=False)
   feature_list = list(train_x.columns)
   lr_feature_df = pd.DataFrame({"feature_names": feature_list,
              "weights": r2.coef_})
   lr_feature_df = lr_feature_df.sort_values(["weights"], ascending=False)
-  lr_feature_df.to_csv(output + "feature_weights_lr.csv")
+  lr_feature_df.to_csv(output + "feature_weights_lr.csv", index=False)
   return lr_feature_df
 
 # Define plot function  
