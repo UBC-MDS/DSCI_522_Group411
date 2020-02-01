@@ -48,13 +48,13 @@ The features we tested were:
 - `lon`: longitude of the U.S. region the avocado was sold in
 - `season`: season avocado was sold in
 
-The features we used in the random forest regression model were:
+The features we used to train the random forest regression model on were:
 
 - `type`: type of avocado sold (conventional or organic)
 - `lat`: latitude of the U.S. region the avocado was sold in
 - `lon`: longitude of the U.S. region the avocado was sold in
 - `season`: season avocado was sold in
-- *The intuition behind these selected features will be explained later on in the report.*
+- *The intuition behind training on these selected features will be explained later on in the report.*
 
 The target was:
 
