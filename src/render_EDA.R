@@ -22,7 +22,7 @@ suppressMessages(library(kableExtra))
 main <- function(args) {
   check_args(args)
   make_plot(args$datafile, args$out)
-  make_table(args$datafile, args$out)
+# make_table(args$datafile, args$out)
 }
 
 check_args <- function(args) {
@@ -257,6 +257,6 @@ make_plot <- function(datafile, out) {
 #     month_summary_table <- kable(month_summary, 
 #                                caption = "Table 3. Summary statistics for the average price of avocados for each month of the year.") %>% 
 #                          as_image(file = file.path(dest_path, 'EDA_month_table.png'))
-}
+#}
 
 main(docopt(doc))
