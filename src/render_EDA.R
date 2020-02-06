@@ -195,68 +195,68 @@ make_plot <- function(datafile, out) {
   ggsave('EDA_year_plot.png',  year_plot, path = file.path(dest_path))
   }
   
-  make_table <- function(datafile, out) {
-  #' Create table and save table as image.
-  #' 
-  #' @param datafile Path to the feather file, including the actual filename.
-  #' @param out The destination path to save the images to to.
-  #' @return png file of table.
+#   make_table <- function(datafile, out) {
+#   #' Create table and save table as image.
+#   #' 
+#   #' @param datafile Path to the feather file, including the actual filename.
+#   #' @param out The destination path to save the images to to.
+#   #' @return png file of table.
   
-  dest_path <- path.expand(out)
+#   dest_path <- path.expand(out)
   
-  # Read in data
-  avocado <- read_feather(datafile)
+#   # Read in data
+#   avocado <- read_feather(datafile)
   
-  # Create table showing the distribution of region
-  region_summary <- avocado %>%
-    count(region)
-  region_summary <- avocado %>%
-    group_by(region) %>%
-    summarize(min = min(average_price),
-              lower_quartile = quantile(average_price, 0.25),
-              mean = mean(average_price),
-              median = median(average_price),
-              upper_quantile = quantile(average_price, 0.75),
-              max = max(average_price))  %>%
-    left_join(region_summary)
-    # Save table as png
-    region_summary_table <- kable(region_summary,
-                                caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.") %>% 
-                          as_image(file = file.path(dest_path, 'EDA_region_table.png'))
+#   # Create table showing the distribution of region
+#   region_summary <- avocado %>%
+#     count(region)
+#   region_summary <- avocado %>%
+#     group_by(region) %>%
+#     summarize(min = min(average_price),
+#               lower_quartile = quantile(average_price, 0.25),
+#               mean = mean(average_price),
+#               median = median(average_price),
+#               upper_quantile = quantile(average_price, 0.75),
+#               max = max(average_price))  %>%
+#     left_join(region_summary)
+#     # Save table as png
+#     region_summary_table <- kable(region_summary,
+#                                 caption = "Table 1. Summary statistics for the average price of avocados in all regions in the United States.") %>% 
+#                           as_image(file = file.path(dest_path, 'EDA_region_table.png'))
   
-  # Create table showing the distribution of type
-  type_summary <- avocado %>%
-    count(type)
-    type_summary <- avocado %>%
-    group_by(type) %>%
-    summarize(min = min(average_price),
-              lower_quartile = quantile(average_price, 0.25),
-              mean = mean(average_price),
-              median = median(average_price),
-              upper_quantile = quantile(average_price, 0.75),
-              max = max(average_price))  %>%
-    left_join(type_summary)
-    # Save table as png
-    type_summary_table <- kable(type_summary, 
-                              caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.") %>% 
-                        as_image(file = file.path(dest_path, 'EDA_type_table.png'))
+#   # Create table showing the distribution of type
+#   type_summary <- avocado %>%
+#     count(type)
+#     type_summary <- avocado %>%
+#     group_by(type) %>%
+#     summarize(min = min(average_price),
+#               lower_quartile = quantile(average_price, 0.25),
+#               mean = mean(average_price),
+#               median = median(average_price),
+#               upper_quantile = quantile(average_price, 0.75),
+#               max = max(average_price))  %>%
+#     left_join(type_summary)
+#     # Save table as png
+#     type_summary_table <- kable(type_summary, 
+#                               caption = "Table 2. Summary statistics for the average price of avocados for organic and non-organic avocados.") %>% 
+#                         as_image(file = file.path(dest_path, 'EDA_type_table.png'))
   
-  # Create table showing the distribution of month
-  month_summary <- avocado %>%
-    count(month)
-  month_summary <- avocado %>%
-    group_by(month) %>%
-    summarize(min = min(average_price),
-              lower_quartile = quantile(average_price, 0.25),
-              mean = mean(average_price),
-              median = median(average_price),
-              upper_quantile = quantile(average_price, 0.75),
-              max = max(average_price))  %>%
-    left_join(month_summary)
-    # Save table as png
-    month_summary_table <- kable(month_summary, 
-                               caption = "Table 3. Summary statistics for the average price of avocados for each month of the year.") %>% 
-                         as_image(file = file.path(dest_path, 'EDA_month_table.png'))
+#   # Create table showing the distribution of month
+#   month_summary <- avocado %>%
+#     count(month)
+#   month_summary <- avocado %>%
+#     group_by(month) %>%
+#     summarize(min = min(average_price),
+#               lower_quartile = quantile(average_price, 0.25),
+#               mean = mean(average_price),
+#               median = median(average_price),
+#               upper_quantile = quantile(average_price, 0.75),
+#               max = max(average_price))  %>%
+#     left_join(month_summary)
+#     # Save table as png
+#     month_summary_table <- kable(month_summary, 
+#                                caption = "Table 3. Summary statistics for the average price of avocados for each month of the year.") %>% 
+#                          as_image(file = file.path(dest_path, 'EDA_month_table.png'))
 }
 
 main(docopt(doc))
