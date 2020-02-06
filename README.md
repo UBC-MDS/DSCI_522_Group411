@@ -48,6 +48,8 @@ Here are two suggested ways to run this analysis.
 ```
 docker run --rm -v /$(pwd):/avocado avocado_predictors make -C /avocado all
 ```
+**Windows Users**: You may need to replace `/$(pwd)` above with the absolute path to the root of your project directory.
+
 
 To clean out all temporary files (without launching a Docker container):
 
