@@ -57,6 +57,8 @@ To clean out all temporary files (without launching a Docker container):
 make clean
 ```
 
+When the process has completed, you can find the analysis report at `doc/avocado_predictors_report.html` or `doc/avocado_predictors_report.md`.
+
 ### Run without Docker
 
 1. Make sure you've installed all of the dependencies listed in the Dependencies section below.
