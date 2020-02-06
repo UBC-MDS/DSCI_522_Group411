@@ -96,11 +96,11 @@ create_assets <- function(datafile, out) {
     table %>%
       write_csv(path = file.path(dest_path, 'collinearity.csv'))
 
-    table %>%
-      rename(Predictor = name, "VIF Score" = value) %>%
-      kable("html") %>%
-      kable_styling(full_width = FALSE) %>%
-      save_kable(file = file.path(dest_path, "collinearity.png"))
+    # table %>%
+    #  rename(Predictor = name, "VIF Score" = value) %>%
+    #  kable("html") %>%
+    #  kable_styling(full_width = FALSE) %>%
+    #  save_kable(file = file.path(dest_path, "collinearity.png"))
 }
 
 main(docopt(doc))
