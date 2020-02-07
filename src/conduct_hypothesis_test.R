@@ -80,9 +80,9 @@ make_table <- function(datafile, out) {
   # Conduct hypothesis test and save table as png
   write_csv(tidy(model), path = file.path(dest_path, 'hypothesis_test_table.csv'))
   
-  p_val <- kable(tidy(model), 
-                 caption = "Table 1. Hypothesis Test Table.") %>% 
-    as_image(file = file.path(dest_path, 'hypothesis_test_table.png'))
+  #p_val <- kable(tidy(model), 
+  #               caption = "Table 1. Hypothesis Test Table.") %>% 
+  #  as_image(file = file.path(dest_path, 'hypothesis_test_table.png'))
   
 }
   
