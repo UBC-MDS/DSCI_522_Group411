@@ -137,7 +137,7 @@ cv_scores <- cv_scores %>%
 kable(cv_scores,
       caption="**Table 3**. Cross-validation scores for each of the folds in the random forest regression model.")
 
-print(paste0("The average cross-validation score for random forest regression is: ", round(abs(mean(cv_scores$`Neg Mean Squared Error`)), 3)))
+print(paste0("The average cross-validation score for random forest regression is: ", round(abs(mean(cv_scores$`Neg Mean Squared Error`)), 2)))
 ```
 
 From this model, we identified the relative importance of each feature.
@@ -167,7 +167,7 @@ cv_scores <- cv_scores %>%
 kable(cv_scores,
       caption="**Table 5**. Cross-validation scores for each of the folds in the linear regression model.")
 
-print(paste0("The average cross-validation score for linear regression is: ", round(abs(mean(cv_scores$`Neg Mean Squared Error`)), 3)))
+print(paste0("The average cross-validation score for linear regression is: ", round(abs(mean(cv_scores$`Neg Mean Squared Error`)), 2)))
 ```
 
 The linear regression model had even lower error than the random forest regression model. This may indicate that linear regression may be a better model for predicting average avocado prices.

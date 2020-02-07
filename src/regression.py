@@ -82,7 +82,7 @@ def feature_target_split(train_data):
   
   categorical_features = ['type', 'season']
   
-  # Check if categorical features are 
+  # Check if categorical features are strings
   assert type(train_x['type'][1]) == str, "categorical feature should be type string"
   assert type(train_x['season'][1]) == str, "categorical feature should be type string"
   
@@ -131,10 +131,10 @@ def random_forest_regression(train_x, train_y, output, train_data):
   random_rfr.fit(train_x, train_y)
   fold_accuracies_rfr = cross_val_score(estimator=random_rfr, X=train_x, y=train_y, cv=5)
   cv_scores = pd.DataFrame({'Fold': [1, 2, 3, 4, 5],
-                            'Neg Mean Squared Error': fold_accuracies_rfr})
+                            'Neg Mean Squared Error': np.around(fold_accuracies_rfr, 2)})
                     
   # Check that the regression worked and all cv_scores are not equal to zero
-  assert cv_scores['Neg Mean Squared Error'].all() != 0, "Random Forest Regression failed..."
+  assert cv_scores['Neg Mean Squared Error'].any() != 0, "Random Forest Regression failed..."
   
   # Outputting the cv_scores to the results folder as a csv file                  
   # calculate the average error from these scores in final report
@@ -145,7 +145,7 @@ def random_forest_regression(train_x, train_y, output, train_data):
                      'Fall Season', 'Spring Season',
                      'Summer Season', 'Winter Season']
   feature_df = pd.DataFrame({"feature_names": nice_feature_list,
-             "importance": random_rfr.best_estimator_.feature_importances_})
+             "importance": np.around(random_rfr.best_estimator_.feature_importances_, 2)})
   feature_df = feature_df.sort_values(["importance"], ascending=False)
   feature_df.to_csv(output + "feature_importance_rfr.csv", index=False)
   return feature_df
@@ -185,10 +185,10 @@ def regularized_linear_regression(train_x, train_y, output, train_data):
   r2.fit(train_x, train_y)
   fold_accuracies_lr = cross_val_score(estimator=r2, X=train_x, y=train_y, cv=5)
   cv_scores_lr = pd.DataFrame({'Fold': [1, 2, 3, 4, 5],
-                               'Neg Mean Squared Error': fold_accuracies_lr})
+                               'Neg Mean Squared Error': np.around(fold_accuracies_lr, 2)})
                                
   # Check that the regression worked and all cv_scores are not equal to zero
-  assert cv_scores_lr['Neg Mean Squared Error'].all() != 0, "Regularized linear regression failed..."   
+  assert cv_scores_lr['Neg Mean Squared Error'].any() != 0, "Regularized linear regression failed..."   
 
   cv_scores_lr.to_csv(output + "cv_scores_lr.csv", index=False)
   feature_list = list(train_x.columns)
@@ -197,7 +197,7 @@ def regularized_linear_regression(train_x, train_y, output, train_data):
                      'Fall Season', 'Spring Season',
                      'Summer Season', 'Winter Season']
   lr_feature_df = pd.DataFrame({"feature_names": nice_feature_list,
-             "weights": r2.coef_})
+             "weights": np.around(r2.coef_, 2)})
   lr_feature_df = lr_feature_df.sort_values(["weights"], ascending=False)
   lr_feature_df.to_csv(output + "feature_weights_lr.csv", index=False)
   return lr_feature_df
