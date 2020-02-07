@@ -140,7 +140,11 @@ def random_forest_regression(train_x, train_y, output, train_data):
   # calculate the average error from these scores in final report
   cv_scores.to_csv(output + "cv_scores_rfr.csv", index=False)
   feature_list = list(train_x.columns)
-  feature_df = pd.DataFrame({"feature_names": feature_list,
+  nice_feature_list = ['Latitude', 'Longitude',
+                     'Conventional Type', 'Organic Type',
+                     'Fall Season', 'Spring Season',
+                     'Summer Season', 'Winter Season']
+  feature_df = pd.DataFrame({"feature_names": nice_feature_list,
              "importance": random_rfr.best_estimator_.feature_importances_})
   feature_df = feature_df.sort_values(["importance"], ascending=False)
   feature_df.to_csv(output + "feature_importance_rfr.csv", index=False)
@@ -188,7 +192,11 @@ def regularized_linear_regression(train_x, train_y, output, train_data):
 
   cv_scores_lr.to_csv(output + "cv_scores_lr.csv", index=False)
   feature_list = list(train_x.columns)
-  lr_feature_df = pd.DataFrame({"feature_names": feature_list,
+  nice_feature_list = ['Latitude', 'Longitude',
+                     'Conventional Type', 'Organic Type',
+                     'Fall Season', 'Spring Season',
+                     'Summer Season', 'Winter Season']
+  lr_feature_df = pd.DataFrame({"feature_names": nice_feature_list,
              "weights": r2.coef_})
   lr_feature_df = lr_feature_df.sort_values(["weights"], ascending=False)
   lr_feature_df.to_csv(output + "feature_weights_lr.csv", index=False)
@@ -211,21 +219,21 @@ def plot_feature_importance(feature_df, lr_feature_df, output):
   """
   print("Plotting most important features from random forest...")
   rfr_plot = alt.Chart(feature_df).mark_bar(color="green", opacity=0.6).encode(
-    x= alt.X("feature_names:N",
+    y= alt.Y("feature_names:N",
              sort=alt.SortField(field="importance:Q"),
              title="Features"),
-    y = alt.Y("importance:Q", title="Feature Importance")
+    x = alt.X("importance:Q", title="Feature Importance")
     ).properties(title="Random Forest Regression",
-             width=400)
+             width=200)
   
   print("Plotting most important features from linear regression...")
   lr_plot = alt.Chart(lr_feature_df).mark_bar(color="blue", opacity=0.6).encode(
-    x = alt.X("feature_names:N",
+    y = alt.Y("feature_names:N",
                sort=alt.SortField(field="weights:Q"),
                title="Features"),
-    y = alt.Y("weights:Q", title="Coefficient Weights")
+    x = alt.X("weights:Q", title="Coefficient Weights")
   ).properties(title="Linear Regression",
-           width=400)
+           width=200)
            
   feature_plot = rfr_plot | lr_plot
              
