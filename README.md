@@ -46,7 +46,7 @@ Here are two suggested ways to run this analysis.
 1. Run the analysis with the following command:
 
 ```
-docker run --rm -v /$(pwd):/avocado murage/avocado_predictors make -C /avocado all
+docker run --rm -v /$(pwd):/avocado murage/avocado_predictors:v1.0 make -C /avocado all
 ```
 **Windows Users**: You may need to replace `/$(pwd)` above with the absolute path to the root of your project directory.
 
