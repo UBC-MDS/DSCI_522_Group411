@@ -26,7 +26,7 @@ str(avocado)
 ```
 
     ## Classes 'tbl_df', 'tbl' and 'data.frame':    12978 obs. of  19 variables:
-    ##  $ X1           : num  0 1 2 3 4 5 7 8 10 11 ...
+    ##  $ ix           : num  0 1 2 3 4 5 7 8 10 11 ...
     ##  $ date         : Date, format: "2015-12-27" "2015-12-20" ...
     ##  $ average_price: num  1.33 1.35 0.93 1.08 1.28 1.26 0.98 1.02 1.12 1.28 ...
     ##  $ total_volume : num  64237 54877 118220 78992 51040 ...
@@ -52,15 +52,16 @@ head(avocado[, c(2:10)])
 ```
 
     ## # A tibble: 6 x 9
-    ##   date       average_price total_volume PLU_4046 PLU_4225 PLU_4770 total_bags
-    ##   <date>             <dbl>        <dbl>    <dbl>    <dbl>    <dbl>      <dbl>
-    ## 1 2015-12-27          1.33       64237.    1037.   54455.     48.2      8697.
-    ## 2 2015-12-20          1.35       54877.     674.   44639.     58.3      9506.
-    ## 3 2015-12-13          0.93      118220.     795.  109150.    130.       8145.
-    ## 4 2015-12-06          1.08       78992.    1132    71976.     72.6      5811.
-    ## 5 2015-11-29          1.28       51040.     941.   43838.     75.8      6184.
-    ## 6 2015-11-22          1.26       55980.    1184.   48068.     43.6      6684.
-    ## # … with 2 more variables: small_bags <dbl>, large_bags <dbl>
+    ##   date       average_price total_volume PLU_4046 PLU_4225 PLU_4770
+    ##   <date>             <dbl>        <dbl>    <dbl>    <dbl>    <dbl>
+    ## 1 2015-12-27          1.33       64237.    1037.   54455.     48.2
+    ## 2 2015-12-20          1.35       54877.     674.   44639.     58.3
+    ## 3 2015-12-13          0.93      118220.     795.  109150.    130. 
+    ## 4 2015-12-06          1.08       78992.    1132    71976.     72.6
+    ## 5 2015-11-29          1.28       51040.     941.   43838.     75.8
+    ## 6 2015-11-22          1.26       55980.    1184.   48068.     43.6
+    ## # … with 3 more variables: total_bags <dbl>, small_bags <dbl>,
+    ## #   large_bags <dbl>
 
 ``` r
 head(avocado[, c(11:19)])
@@ -82,29 +83,30 @@ tail(avocado[, c(2:10)])
 ```
 
     ## # A tibble: 6 x 9
-    ##   date       average_price total_volume PLU_4046 PLU_4225 PLU_4770 total_bags
-    ##   <date>             <dbl>        <dbl>    <dbl>    <dbl>    <dbl>      <dbl>
-    ## 1 2018-02-25          1.57       18421.    1974.    2483.       0      13964.
-    ## 2 2018-02-18          1.56       17597.    1892.    1928.       0      13777.
-    ## 3 2018-02-04          1.63       17075.    2047.    1529.       0      13499.
-    ## 4 2018-01-28          1.71       13888.    1192.    3432.       0       9265.
-    ## 5 2018-01-14          1.93       16205.    1528.    2981.     727.     10970.
-    ## 6 2018-01-07          1.62       17490.    2895.    2356.     225.     12014.
-    ## # … with 2 more variables: small_bags <dbl>, large_bags <dbl>
+    ##   date       average_price total_volume PLU_4046 PLU_4225 PLU_4770
+    ##   <date>             <dbl>        <dbl>    <dbl>    <dbl>    <dbl>
+    ## 1 2018-02-25          1.57       18421.    1974.    2483.       0 
+    ## 2 2018-02-18          1.56       17597.    1892.    1928.       0 
+    ## 3 2018-02-04          1.63       17075.    2047.    1529.       0 
+    ## 4 2018-01-28          1.71       13888.    1192.    3432.       0 
+    ## 5 2018-01-14          1.93       16205.    1528.    2981.     727.
+    ## 6 2018-01-07          1.62       17490.    2895.    2356.     225.
+    ## # … with 3 more variables: total_bags <dbl>, small_bags <dbl>,
+    ## #   large_bags <dbl>
 
 ``` r
 tail(avocado[, c(11:19)])
 ```
 
     ## # A tibble: 6 x 9
-    ##   xlarge_bags type     year region           month year_month   lat   lon season
-    ##         <dbl> <chr>   <dbl> <chr>            <fct> <chr>      <dbl> <dbl> <chr> 
-    ## 1           0 organic  2018 WestTexNewMexico Feb   2018-02     34.3 -106. Winter
-    ## 2           0 organic  2018 WestTexNewMexico Feb   2018-02     34.3 -106. Winter
-    ## 3           0 organic  2018 WestTexNewMexico Feb   2018-02     34.3 -106. Winter
-    ## 4           0 organic  2018 WestTexNewMexico Jan   2018-01     34.3 -106. Winter
-    ## 5           0 organic  2018 WestTexNewMexico Jan   2018-01     34.3 -106. Winter
-    ## 6           0 organic  2018 WestTexNewMexico Jan   2018-01     34.3 -106. Winter
+    ##   xlarge_bags type     year region      month year_month   lat   lon season
+    ##         <dbl> <chr>   <dbl> <chr>       <fct> <chr>      <dbl> <dbl> <chr> 
+    ## 1           0 organic  2018 WestTexNew… Feb   2018-02     34.3 -106. Winter
+    ## 2           0 organic  2018 WestTexNew… Feb   2018-02     34.3 -106. Winter
+    ## 3           0 organic  2018 WestTexNew… Feb   2018-02     34.3 -106. Winter
+    ## 4           0 organic  2018 WestTexNew… Jan   2018-01     34.3 -106. Winter
+    ## 5           0 organic  2018 WestTexNew… Jan   2018-01     34.3 -106. Winter
+    ## 6           0 organic  2018 WestTexNew… Jan   2018-01     34.3 -106. Winter
 
 ``` r
 # How many regions in the US are included in the dataset?
@@ -133,30 +135,38 @@ table(avocado$region)
 ```
 
     ## 
-    ##              Albany             Atlanta BaltimoreWashington               Boise 
-    ##                 274                 274                 256                 253 
-    ##              Boston    BuffaloRochester          California           Charlotte 
-    ##                 259                 270                 259                 279 
-    ##             Chicago    CincinnatiDayton            Columbus       DallasFtWorth 
-    ##                 259                 257                 285                 268 
-    ##              Denver             Detroit         GrandRapids          GreatLakes 
-    ##                 273                 275                 270                 283 
-    ##  HarrisburgScranton HartfordSpringfield             Houston        Indianapolis 
-    ##                 269                 257                 261                 262 
-    ##        Jacksonville            LasVegas          LosAngeles          Louisville 
-    ##                 282                 262                 264                 270 
-    ##   MiamiFtLauderdale           Nashville    NewOrleansMobile             NewYork 
-    ##                 277                 271                 279                 278 
-    ##  NorthernNewEngland             Orlando        Philadelphia       PhoenixTucson 
-    ##                 272                 263                 264                 285 
-    ##          Pittsburgh              Plains            Portland   RaleighGreensboro 
-    ##                 281                 270                 273                 275 
-    ##     RichmondNorfolk             Roanoke          Sacramento            SanDiego 
-    ##                 262                 266                 265                 288 
-    ##        SanFrancisco             Seattle       SouthCarolina             Spokane 
-    ##                 270                 269                 270                 273 
-    ##             StLouis            Syracuse               Tampa    WestTexNewMexico 
-    ##                 283                 274                 281                 268
+    ##              Albany             Atlanta BaltimoreWashington 
+    ##                 274                 274                 256 
+    ##               Boise              Boston    BuffaloRochester 
+    ##                 253                 259                 270 
+    ##          California           Charlotte             Chicago 
+    ##                 259                 279                 259 
+    ##    CincinnatiDayton            Columbus       DallasFtWorth 
+    ##                 257                 285                 268 
+    ##              Denver             Detroit         GrandRapids 
+    ##                 273                 275                 270 
+    ##          GreatLakes  HarrisburgScranton HartfordSpringfield 
+    ##                 283                 269                 257 
+    ##             Houston        Indianapolis        Jacksonville 
+    ##                 261                 262                 282 
+    ##            LasVegas          LosAngeles          Louisville 
+    ##                 262                 264                 270 
+    ##   MiamiFtLauderdale           Nashville    NewOrleansMobile 
+    ##                 277                 271                 279 
+    ##             NewYork  NorthernNewEngland             Orlando 
+    ##                 278                 272                 263 
+    ##        Philadelphia       PhoenixTucson          Pittsburgh 
+    ##                 264                 285                 281 
+    ##              Plains            Portland   RaleighGreensboro 
+    ##                 270                 273                 275 
+    ##     RichmondNorfolk             Roanoke          Sacramento 
+    ##                 262                 266                 265 
+    ##            SanDiego        SanFrancisco             Seattle 
+    ##                 288                 270                 269 
+    ##       SouthCarolina             Spokane             StLouis 
+    ##                 270                 273                 283 
+    ##            Syracuse               Tampa    WestTexNewMexico 
+    ##                 274                 281                 268
 
 ``` r
 # There are 54 unique regions, each with 338 observations
@@ -425,7 +435,8 @@ price_per_region <- ggplot(avocado, aes(x=reorder(region, -average_price), y=ave
                     name=c("")) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, size = 8),
-        axis.title.x = element_blank()) 
+        axis.title.x = element_blank()) +
+  coord_flip()
 
 # Region may not be the best predictor, so now I will test price by coordinates
 avocado_by_lat <- avocado %>%
@@ -434,12 +445,13 @@ avocado_by_lat <- avocado %>%
 
 price_by_lat <- ggplot(avocado, aes(x=lat, y=average_price)) +
   #geom_line(colour="red") +
-  geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
-  geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
-  scale_colour_manual(values=c("red"),
-                    breaks=c("red"),
-                    labels=c("Mean"),
-                    name=c("")) +
+  geom_violin(aes(group=cut_width(lat, 3)), scale='width', draw_quantiles = c(0.5))+
+  #geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
+  #geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
+  #scale_colour_manual(values=c("red"),
+  #                  breaks=c("red"),
+  #                  labels=c("Mean"),
+  #                  name=c("")) +
   xlab("Latitude (Degrees)") +
   ylab("Average Price ($)") +
   ggtitle("Avocado Price by Latitude") +
@@ -450,12 +462,13 @@ avocado_by_lon <- avocado %>%
   summarize(ave_price = mean(average_price))
 
 price_by_lon <- ggplot(avocado, aes(x=lon, y=average_price)) +
-  geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
-  geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
-  scale_colour_manual(values=c("red"),
-                    breaks=c("red"),
-                    labels=c("Mean"),
-                    name=c("")) +
+  geom_violin(aes(group=cut_width(lon, 7)), scale='width', draw_quantiles = c(0.5))+
+  #geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
+  #geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
+  #scale_colour_manual(values=c("red"),
+  #                  breaks=c("red"),
+  #                  labels=c("Mean"),
+  #                  name=c("")) +
   xlab("Longitude (Degrees)") +
   ylab("Average Price ($)") +
   ggtitle("Avocado Price by Longitude") +
@@ -528,24 +541,33 @@ price_per_type
 **Figure 1.** Average price of avocados in the United States by type.
 
 ``` r
-gridExtra::grid.arrange(price_per_region, price_by_lat,
-                        price_by_lon,
-                        ncol=1, nrow=3)
+price_per_region
 ```
 
 ![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-**Figure 2.** Average price of avocados in the United States by
-location.
+**Figure 2.** Average price of avocados in the United States by location
+(region).
+
+``` r
+gridExtra::grid.arrange(price_by_lat,
+                        price_by_lon,
+                        ncol=1, nrow=2)
+```
+
+![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+**Figure 3.** Average price of avocados in the United States by location
+(latitude and longitude).
 
 ``` r
 gridExtra::grid.arrange(price_per_month, price_by_season,
                         ncol=1, nrow=2)
 ```
 
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
-**Figure 3.** Monthly and seasonal changes in avocado prices in the
+**Figure 4.** Monthly and seasonal changes in avocado prices in the
 United States.
 
 We also plotted the average avocado price over time to get an idea of
@@ -567,9 +589,9 @@ avocado %>%
     theme(axis.text.x = element_text(angle=90)) 
 ```
 
-![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](DSCI_522_EDA_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-**Figure 2.** Average number of avocados sold per week between 2015 and
+**Figure 5.** Average number of avocados sold per week between 2015 and
 2018.
 
 ## References

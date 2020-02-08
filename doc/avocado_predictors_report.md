@@ -97,9 +97,17 @@ when we observe the seasonal trend of avocado prices, we can see that
 perhaps avocados are most expensive in the fall months, and least
 expensive during the winter months.
 
-![](../doc/img/EDA_region_plot.png) ![](../doc/img/EDA_summary_plot.png)
-**Figure 1.** Average price of avocados in the United States by region,
-latitude, longitude, type, and season.
+![](../doc/img/EDA_region_plot.png) **Figure 1.** Average price of
+avocados in the United States by region.
+
+![](../doc/img/EDA_lat_plot.png) **Figure 2.** Average price of avocados
+in the United States by latitude.
+
+![](../doc/img/EDA_lon_plot.png) **Figure 3.** Average price of avocados
+in the United States by longitude.
+
+![](../doc/img/EDA_type_season_plot.png) **Figure 4 & 5.** Average price
+of avocados in the United States by type and season.
 
 Since we want to ensure the prices in this dataset are relatively
 accurate, we compared the average prices in this dataset to another
@@ -137,7 +145,7 @@ linear model is appropriate in this case.
 
 <div>
 
-**Figure 2.** Residual plot to examine appropriateness of using a linear
+**Figure 6.** Residual plot to examine appropriateness of using a linear
 model.
 
 </div>
@@ -773,7 +781,7 @@ Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.).
 
 <div>
 
-**Figure 3.** Correlation matrix of continuous features.
+**Figure 7.** Correlation matrix of continuous features.
 
 </div>
 
@@ -1012,7 +1020,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0624845
+\-0.07
 
 </td>
 
@@ -1028,7 +1036,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0714751
+\-0.07
 
 </td>
 
@@ -1044,7 +1052,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0623316
+\-0.06
 
 </td>
 
@@ -1060,7 +1068,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.1281574
+\-0.12
 
 </td>
 
@@ -1076,7 +1084,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.1396265
+\-0.14
 
 </td>
 
@@ -1086,7 +1094,7 @@ Neg Mean Squared
 
 </table>
 
-    ## [1] "The average cross-validation score for random forest regression is: 0.093"
+    ## [1] "The average cross-validation score for random forest regression is: 0.09"
 
 From this model, we identified the relative importance of each feature.
 
@@ -1125,13 +1133,13 @@ Importance
 
 <td style="text-align:left;">
 
-type\_organic
+Organic Type
 
 </td>
 
 <td style="text-align:right;">
 
-0.3969294
+0.39
 
 </td>
 
@@ -1141,13 +1149,13 @@ type\_organic
 
 <td style="text-align:left;">
 
-type\_conventional
+Conventional Type
 
 </td>
 
 <td style="text-align:right;">
 
-0.2099989
+0.22
 
 </td>
 
@@ -1157,13 +1165,13 @@ type\_conventional
 
 <td style="text-align:left;">
 
-lon
+Longitude
 
 </td>
 
 <td style="text-align:right;">
 
-0.1958670
+0.20
 
 </td>
 
@@ -1173,13 +1181,13 @@ lon
 
 <td style="text-align:left;">
 
-lat
+Latitude
 
 </td>
 
 <td style="text-align:right;">
 
-0.1044871
+0.11
 
 </td>
 
@@ -1189,13 +1197,13 @@ lat
 
 <td style="text-align:left;">
 
-season\_Fall
+Fall Season
 
 </td>
 
 <td style="text-align:right;">
 
-0.0518205
+0.05
 
 </td>
 
@@ -1205,13 +1213,13 @@ season\_Fall
 
 <td style="text-align:left;">
 
-season\_Summer
+Summer Season
 
 </td>
 
 <td style="text-align:right;">
 
-0.0274426
+0.03
 
 </td>
 
@@ -1221,13 +1229,13 @@ season\_Summer
 
 <td style="text-align:left;">
 
-season\_Winter
+Winter Season
 
 </td>
 
 <td style="text-align:right;">
 
-0.0105028
+0.01
 
 </td>
 
@@ -1237,13 +1245,13 @@ season\_Winter
 
 <td style="text-align:left;">
 
-season\_Spring
+Spring Season
 
 </td>
 
 <td style="text-align:right;">
 
-0.0029517
+0.00
 
 </td>
 
@@ -1309,7 +1317,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.4589097
+\-0.46
 
 </td>
 
@@ -1325,7 +1333,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-0.2206909
+0.22
 
 </td>
 
@@ -1341,7 +1349,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-0.4166477
+0.42
 
 </td>
 
@@ -1357,7 +1365,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.0509614
+\-0.05
 
 </td>
 
@@ -1373,7 +1381,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-0.0048601
+0.00
 
 </td>
 
@@ -1383,7 +1391,7 @@ Neg Mean Squared
 
 </table>
 
-    ## [1] "The average cross-validation score for linear regression is: 0.026"
+    ## [1] "The average cross-validation score for linear regression is: 0.03"
 
 The linear regression model had even lower error than the random forest
 regression model. This may indicate that linear regression may be a
@@ -1427,13 +1435,13 @@ Weights
 
 <td style="text-align:left;">
 
-type\_organic
+Organic Type
 
 </td>
 
 <td style="text-align:right;">
 
-0.2497839
+0.25
 
 </td>
 
@@ -1443,13 +1451,13 @@ type\_organic
 
 <td style="text-align:left;">
 
-season\_Fall
+Fall Season
 
 </td>
 
 <td style="text-align:right;">
 
-0.1217987
+0.12
 
 </td>
 
@@ -1459,13 +1467,13 @@ season\_Fall
 
 <td style="text-align:left;">
 
-season\_Summer
+Summer Season
 
 </td>
 
 <td style="text-align:right;">
 
-0.0503069
+0.05
 
 </td>
 
@@ -1475,13 +1483,13 @@ season\_Summer
 
 <td style="text-align:left;">
 
-lat
+Latitude
 
 </td>
 
 <td style="text-align:right;">
 
-0.0409049
+0.04
 
 </td>
 
@@ -1491,13 +1499,13 @@ lat
 
 <td style="text-align:left;">
 
-lon
+Longitude
 
 </td>
 
 <td style="text-align:right;">
 
-0.0369545
+0.04
 
 </td>
 
@@ -1507,13 +1515,13 @@ lon
 
 <td style="text-align:left;">
 
-season\_Spring
+Spring Season
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0617987
+\-0.06
 
 </td>
 
@@ -1523,13 +1531,13 @@ season\_Spring
 
 <td style="text-align:left;">
 
-season\_Winter
+Winter Season
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.1103069
+\-0.11
 
 </td>
 
@@ -1539,13 +1547,13 @@ season\_Winter
 
 <td style="text-align:left;">
 
-type\_conventional
+Conventional Type
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.2497839
+\-0.25
 
 </td>
 
@@ -1563,8 +1571,8 @@ avocado pricing (figure 4).
 
 ![](../results/feature_plot.png)
 
-**Figure 4.** Relative feature importances for random forest regression,
-and feature weights for linear regression.
+**Figure 8 & 9.** Relative feature importances for random forest
+regression, and feature weights for linear regression.
 
 # Discussion
 
