@@ -19,6 +19,9 @@ library(knitr)
 library(ggpubr)
 library(feather)
 
+# Set significant figures
+options(digits = 4)
+
 # Loading in the dataset.
 # (See README for how to download dataset.)
 avocado <- read_feather("../data/train.feather")

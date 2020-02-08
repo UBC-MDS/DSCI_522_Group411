@@ -35,6 +35,9 @@ knitr::opts_chunk$set(warning = FALSE, message=FALSE)
 library(tidyverse)
 library(broom)
 library(feather)
+
+# Set significant figures
+options(digits = 4)
 ```
 
 Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we will examine its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.

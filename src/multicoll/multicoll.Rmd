@@ -21,6 +21,9 @@ library(reshape2)
 library(kableExtra)
 library(car)
 source(here::here("src/multicoll/support_functions.R"))
+
+# Set significant figures
+options(digits = 4)
 ```
 
 ## Correlation Matrix
