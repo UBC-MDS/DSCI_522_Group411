@@ -36,20 +36,38 @@ To communicate our results, we will create a bar chart ranking the features by i
 
 ## Usage
 
-To replicate this analysis, clone this repository and make sure that the dependencies below are installed. Then, run the following in your terminal from the root directory of the project.
+Here are two suggested ways to run this analysis.
 
-You may need to install the following package to help with rendering the reports.
+### Run with Docker (recommended)
 
-```
-Rscript -e "webshot::install_phantomjs()"
-```
-
-### Run Process End-to-End
-
-To run the entire process and generate analysis report:
+1. Install [Docker](https://www.docker.com/get-started).
+1. Download or clone this repository.
+1. Open a terminal session and navigate to the root of the project directory.
+1. Run the analysis with the following command:
 
 ```
-make
+docker run --rm -v /$(pwd):/avocado murage/avocado_predictors:v1.0 make -C /avocado all
+```
+**Windows Users**: You may need to replace `/$(pwd)` above with the absolute path to the root of your project directory.
+
+
+To clean out all temporary files (without launching a Docker container):
+
+```
+make clean
+```
+
+When the process has completed, you can find the analysis report at `doc/avocado_predictors_report.html` or `doc/avocado_predictors_report.md`.
+
+### Run without Docker
+
+1. Make sure you've installed all of the dependencies listed in the Dependencies section below.
+1. Download or clone this repository.
+1. Open a terminal session and navigate to the root of the project directory.
+1. Run the analysis with the following command:
+
+```
+make all
 ```
 
 To clean out all temporary files:
@@ -58,7 +76,7 @@ To clean out all temporary files:
 make clean
 ```
 
-### Run Individual Pieces
+#### Run Individual Pieces
 
 To retrieve and prepare the data:
 
@@ -84,6 +102,16 @@ Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 python src/regression.py data/train.feather results/
 Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 ```
+
+## Dependencies
+
+### OS-level Dependencies
+
+Package Name|Version
+-|-
+chromedriver|79.0.3945.36
+Python|3.7
+R|3.6.2
 
 ### R Package Dependencies
 
@@ -114,12 +142,6 @@ pandas|0.25.3
 pyarrow|0.15.1
 scikit-learn|0.22.1
 selenium|3.141.0
-
-### OS-level Dependencies
-
-Package Name|Version
--|-
-chromedriver|79.0.3945.36
 
 ## Reports
 
