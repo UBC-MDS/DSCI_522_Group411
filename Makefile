@@ -53,20 +53,16 @@ data/train.feather \
 src/conduct_hypothesis_test.R
 	Rscript src/conduct_hypothesis_test.R --datafile=data/train.feather --out=doc/img
 
-doc/img/collinearity.png \
 doc/img/correlation_matrix.png \
 doc/img/collinearity.csv : \
 data/train.feather \
 src/multicoll/mc_create_assets.R
 	Rscript src/multicoll/mc_create_assets.R --datafile=data/train.feather --out=doc/img
 
-doc/img/EDA_month_plot.png \
-doc/img/EDA_month_table.png \
 doc/img/EDA_region_plot.png \
-doc/img/EDA_region_table.png \
-doc/img/EDA_summary_plot.png \
-doc/img/EDA_type_table.png \
-doc/img/EDA_year_plot.png : \
+doc/img/EDA_lat_plot.png \
+doc/img/EDA_lon_plot.png \
+doc/img/EDA_type_season_plot.png : \
 data/train.feather src/render_EDA.R
 	Rscript src/render_EDA.R --datafile=data/train.feather --out=doc/img
 
@@ -83,6 +79,7 @@ src/regression.py
 # Generate final report
 doc/avocado_predictors_report.md : \
 doc/avocado_predictors_report.Rmd \
+src/DSCI_522_EDA.md \
 src/multicoll/multicoll.md \
 src/hypothesis_test.md \
 results/cv_scores_lr.csv \
@@ -93,13 +90,10 @@ results/feature_weights_lr.csv \
 doc/img/collinearity.csv \
 doc/img/correlation_matrix.png \
 doc/img/hypothesis_test_table.csv \
-doc/img/EDA_month_plot.png \
-doc/img/EDA_month_table.png \
 doc/img/EDA_region_plot.png \
-doc/img/EDA_region_table.png \
-doc/img/EDA_summary_plot.png \
-doc/img/EDA_type_table.png \
-doc/img/EDA_year_plot.png
+doc/img/EDA_lat_plot.png \
+doc/img/EDA_lon_plot.png \
+doc/img/EDA_type_season_plot.png
 	Rscript -e "rmarkdown::render('doc/avocado_predictors_report.Rmd', output_format = 'github_document')"
 
 #
