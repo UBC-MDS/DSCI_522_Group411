@@ -1,9 +1,9 @@
 feature_names,importance
-type_organic,0.39692939309034236
-type_conventional,0.20999885293756373
-lon,0.19586698913819808
-lat,0.10448711807405132
-season_Fall,0.05182048446611177
-season_Summer,0.027442622793706677
-season_Winter,0.01050280745633967
-season_Spring,0.0029517320436865026
+Organic Type,0.39
+Conventional Type,0.22
+Longitude,0.2
+Latitude,0.11
+Fall Season,0.05
+Summer Season,0.03
+Winter Season,0.01
+Spring Season,0.0
