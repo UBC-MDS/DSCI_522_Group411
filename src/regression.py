@@ -6,16 +6,18 @@ a table of the most important features determined  by each one.
 This script takes a path to an input file and a path to an output 
 directory as arguments.
 
-Usage: regression.py <file_path_train> <output>
+Usage: regression.py <file_path_train> <file_path_test> <output>
 
 Arguments:
 <file_path_train>   Path (including filename) to the cleaned feather training dataset.
-<output>            Path (excluding filename) to the figures/tables output directory
+<file_path_test>    Path (including filename) to the cleaned feather test dataset.
+<output>            Path (excluding filename) to the figures/tables output directory.
 """
 
 # Import all necessary packages
 import pandas as pd
 import numpy as np
+from joblib import dump, load
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
@@ -30,17 +32,19 @@ from os import path
 opt = docopt(__doc__)
 
 # Define main function
-def main(file_path_train, output):
+def main(file_path_train, file_path_test, output):
   """
   Runs through all functions involved in the regression analysis.
   
   Parameters:
   ----------
   file_path_train: (filepath) file path to the training data
+  file_path_test: (filepath) file path to the test data
   output: (filepath) file path to the output
   """
-  # Check if the input file is a valid path
-  assert path.exists(file_path_train) == True, "Input file path does not exist"
+  # Check if the input files are a valid path
+  assert path.exists(file_path_train) == True, "Input file path to training data does not exist"
+  assert path.exists(file_path_test) == True, "Input file path to test data does not exist"  
   
   # Check if the output file is a valid path
   assert path.exists(output) == True, "Output file path does not exist"
@@ -48,16 +52,17 @@ def main(file_path_train, output):
   # read in the data
   print("Starting to load in data...")
   train_data = pd.read_feather(file_path_train)
-  train_x, train_y = feature_target_split(train_data)
-  feature_df = random_forest_regression(train_x, train_y, output, train_data)
-  lr_feature_df = regularized_linear_regression(train_x, train_y, output, train_data)
+  test_data = pd.read_feather(file_path_test)
+  train_x, train_y, test_x, test_y = feature_target_split(train_data, test_data)
+  feature_df = random_forest_regression(train_x, train_y, test_x, test_y, output, train_data)
+  lr_feature_df = regularized_linear_regression(train_x, train_y, test_x, test_y, output, train_data)
   plot_feature_importance(feature_df, lr_feature_df, output)
   print("Finished")
   
   
 
 # Define function to split data into feature and targets
-def feature_target_split(train_data):
+def feature_target_split(train_data, test_data):
   """
   Splits the data into feature and targets and applies
   one hot encoding.
@@ -68,51 +73,69 @@ def feature_target_split(train_data):
   
   Returns:
   --------
-  train_x: (array) - feature set
-  train_y: (list) - target set
+  train_x: (array) - train feature set
+  train_y: (list) - train target set
+  test_x: (array) - test feature set
+  test_y: (list) - test target set
   """
   print("Preprocessing data...")
   train_x = train_data[['lat', 'lon', 'type', 'season']]
   train_y = train_data['average_price']
+  test_x = test_data[['lat', 'lon', 'type', 'season']]
+  test_y = test_data['average_price']
   numeric_features = ['lat', 'lon']
   
   # Check if numeric features are really numeric
   assert type(train_x['lat'][1]) == np.float64, "numeric feature should be type float"
   assert type(train_x['lon'][1]) == np.float64, "numeric feature should be type float"
+  assert type(test_x['lat'][1]) == np.float64, "numeric feature should be type float"
+  assert type(test_x['lon'][1]) == np.float64, "numeric feature should be type float"
   
   categorical_features = ['type', 'season']
   
   # Check if categorical features are strings
   assert type(train_x['type'][1]) == str, "categorical feature should be type string"
   assert type(train_x['season'][1]) == str, "categorical feature should be type string"
+  assert type(test_x['type'][1]) == str, "categorical feature should be type string"
+  assert type(test_x['season'][1]) == str, "categorical feature should be type string"
   
   preprocessor = ColumnTransformer(transformers=[
     ('scaler', StandardScaler(), numeric_features),
     ('ohe', OneHotEncoder(), categorical_features)
     ])
+  
+  # Apply preprocessing to training dataset
   train_x = pd.DataFrame(preprocessor.fit_transform(train_x),
                          index=train_x.index,
                          columns = (numeric_features +
                                    list(preprocessor.named_transformers_['ohe']
                                        .get_feature_names(categorical_features))))
                                        
+  # Apply preprocessing to test dataset
+  test_x = pd.DataFrame(preprocessor.transform(test_x),
+                        index=test_x.index,
+                        columns=train_x.columns)                                     
+                                       
   # Check to see if one-hot-encoding added extra 4 columns for season and type
-  assert len(train_x.columns) == 8, "One-Hot-Encoding failed..."
+  assert len(train_x.columns) == 8, "One-Hot-Encoding failed on the training set..."
+  assert len(test_x.columns) == 8, "One-Hot-Encoding failed on the test set..."
   
   # Return the preprocessed training data for regression analysis
-  return train_x, train_y
+  return train_x, train_y, test_x, test_y
   print("Finished preprocessing data...")
   
 # Define function to carry out random forest regression 
-def random_forest_regression(train_x, train_y, output, train_data):
+def random_forest_regression(train_x, train_y, test_x, test_y, output, train_data):
   """
   Carries out the random forest regression analysis and 
   calculates feature importance.
   
   Parameters:
   -----------
-  train_x: (array) - feature set
-  train_y: (list) - target set
+  train_x: (array) - train feature set
+  train_y: (list) - train target set
+  test_x: (array) - test feature set
+  test_y: (list) - test target set
   output: (filepath) - filepath to where the results are stored
   train_data: (dataframe) training data
   
@@ -121,10 +144,10 @@ def random_forest_regression(train_x, train_y, output, train_data):
   feature_df: (dataframe) dataframe of feature names and importances
   csv file of cross-validation scores
   csv file of feature importances
+  csv file of test score
   """
   print("Performing random forest regression...")
   rfr = RandomForestRegressor(random_state=123)
-  rfr.fit(train_x, train_y)
   rfr_parameters = {'max_depth': range(1, 20),
                   'n_estimators': range(1, 100)}
   random_rfr = RandomizedSearchCV(rfr, rfr_parameters, cv=5, scoring='neg_mean_squared_error')
@@ -150,16 +173,25 @@ def random_forest_regression(train_x, train_y, output, train_data):
   feature_df.to_csv(output + "feature_importance_rfr.csv", index=False)
   return feature_df
   
+  # Now get test accuracy
+  rfr_test_score = np.around(random_rfr.score(test_x, test_y), 2)
+  rfr_test_score = pd.DataFrame({'test': [rfr_test_score]})
+  rfr_test_score.to_csv(output + "lr_test_accuracy.csv", index=False)
+  
+  assert len(rfr_test_score) != 0, "rfr test score is not being calculated..."
+  
 # Define function to carry out linear regression
-def regularized_linear_regression(train_x, train_y, output, train_data):
+def regularized_linear_regression(train_x, train_y, test_x, test_y, output, train_data):
   """
   Carries out linear regression analysis using L2 regularization
   and calculates weights assigned to each feature.
   
   Parameters:
   -----------
-  train_x: (array) - feature set
-  train_y: (list) - target set
+  train_x: (array) - train feature set
+  train_y: (list) - train target set
+  test_x: (array) - test feature set
+  test_y: (list) - test target set
   output: (filepath) - filepath to where the results are stored
   train_data: (dataframe) training data
   
@@ -168,6 +200,7 @@ def regularized_linear_regression(train_x, train_y, output, train_data):
   lr_feature_df: (dataframe) dataframe of feature names and weights
   csv file of cross-validation scores
   csv file of feature weights
+  csv file of test score
   """ 
   print("Performing regularized linear regression...")
   # set the model
@@ -200,8 +233,15 @@ def regularized_linear_regression(train_x, train_y, output, train_data):
              "weights": np.around(r2.coef_, 2)})
   lr_feature_df = lr_feature_df.sort_values(["weights"], ascending=False)
   lr_feature_df.to_csv(output + "feature_weights_lr.csv", index=False)
-  return lr_feature_df
+  return lr_feature_df  
+  
+  # Now score on the test data
+  lr_test_score = np.around(r2.score(test_x, test_y), 2)
+  lr_test_score = pd.DataFrame({'test': [lr_test_score]})
+  lr_test_score.to_csv(output + "lr_test_accuracy.csv", index=False)
 
+  assert len(lr_test_score) != 0, "lr test score is not being calculated..."
+  
 # Define plot function  
 def plot_feature_importance(feature_df, lr_feature_df, output):
   """
@@ -242,4 +282,4 @@ def plot_feature_importance(feature_df, lr_feature_df, output):
 
 # Call main function
 if __name__ == "__main__":
-  main(opt["<file_path_train>"], opt["<output>"])
+  main(opt["<file_path_train>"], opt["<file_path_test>"], opt["<output>"])
