@@ -160,6 +160,10 @@ selenium|3.141.0
 - [Conduct Feature Importances Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/regression.py)
 - [Final Report](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/run_all.sh)
 
+## File Dependency Graph
+
+![File Dependency Graph](Makefile.png)
+
 ## References
 
 [1] Kiggins, J. "Avocado Prices: Historical data on avocado prices and sales volume in multiple US markets." May 2018. [Web Link](https://www.kaggle.com/neuromusic/avocado-prices).
