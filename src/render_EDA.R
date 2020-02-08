@@ -70,7 +70,8 @@ make_plot <- function(datafile, out) {
                         name=c("")) +
     theme_bw() +
     theme(axis.text.x = element_text(angle=90, size = 8),
-          axis.title.x = element_blank()) 
+          axis.title.x = element_blank()) +
+    coord_flip()
   
   # Region may not be the best predictor, so now I will test price by coordinates
   avocado_by_lat <- avocado %>%
@@ -82,23 +83,25 @@ make_plot <- function(datafile, out) {
   # Make plot
   price_by_lat <- ggplot(avocado, aes(x=lat, y=average_price)) +
     #geom_line(colour="red") +
-    geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
-    geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
-    scale_colour_manual(values=c("red"),
-                        breaks=c("red"),
-                        labels=c("Mean"),
-                        name=c("")) +
+    geom_violin(aes(group=cut_width(lat, 3)), scale='width', draw_quantiles = c(0.5))+
+    #geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
+    #geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
+    #scale_colour_manual(values=c("red"),
+    #                    breaks=c("red"),
+    #                    labels=c("Mean"),
+    #                    name=c("")) +
     xlab("Latitude (Degrees)") +
     ylab("Average Price ($)") +
     ggtitle("Avocado Price by Latitude") +
     theme_bw() 
   price_by_lon <- ggplot(avocado, aes(x=lon, y=average_price)) +
-    geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
-    geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
-    scale_colour_manual(values=c("red"),
-                        breaks=c("red"),
-                        labels=c("Mean"),
-                        name=c("")) +
+    geom_violin(aes(group=cut_width(lon, 7)), scale='width', draw_quantiles = c(0.5))+
+    #geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
+    #geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
+    #scale_colour_manual(values=c("red"),
+    #                    breaks=c("red"),
+    #                    labels=c("Mean"),
+    #                    name=c("")) +
     xlab("Longitude (Degrees)") +
     ylab("Average Price ($)") +
     ggtitle("Avocado Price by Longitude") +
@@ -161,38 +164,40 @@ make_plot <- function(datafile, out) {
     theme_bw()
   
   # Combine type, season plots above
-  summary_plot <- gridExtra::arrangeGrob(price_per_type,
+  type_season_plot <- gridExtra::arrangeGrob(price_per_type,
                           price_by_season,
-                          ncol=1, nrow=2)
-  # Save plot as png
-  ggsave('EDA_summary_plot.png', summary_plot, path = file.path(dest_path))
+                          ncol=2, nrow=1)
+  # Save type, season plots as png
+  ggsave('EDA_type_season_plot.png', type_season_plot, height=3, width=7, path = file.path(dest_path))
   
-  # Combine region, lat,  lon plots above
-  region_plot <- gridExtra::grid.arrange(price_per_region, price_by_lat,
-                          price_by_lon,
-                          ncol=1, nrow=3)
-  # Save plot as png
-  ggsave('EDA_region_plot.png', region_plot, path = file.path(dest_path))
+#  # Combine region, lat, lon plots above
+#  region_plot <- gridExtra::grid.arrange(price_per_region, price_by_lat,
+#                          price_by_lon,
+#                          ncol=1, nrow=3)
+  # Save region, lat, lon plots as png
+  ggsave('EDA_region_plot.png', price_per_region, path = file.path(dest_path))
+  ggsave('EDA_lat_plot.png', price_by_lat, height=2, width=7, path = file.path(dest_path))
+  ggsave('EDA_lon_plot.png', price_by_lon, height=2, width=7, path = file.path(dest_path))
   
-  # Combine moth, season plots above
-  month_plot <- gridExtra::grid.arrange(price_per_month, price_by_season,
-                          ncol=1, nrow=2)
-  # Save plot as png
-  ggsave('EDA_month_plot.png',  month_plot, path = file.path(dest_path))
+#  # Combine moth, season plots above
+#  month_plot <- gridExtra::grid.arrange(price_per_month, price_by_season,
+#                         ncol=1, nrow=2)
+#  # Save month, season plots as png
+#  ggsave('EDA_month_plot.png',  month_plot, path = file.path(dest_path))
   
-  # What is the average price over time?
-  year_plot <- avocado %>%
-    group_by(year_month) %>%
-    summarize(average_price = mean(average_price)) %>%
-    ggplot(aes(x=year_month, y=average_price)) +
-    geom_point(alpha=0.5, colour="darkblue") +
-    xlab("Year-Month") +
-    ylab("Average Price") +
-    #ggtitle("Average Avocado Price Over Time") +
-    theme_bw() +
-    theme(axis.text.x = element_text(angle=90)) 
-  # Save plot as png
-  ggsave('EDA_year_plot.png',  year_plot, path = file.path(dest_path))
+#  # What is the average price over time?
+#  year_plot <- avocado %>%
+#    group_by(year_month) %>%
+#    summarize(average_price = mean(average_price)) %>%
+#    ggplot(aes(x=year_month, y=average_price)) +
+#    geom_point(alpha=0.5, colour="darkblue") +
+#    xlab("Year-Month") +
+#    ylab("Average Price") +
+#    #ggtitle("Average Avocado Price Over Time") +
+#    theme_bw() +
+#    theme(axis.text.x = element_text(angle=90)) 
+#  # Save plot as png
+#  ggsave('EDA_year_plot.png',  year_plot, path = file.path(dest_path))
   }
   
 #   make_table <- function(datafile, out) {
