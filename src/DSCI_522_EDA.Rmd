@@ -163,7 +163,8 @@ price_per_region <- ggplot(avocado, aes(x=reorder(region, -average_price), y=ave
                     name=c("")) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, size = 8),
-        axis.title.x = element_blank()) 
+        axis.title.x = element_blank()) +
+  coord_flip()
 
 # Region may not be the best predictor, so now I will test price by coordinates
 avocado_by_lat <- avocado %>%
@@ -172,12 +173,13 @@ avocado_by_lat <- avocado %>%
 
 price_by_lat <- ggplot(avocado, aes(x=lat, y=average_price)) +
   #geom_line(colour="red") +
-  geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
-  geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
-  scale_colour_manual(values=c("red"),
-                    breaks=c("red"),
-                    labels=c("Mean"),
-                    name=c("")) +
+  geom_violin(aes(group=cut_width(lat, 3)), scale='width', draw_quantiles = c(0.5))+
+  #geom_jitter(aes(group=lat), width=0.2, alpha=0.2, colour="blue") +
+  #geom_point(aes(x=lat, y=ave_price, colour="red"), data=avocado_by_lat, size=1.5) +
+  #scale_colour_manual(values=c("red"),
+  #                  breaks=c("red"),
+  #                  labels=c("Mean"),
+  #                  name=c("")) +
   xlab("Latitude (Degrees)") +
   ylab("Average Price ($)") +
   ggtitle("Avocado Price by Latitude") +
@@ -188,12 +190,13 @@ avocado_by_lon <- avocado %>%
   summarize(ave_price = mean(average_price))
 
 price_by_lon <- ggplot(avocado, aes(x=lon, y=average_price)) +
-  geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
-  geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
-  scale_colour_manual(values=c("red"),
-                    breaks=c("red"),
-                    labels=c("Mean"),
-                    name=c("")) +
+  geom_violin(aes(group=cut_width(lon, 7)), scale='width', draw_quantiles = c(0.5))+
+  #geom_jitter(aes(group=lon), width=0.2, alpha=0.2, colour="blue") +
+  #geom_point(aes(x=lon, y=ave_price,colour="red"), data=avocado_by_lon, size=1.5) +
+  #scale_colour_manual(values=c("red"),
+  #                  breaks=c("red"),
+  #                  labels=c("Mean"),
+  #                  name=c("")) +
   xlab("Longitude (Degrees)") +
   ylab("Average Price ($)") +
   ggtitle("Avocado Price by Longitude") +
@@ -263,20 +266,26 @@ price_per_type
 
 **Figure 1.** Average price of avocados in the United States by type.
 
-```{r,  fig.height=12}
-gridExtra::grid.arrange(price_per_region, price_by_lat,
-                        price_by_lon,
-                        ncol=1, nrow=3)
+```{r, fig.height=8}
+price_per_region
 ```
 
-**Figure 2.** Average price of avocados in the United States by location.
+**Figure 2.** Average price of avocados in the United States by location (region).
+
+```{r,  fig.height=8}
+gridExtra::grid.arrange(price_by_lat,
+                        price_by_lon,
+                        ncol=1, nrow=2)
+```
+
+**Figure 3.** Average price of avocados in the United States by location (latitude and longitude).
 
 ```{r,  fig.height=8}
 gridExtra::grid.arrange(price_per_month, price_by_season,
                         ncol=1, nrow=2)
 ```
 
-**Figure 3.** Monthly and seasonal changes in avocado prices in the United States.
+**Figure 4.** Monthly and seasonal changes in avocado prices in the United States.
 
 We also plotted the average avocado price over time to get an idea of how the price has fluctuated and whether there were any outlier months in the dataset (figure 2). It appears that there was a sharp incline in avocado prices in August-October of 2017, which may influence our analysis.
 
@@ -293,7 +302,7 @@ avocado %>%
     theme(axis.text.x = element_text(angle=90)) 
 ```
 
-**Figure 2.** Average number of avocados sold per week between 2015 and 2018.
+**Figure 5.** Average number of avocados sold per week between 2015 and 2018.
 
 
 ## References
