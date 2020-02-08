@@ -1,8 +1,8 @@
 feature_names,importance
-Organic Type,0.39
+Organic Type,0.42
 Conventional Type,0.22
-Longitude,0.2
-Latitude,0.11
+Longitude,0.19
+Latitude,0.08
 Fall Season,0.05
 Summer Season,0.03
 Winter Season,0.01

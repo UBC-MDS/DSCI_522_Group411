@@ -71,7 +71,7 @@ create_assets <- function(datafile, out) {
            subtitle = "Avocado Data",
            fill = "Pearson's\nCorrelation") +
       coord_fixed() +
-      theme_minimal() +
+      theme_bw() +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
             axis.title.x = element_blank(),
             axis.title.y = element_blank(),

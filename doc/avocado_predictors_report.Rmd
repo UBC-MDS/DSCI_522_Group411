@@ -1,7 +1,7 @@
 ---
 title: "DSCI 522 Avocado Predictors"
 author: "Katie Birchard, Ryan Homer, Andrea Lee"
-date: "02/02/2020"
+date: "02/08/2020"
 output:
   github_document:
     toc: true
@@ -21,9 +21,9 @@ options(digits = 3)
 
 # Introduction
 
-As millenials, we love avocados. However, as we all know, avocados can be expensive. Therefore, we decided it would be interesting to investigate what drives avocado prices. We would like to know what time of year avocados are least expensive, and where avocados are the cheapest. Hopefully, the results of this investigation can give us insight on how to enjoy our beloved avocado toasts without breaking the bank.
+As millenials, we love avocados. However, as we all know, avocados can be expensive. Therefore, we decided it would be interesting to investigate what drives avocado prices. We would like to know what time of year avocados are least expensive, and where avocados are the cheapest. Hopefully, the results of this investigation can give us insight into how we can enjoy our beloved avocado toasts without breaking the bank.
 
-We will be answering the research question: **What is the strongest predictor of avocado prices in the United States?** Thus, our goal is to find the feature that most strongly predicts the price of avocados in the United States. A natural inferential sub-question would be to first determine if any of the features correlate with avocado prices and if there is any multicollinearity among the features. From our results, we can also compute a rank of features by importance.
+We will be answering the research question: **What is the strongest predictor of avocado prices in the United States?** Thus, our goal is to find the feature that most strongly predicts the price of avocados in the United States. A natural inferential sub-question would be to first determine if any of the features correlate with avocado prices and if there is any multicollinearity among the features. From our results, we can then compute a rank of features by importance.
 
 # Dataset
 
@@ -63,19 +63,19 @@ The target was:
 
 # Exploratory Data Analysis
 
-We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, latitude, longitude, type, and season against the average price to visualize the relationships between these variables (figure 1). We did not plot number of avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the relationship between avocado prices and avocados sold could be reciprocal (i.e. avocados sold may influence the price and vice versa), leading to a false interpretation. From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston. When looking at latitude and longitude, it looks like latitude has no observable trend with average price, but longitude may have a slight parabolic trend with average price. We can also clearly see (and we may have already predicted from our own experience) that organic avocados tend to be more expensive than non-organic avocados. Finally, when we observe the seasonal trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months.
+We wanted to determine which features might be the most important to include in our random forest regression model. Therefore we plotted region, latitude, longitude, type, and season against the average price to visualize the relationships between these variables (Figures 1-4). We did not plot number of avocados sold from each of the PLU codes, `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the relationship between avocado prices and avocados sold could be reciprocal (i.e. avocados sold may influence the price and vice versa), leading to a false interpretation. From looking at these relationships, we can see that some regions, such as Hartford-Springfield and San Francisco, have higher avocado prices than other regions, such as Houston (Figure 1). When looking at latitude and longitude, it looks like latitude has no observable trend with average price (Figure 2), but longitude may have a slight parabolic trend with average price (Figure 3). We can also clearly see (and we may have already predicted from our own experience) that organic avocados tend to be more expensive than non-organic avocados(Figure 4A). Finally, when we observe the seasonal trend of avocado prices, we can see that perhaps avocados are most expensive in the fall months, and least expensive during the winter months (Figure 4B).
 
 ![](../doc/img/EDA_region_plot.png)
-**Figure 1.** Average price of avocados in the United States by region.
+**Figure 1.** Distribution of the average price of avocados in the United States by region.
 
 ![](../doc/img/EDA_lat_plot.png)
-**Figure 2.** Average price of avocados in the United States by latitude.
+**Figure 2.** Distribution of the average price of avocados in the United States by latitude.
 
 ![](../doc/img/EDA_lon_plot.png)
-**Figure 3.** Average price of avocados in the United States by longitude.
+**Figure 3.** Distribution of the average price of avocados in the United States by longitude.
 
 ![](../doc/img/EDA_type_season_plot.png)
-**Figure 4 & 5.** Average price of avocados in the United States by type and season.
+**Figure 4.** Distribution of the average price of avocados in the United States by (A) type and (B) season.
 
 Since we want to ensure the prices in this dataset are relatively accurate, we compared the average prices in this dataset to another [study](https://www.statista.com/statistics/493487/average-sales-price-of-avocados-in-the-us/) published by M. Shahbandeh in February 2019. According to the dataset we selected, the average price of avocados from 2015 to 2018 was \$1.41. According to Shahbandeh’s study, the average price of avocados from 2015 to 2018 was \$1.11 [@avocado-study]. Thus, the average price from our dataset is slightly higher compared to Shahbandeh’s study. This discrepancy could be due to the inclusion of organic avocados in this dataset, which tend to be more expensive. However, the prices are still similar enough that the observations from this dataset are likely accurate.
 
@@ -83,14 +83,14 @@ Since we want to ensure the prices in this dataset are relatively accurate, we c
 
 Before undergoing our main analysis, we first conducted a hypothesis test to determine if any of the features are correlated with the target. To conduct a hypothesis test, we fitted an additive linear model and interpreted the p-values to determine which features are significant. We chose a significance level of 0.05 as it is the industry standard. We chose not to choose a stricter significance level (i.e. 0.01 or 0.001) as we do not believe that predicting avocado prices requires as conservative of a test.
 
-Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we examined its residual plot. Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
+Based on our EDA, we chose to fit a linear model to conduct our hypothesis test. To confirm that a linear model would be appropriate for this dataset, we examined its residual plot (Figure 5). Looking at the residual plot below, the points are randomly distributed which indicates that a linear model is appropriate in this case.
 
 <div style="text-align: center">
   <img src="../doc/img/residual_plot.png" width="680px" />
-  <div>**Figure 6.** Residual plot to examine appropriateness of using a linear model.</div>
+  <div>**Figure 5.** Residual plot to examine appropriateness of using a linear model.</div>
 </div>
 
-At a significance level of 0.05, it appears from the model below that the following features are significant as their p-values are less than the significance level:
+At a significance level of 0.05, it appears from the model below that the following features are significant as their p-values are less than the significance level (Table 1):
 
 - `type`
 - `year`
@@ -113,16 +113,16 @@ However, we should be cautious not to use the p-value significance as a stand al
 
 ## Multicollinearity Test
 
-Next, we conducted a multicollinearity test to check for any redundancies between features. Under the assumption that the data can be modelled linearly after observing the residual plot, we selected the continuous numerical predictors, computed the correlation matrix, and wrangled the data into a plottable dataframe [@corr].
+Next, we conducted a multicollinearity test to check for any redundancies between features. Under the assumption that the data can be modelled linearly after observing the residual plot, we selected the continuous numerical predictors, computed the correlation matrix, and wrangled the data into a plottable dataframe [@corr] (Figure 6).
 
 <div style="text-align: center">
   <img src="../doc/img/correlation_matrix.png" width="600px" />
-  <div>**Figure 7.** Correlation matrix of continuous features.</div>
+  <div>**Figure 6.** Correlation matrix of continuous features.</div>
 </div>
 
 Overall, there is fairly high collinearity between many of the predictors. This was expected, since they all deal with volume or number of avocados sold, be it by PLU code, bag type or total volume. In particular, `total_bags` and `total_volume` were expected to be highly correlated with other predictors that were sub-quantities of these totals. Due to the high correlation, including all these predictors in a prediction model would probably lead to overfitting.
 
-To verify the result from the correlation matrix above, we also computed the variance inflation (VIF) scores from the `car` package.
+To verify the result from the correlation matrix above, we also computed the variance inflation (VIF) scores from the `car` package (Table 2).
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 col <- read_csv("img/collinearity.csv")
@@ -137,7 +137,7 @@ The high VIF scores suggest extremely high collinearity for these variables in a
 
 ## Random Forest
 
-We fitted a random forest regressor model using the significant features from the analysis above (`lat`, `lon`, `type`, and `season`). We used one hot encoding to scale the categorical features (`type` and `season`) and standard scaling tto scale the numerical features(`lat` and `lon`). We used randomized cross validation to determine the optimal values for maximum depth and number of estimators. We calculated the average (validation) scores using cross validation to determine how well our model was performing.
+We fitted a random forest regressor model using the significant features from the analysis above (`lat`, `lon`, `type`, and `season`). We used one hot encoding to scale the categorical features (`type` and `season`) and standard scaling tto scale the numerical features(`lat` and `lon`). We used randomized cross validation to determine the optimal values for maximum depth and number of estimators. We calculated the average (validation) scores using cross validation to determine how well our model was performing (Table 3).
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 cv_scores <- read_csv("../results/cv_scores_rfr.csv")
@@ -151,7 +151,7 @@ kable(cv_scores,
 print(paste0("The average cross-validation score for random forest regression is: ", round(abs(mean(cv_scores$`Neg Mean Squared Error`)), 2)))
 ```
 
-From this model, we identified the relative importance of each feature.
+From this model, we identified the relative importance of each feature (Table 4).
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 feat_imp <- read_csv("../results/feature_importance_rfr.csv")
@@ -167,7 +167,7 @@ According to the random forest regression, the top predictor of avocado prices i
 
 ## Linear Regression
 
-To compare, we fitted a linear regression model using L2 regularization. We also used randomized cross validation to determine the optimal value for the complexity penalization factor, alpha. Again, we calculated the average (validation) scores using cross validation to determine how well our model was performing.
+To compare, we fitted a linear regression model using L2 regularization. We also used randomized cross validation to determine the optimal value for the complexity penalization factor, alpha. Again, we calculated the average (validation) scores using cross validation to determine how well our model was performing (Table 5).
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 cv_scores <- read_csv("../results/cv_scores_lr.csv")
@@ -183,7 +183,7 @@ print(paste0("The average cross-validation score for linear regression is: ", ro
 
 The linear regression model had even lower error than the random forest regression model. This may indicate that linear regression may be a better model for predicting average avocado prices.
 
-From the linear regression model, we also identified the relative weights of each of the coefficients. 
+From the linear regression model, we also identified the relative weights of each of the coefficients (Table 6). 
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 feat_imp <- read_csv("../results/feature_weights_lr.csv")
@@ -195,17 +195,19 @@ kable(feat_imp,
       caption="**Table 6**. The relative feature weights determined by the linear regression model.")
 ```
 
-When looking at the relative feature weights from the linear regression model, we need to account for the absolute weight. Therefore, comparing the two models, random forest regression and linear regression, we can see that both indicated `type` as the most important predictor of avocado pricing (figure 4).
+When looking at the relative feature weights from the linear regression model, we need to account for the absolute weight. Therefore, comparing the two models, random forest regression and linear regression, we can see that both indicated `type` as the most important predictor of avocado pricing (Figure 7).
 
 ![](../results/feature_plot.png)
 
-**Figure 8 & 9.** Relative feature importances for random forest regression, and feature weights for linear regression.
+**Figure 7.** (A) Relative feature importances for each feature in predicting average avocado prices determined by random forest regression, and (B) relative feature weights for each feature in predicting average avocado prices determined by linear regression.
 
 # Discussion
 
 ## Conclusion
 
-The random forest regression model predicted that `type` is the most important feature for predicting avocado price. This result is expected, since we observed a significant difference in the distribution of average prices between organic and conventional avocados during the exploratory data analysis and hypothesis testing. We also expected this result from previous experience buying avocados. Organic avocados are grown without the use of pesticides, and therefore produce a lower yield per growing season, ultimately resulting in a more expensive avocado.
+After creating and optimizing both a random forest regression model and a regularized linear regression model to predict average avocado prices, we found that the test scores for our predictive models were quite low. For the random forest regression model, the test accuracy is **64%**. The regularized linear regression model has an even lower accuracy of **43%**. 
+
+Despite these disappointing test accuracy scores, we can still gain some insight from these models. The random forest regression model predicted that `type` is the most important feature for predicting avocado price. This result is expected, since we observed a significant difference in the distribution of average prices between organic and conventional avocados during the exploratory data analysis and hypothesis testing. We also expected this result from previous experience buying avocados. Organic avocados are grown without the use of pesticides, and therefore produce a lower yield per growing season, ultimately resulting in a more expensive avocado.
 
 The `region` feature also seemed to play some importance in the pricing of avocados. For instance, regions such as Hartford-Springfield and San Francisco were the third and fourth most important predictors of average avocado price. It is unclear how these regions affect avocado prices. A possible explanation could be that some regions, such as San Francisco, have significantly higher priced avocados because of the fact that the cost of living in these regions significantly higher than other regions in the United States. On the other hand, other regions, such as Texas, have significantly lower priced avocados because avocados are grown these regions.
 

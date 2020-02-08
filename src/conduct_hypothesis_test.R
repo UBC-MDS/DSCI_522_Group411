@@ -56,10 +56,10 @@ make_plot <- function(datafile, out) {
   plot <- ggplot(model, aes(x = model$fitted.values, y = model$residuals)) +
     geom_point(colour= "cadetblue", alpha=0.1) +
     labs(title = 'Residual Plot (Linear Model)', x = "Predicted Values", y = "Residuals") +
-    theme_minimal()
+    theme_bw()
   
   # Save plot as png
-  ggsave('residual_plot.png',  plot, path = file.path(dest_path))
+  ggsave('residual_plot.png',  plot, height=4, width=7, path = file.path(dest_path))
 }
 
 make_table <- function(datafile, out) {
