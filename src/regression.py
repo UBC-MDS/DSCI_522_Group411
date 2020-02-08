@@ -263,8 +263,8 @@ def plot_feature_importance(feature_df, lr_feature_df, output):
              sort=alt.SortField(field="importance:Q"),
              title="Features"),
     x = alt.X("importance:Q", title="Feature Importance")
-    ).properties(title="Random Forest Regression",
-             width=200)
+    ).properties(title="(A) Random Forest Regression",
+             width=300, height=300)
   
   print("Plotting most important features from linear regression...")
   lr_plot = alt.Chart(lr_feature_df).mark_bar(color="blue", opacity=0.6).encode(
@@ -272,8 +272,8 @@ def plot_feature_importance(feature_df, lr_feature_df, output):
                sort=alt.SortField(field="weights:Q"),
                title="Features"),
     x = alt.X("weights:Q", title="Coefficient Weights")
-  ).properties(title="Linear Regression",
-           width=200)
+  ).properties(title="(B) Linear Regression",
+           width=300, height=300)
            
   feature_plot = rfr_plot | lr_plot
              

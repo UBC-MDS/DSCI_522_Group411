@@ -69,8 +69,6 @@ make_plot <- function(datafile, out) {
                         labels=c("Mean"),
                         name=c("")) +
     theme_bw() +
-    theme(axis.text.x = element_text(angle=90, size = 8),
-          axis.title.x = element_blank()) +
     coord_flip()
   
   # Region may not be the best predictor, so now I will test price by coordinates
@@ -118,7 +116,7 @@ make_plot <- function(datafile, out) {
                data=avocado_by_type) +
     xlab("Type") +
     ylab("Average Price ($)") +
-    ggtitle("Avocado Price by Type") +
+    ggtitle("(A) Avocado Price by Type") +
     scale_colour_manual(values=c("red"),
                         breaks=c("red"),
                         labels=c("Mean"),
@@ -160,13 +158,15 @@ make_plot <- function(datafile, out) {
                         name=c("")) +
     xlab("Season") +
     ylab("Average Price ($)") +
-    ggtitle("Average Price by Season") +
+    ggtitle("(B) Average Price by Season") +
     theme_bw()
   
   # Combine type, season plots above
-  type_season_plot <- gridExtra::arrangeGrob(price_per_type,
+  type_season_plot <- ggarrange(price_per_type,
                           price_by_season,
-                          ncol=2, nrow=1)
+                          ncol=2, nrow=1,
+                          common.legend = TRUE,
+                          legend="right")
   # Save type, season plots as png
   ggsave('EDA_type_season_plot.png', type_season_plot, height=3, width=7, path = file.path(dest_path))
   

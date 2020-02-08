@@ -1,7 +1,7 @@
 DSCI 522 Avocado Predictors
 ================
 Katie Birchard, Ryan Homer, Andrea Lee
-02/02/2020
+02/08/2020
 
 # Introduction
 
@@ -10,8 +10,8 @@ be expensive. Therefore, we decided it would be interesting to
 investigate what drives avocado prices. We would like to know what time
 of year avocados are least expensive, and where avocados are the
 cheapest. Hopefully, the results of this investigation can give us
-insight on how to enjoy our beloved avocado toasts without breaking the
-bank.
+insight into how we can enjoy our beloved avocado toasts without
+breaking the bank.
 
 We will be answering the research question: **What is the strongest
 predictor of avocado prices in the United States?** Thus, our goal is to
@@ -19,7 +19,7 @@ find the feature that most strongly predicts the price of avocados in
 the United States. A natural inferential sub-question would be to first
 determine if any of the features correlate with avocado prices and if
 there is any multicollinearity among the features. From our results, we
-can also compute a rank of features by importance.
+can then compute a rank of features by importance.
 
 # Dataset
 
@@ -79,7 +79,7 @@ The target was:
 We wanted to determine which features might be the most important to
 include in our random forest regression model. Therefore we plotted
 region, latitude, longitude, type, and season against the average price
-to visualize the relationships between these variables (figure 1). We
+to visualize the relationships between these variables (Figures 1-4). We
 did not plot number of avocados sold from each of the PLU codes,
 `PLU_4046`, `PLU_4225`, and `PLU_4770`, or the number of bags sold from
 `total_bags`, `small_bags`, `large_bags`, and `xlarge_bags`, because the
@@ -88,26 +88,28 @@ reciprocal (i.e. avocados sold may influence the price and vice versa),
 leading to a false interpretation. From looking at these relationships,
 we can see that some regions, such as Hartford-Springfield and San
 Francisco, have higher avocado prices than other regions, such as
-Houston. When looking at latitude and longitude, it looks like latitude
-has no observable trend with average price, but longitude may have a
-slight parabolic trend with average price. We can also clearly see (and
-we may have already predicted from our own experience) that organic
-avocados tend to be more expensive than non-organic avocados. Finally,
-when we observe the seasonal trend of avocado prices, we can see that
-perhaps avocados are most expensive in the fall months, and least
-expensive during the winter months.
+Houston (Figure 1). When looking at latitude and longitude, it looks
+like latitude has no observable trend with average price (Figure 2), but
+longitude may have a slight parabolic trend with average price (Figure
+3). We can also clearly see (and we may have already predicted from our
+own experience) that organic avocados tend to be more expensive than
+non-organic avocados(Figure 4A). Finally, when we observe the seasonal
+trend of avocado prices, we can see that perhaps avocados are most
+expensive in the fall months, and least expensive during the winter
+months (Figure 4B).
 
-![](../doc/img/EDA_region_plot.png) **Figure 1.** Average price of
-avocados in the United States by region.
+![](../doc/img/EDA_region_plot.png) **Figure 1.** Distribution of the
+average price of avocados in the United States by region.
 
-![](../doc/img/EDA_lat_plot.png) **Figure 2.** Average price of avocados
-in the United States by latitude.
+![](../doc/img/EDA_lat_plot.png) **Figure 2.** Distribution of the
+average price of avocados in the United States by latitude.
 
-![](../doc/img/EDA_lon_plot.png) **Figure 3.** Average price of avocados
-in the United States by longitude.
+![](../doc/img/EDA_lon_plot.png) **Figure 3.** Distribution of the
+average price of avocados in the United States by longitude.
 
-![](../doc/img/EDA_type_season_plot.png) **Figure 4 & 5.** Average price
-of avocados in the United States by type and season.
+![](../doc/img/EDA_type_season_plot.png) **Figure 4.** Distribution of
+the average price of avocados in the United States by (A) type and (B)
+season.
 
 Since we want to ensure the prices in this dataset are relatively
 accurate, we compared the average prices in this dataset to another
@@ -135,9 +137,9 @@ conservative of a test.
 
 Based on our EDA, we chose to fit a linear model to conduct our
 hypothesis test. To confirm that a linear model would be appropriate for
-this dataset, we examined its residual plot. Looking at the residual
-plot below, the points are randomly distributed which indicates that a
-linear model is appropriate in this case.
+this dataset, we examined its residual plot (Figure 5). Looking at the
+residual plot below, the points are randomly distributed which indicates
+that a linear model is appropriate in this case.
 
 <div style="text-align: center">
 
@@ -145,7 +147,7 @@ linear model is appropriate in this case.
 
 <div>
 
-**Figure 6.** Residual plot to examine appropriateness of using a linear
+**Figure 5.** Residual plot to examine appropriateness of using a linear
 model.
 
 </div>
@@ -154,7 +156,7 @@ model.
 
 At a significance level of 0.05, it appears from the model below that
 the following features are significant as their p-values are less than
-the significance level:
+the significance level (Table 1):
 
   - `type`
   - `year`
@@ -224,19 +226,19 @@ p.value
 
 <td style="text-align:right;">
 
-\-126.5846962
+\-126.585
 
 </td>
 
 <td style="text-align:right;">
 
-5.8377380
+5.838
 
 </td>
 
 <td style="text-align:right;">
 
-\-21.6838604
+\-21.684
 
 </td>
 
@@ -258,19 +260,19 @@ total\_volume
 
 <td style="text-align:right;">
 
-\-0.0001696
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-0.0000632
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-\-2.6828953
+\-2.683
 
 </td>
 
@@ -292,19 +294,19 @@ PLU\_4046
 
 <td style="text-align:right;">
 
-0.0001694
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-0.0000632
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-2.6798369
+2.680
 
 </td>
 
@@ -326,19 +328,19 @@ PLU\_4225
 
 <td style="text-align:right;">
 
-0.0001698
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-0.0000632
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-2.6866911
+2.687
 
 </td>
 
@@ -360,19 +362,19 @@ PLU\_4770
 
 <td style="text-align:right;">
 
-0.0001692
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-0.0000632
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-2.6759652
+2.676
 
 </td>
 
@@ -394,19 +396,19 @@ total\_bags
 
 <td style="text-align:right;">
 
-\-0.0304085
+\-0.030
 
 </td>
 
 <td style="text-align:right;">
 
-0.0403553
+0.040
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.7535183
+\-0.754
 
 </td>
 
@@ -428,19 +430,19 @@ small\_bags
 
 <td style="text-align:right;">
 
-0.0305780
+0.031
 
 </td>
 
 <td style="text-align:right;">
 
-0.0403553
+0.040
 
 </td>
 
 <td style="text-align:right;">
 
-0.7577192
+0.758
 
 </td>
 
@@ -462,19 +464,19 @@ large\_bags
 
 <td style="text-align:right;">
 
-0.0305770
+0.031
 
 </td>
 
 <td style="text-align:right;">
 
-0.0403553
+0.040
 
 </td>
 
 <td style="text-align:right;">
 
-0.7576960
+0.758
 
 </td>
 
@@ -496,19 +498,19 @@ xlarge\_bags
 
 <td style="text-align:right;">
 
-0.0305811
+0.031
 
 </td>
 
 <td style="text-align:right;">
 
-0.0403553
+0.040
 
 </td>
 
 <td style="text-align:right;">
 
-0.7577960
+0.758
 
 </td>
 
@@ -530,19 +532,19 @@ typeorganic
 
 <td style="text-align:right;">
 
-0.4649471
+0.465
 
 </td>
 
 <td style="text-align:right;">
 
-0.0058180
+0.006
 
 </td>
 
 <td style="text-align:right;">
 
-79.9147221
+79.915
 
 </td>
 
@@ -564,19 +566,19 @@ year
 
 <td style="text-align:right;">
 
-0.0634157
+0.063
 
 </td>
 
 <td style="text-align:right;">
 
-0.0028957
+0.003
 
 </td>
 
 <td style="text-align:right;">
 
-21.8999114
+21.900
 
 </td>
 
@@ -598,19 +600,19 @@ lat
 
 <td style="text-align:right;">
 
-0.0045224
+0.005
 
 </td>
 
 <td style="text-align:right;">
 
-0.0005441
+0.001
 
 </td>
 
 <td style="text-align:right;">
 
-8.3116710
+8.312
 
 </td>
 
@@ -632,19 +634,19 @@ lon
 
 <td style="text-align:right;">
 
-0.0011681
+0.001
 
 </td>
 
 <td style="text-align:right;">
 
-0.0001653
+0.000
 
 </td>
 
 <td style="text-align:right;">
 
-7.0670097
+7.067
 
 </td>
 
@@ -666,19 +668,19 @@ seasonSpring
 
 <td style="text-align:right;">
 
-\-0.1872143
+\-0.187
 
 </td>
 
 <td style="text-align:right;">
 
-0.0073685
+0.007
 
 </td>
 
 <td style="text-align:right;">
 
-\-25.4072382
+\-25.407
 
 </td>
 
@@ -700,19 +702,19 @@ seasonSummer
 
 <td style="text-align:right;">
 
-\-0.0690990
+\-0.069
 
 </td>
 
 <td style="text-align:right;">
 
-0.0076073
+0.008
 
 </td>
 
 <td style="text-align:right;">
 
-\-9.0832990
+\-9.083
 
 </td>
 
@@ -734,19 +736,19 @@ seasonWinter
 
 <td style="text-align:right;">
 
-\-0.2515148
+\-0.252
 
 </td>
 
 <td style="text-align:right;">
 
-0.0073416
+0.007
 
 </td>
 
 <td style="text-align:right;">
 
-\-34.2587737
+\-34.259
 
 </td>
 
@@ -773,7 +775,8 @@ redundancies between features. Under the assumption that the data can be
 modelled linearly after observing the residual plot, we selected the
 continuous numerical predictors, computed the correlation matrix, and
 wrangled the data into a plottable dataframe (*Ggplot2 : Quick
-Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.).
+Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.)
+(Figure 6).
 
 <div style="text-align: center">
 
@@ -781,7 +784,7 @@ Correlation Matrix Heatmap - R Software and Data Visualization*, n.d.).
 
 <div>
 
-**Figure 7.** Correlation matrix of continuous features.
+**Figure 6.** Correlation matrix of continuous features.
 
 </div>
 
@@ -796,7 +799,7 @@ totals. Due to the high correlation, including all these predictors in a
 prediction model would probably lead to overfitting.
 
 To verify the result from the correlation matrix above, we also computed
-the variance inflation (VIF) scores from the `car` package.
+the variance inflation (VIF) scores from the `car` package (Table 2).
 
 <table class="table" style="margin-left: auto; margin-right: auto;">
 
@@ -838,7 +841,7 @@ total\_volume
 
 <td style="text-align:right;">
 
-3.775250e+08
+3.78e+08
 
 </td>
 
@@ -854,7 +857,7 @@ PLU\_4046
 
 <td style="text-align:right;">
 
-6.022176e+07
+6.02e+07
 
 </td>
 
@@ -870,7 +873,7 @@ PLU\_4225
 
 <td style="text-align:right;">
 
-5.317631e+07
+5.32e+07
 
 </td>
 
@@ -886,7 +889,7 @@ PLU\_4770
 
 <td style="text-align:right;">
 
-1.060176e+06
+1.06e+06
 
 </td>
 
@@ -902,7 +905,7 @@ total\_bags
 
 <td style="text-align:right;">
 
-1.251477e+13
+1.25e+13
 
 </td>
 
@@ -918,7 +921,7 @@ small\_bags
 
 <td style="text-align:right;">
 
-9.390446e+12
+9.39e+12
 
 </td>
 
@@ -934,7 +937,7 @@ large\_bags
 
 <td style="text-align:right;">
 
-6.580236e+11
+6.58e+11
 
 </td>
 
@@ -950,7 +953,7 @@ xlarge\_bags
 
 <td style="text-align:right;">
 
-1.322641e+10
+1.32e+10
 
 </td>
 
@@ -976,7 +979,7 @@ and standard scaling tto scale the numerical features(`lat` and `lon`).
 We used randomized cross validation to determine the optimal values for
 maximum depth and number of estimators. We calculated the average
 (validation) scores using cross validation to determine how well our
-model was performing.
+model was performing (Table 3).
 
 <table>
 
@@ -1020,7 +1023,7 @@ Neg Mean Squared
 
 <td style="text-align:right;">
 
-\-0.07
+\-0.06
 
 </td>
 
@@ -1096,7 +1099,8 @@ Neg Mean Squared
 
     ## [1] "The average cross-validation score for random forest regression is: 0.09"
 
-From this model, we identified the relative importance of each feature.
+From this model, we identified the relative importance of each feature
+(Table 4).
 
 <table>
 
@@ -1139,7 +1143,7 @@ Organic Type
 
 <td style="text-align:right;">
 
-0.39
+0.42
 
 </td>
 
@@ -1171,7 +1175,7 @@ Longitude
 
 <td style="text-align:right;">
 
-0.20
+0.19
 
 </td>
 
@@ -1187,7 +1191,7 @@ Latitude
 
 <td style="text-align:right;">
 
-0.11
+0.08
 
 </td>
 
@@ -1273,7 +1277,7 @@ To compare, we fitted a linear regression model using L2 regularization.
 We also used randomized cross validation to determine the optimal value
 for the complexity penalization factor, alpha. Again, we calculated the
 average (validation) scores using cross validation to determine how well
-our model was performing.
+our model was performing (Table 5).
 
 <table>
 
@@ -1398,7 +1402,7 @@ regression model. This may indicate that linear regression may be a
 better model for predicting average avocado prices.
 
 From the linear regression model, we also identified the relative
-weights of each of the coefficients.
+weights of each of the coefficients (Table 6).
 
 <table>
 
@@ -1567,25 +1571,36 @@ When looking at the relative feature weights from the linear regression
 model, we need to account for the absolute weight. Therefore, comparing
 the two models, random forest regression and linear regression, we can
 see that both indicated `type` as the most important predictor of
-avocado pricing (figure 4).
+avocado pricing (Figure 7).
 
 ![](../results/feature_plot.png)
 
-**Figure 8 & 9.** Relative feature importances for random forest
-regression, and feature weights for linear regression.
+**Figure 7.** (A) Relative feature importances for each feature in
+predicting average avocado prices determined by random forest
+regression, and (B) relative feature weights for each feature in
+predicting average avocado prices determined by linear regression.
 
 # Discussion
 
 ## Conclusion
 
-The random forest regression model predicted that `type` is the most
-important feature for predicting avocado price. This result is expected,
-since we observed a significant difference in the distribution of
-average prices between organic and conventional avocados during the
-exploratory data analysis and hypothesis testing. We also expected this
-result from previous experience buying avocados. Organic avocados are
-grown without the use of pesticides, and therefore produce a lower yield
-per growing season, ultimately resulting in a more expensive avocado.
+After creating and optimizing both a random forest regression model and
+a regularized linear regression model to predict average avocado prices,
+we found that the test scores for our predictive models were quite low.
+For the random forest regression model, the test accuracy is **64%**.
+The regularized linear regression model has an even lower accuracy of
+**43%**.
+
+Despite these disappointing test accuracy scores, we can still gain some
+insight from these models. The random forest regression model predicted
+that `type` is the most important feature for predicting avocado price.
+This result is expected, since we observed a significant difference in
+the distribution of average prices between organic and conventional
+avocados during the exploratory data analysis and hypothesis testing. We
+also expected this result from previous experience buying avocados.
+Organic avocados are grown without the use of pesticides, and therefore
+produce a lower yield per growing season, ultimately resulting in a more
+expensive avocado.
 
 The `region` feature also seemed to play some importance in the pricing
 of avocados. For instance, regions such as Hartford-Springfield and San

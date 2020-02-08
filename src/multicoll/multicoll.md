@@ -11,6 +11,9 @@ library(reshape2)
 library(kableExtra)
 library(car)
 source(here::here("src/multicoll/support_functions.R"))
+
+# Set significant figures
+options(digits = 4)
 ```
 
 ## Correlation Matrix
@@ -138,7 +141,7 @@ total\_volume
 
 <td style="text-align:right;">
 
-3.775250e+08
+3.775e+08
 
 </td>
 
@@ -154,7 +157,7 @@ PLU\_4046
 
 <td style="text-align:right;">
 
-6.022176e+07
+6.022e+07
 
 </td>
 
@@ -170,7 +173,7 @@ PLU\_4225
 
 <td style="text-align:right;">
 
-5.317631e+07
+5.318e+07
 
 </td>
 
@@ -186,7 +189,7 @@ PLU\_4770
 
 <td style="text-align:right;">
 
-1.060176e+06
+1.060e+06
 
 </td>
 
@@ -202,7 +205,7 @@ total\_bags
 
 <td style="text-align:right;">
 
-1.251477e+13
+1.251e+13
 
 </td>
 
@@ -218,7 +221,7 @@ small\_bags
 
 <td style="text-align:right;">
 
-9.390446e+12
+9.390e+12
 
 </td>
 
@@ -234,7 +237,7 @@ large\_bags
 
 <td style="text-align:right;">
 
-6.580236e+11
+6.580e+11
 
 </td>
 
@@ -250,7 +253,7 @@ xlarge\_bags
 
 <td style="text-align:right;">
 
-1.322641e+10
+1.323e+10
 
 </td>
 
