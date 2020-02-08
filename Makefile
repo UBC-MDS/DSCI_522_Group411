@@ -78,7 +78,7 @@ results/feature_importance_rfr.csv \
 results/feature_plot.png : \
 data/train.feather \
 src/regression.py
-	python src/regression.py data/train.feather results/
+	python src/regression.py data/train.feather data/test.feather results/
 
 # Generate final report
 doc/avocado_predictors_report.md : \
