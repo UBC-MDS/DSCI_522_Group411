@@ -50,14 +50,13 @@ docker run --rm -v /$(pwd):/avocado murage/avocado_predictors:v1.0 make -C /avoc
 ```
 **Windows Users**: You may need to replace `/$(pwd)` above with the absolute path to the root of your project directory.
 
-
-To clean out all temporary files (without launching a Docker container):
-
-```
-make clean
-```
-
 When the process has completed, you can find the analysis report at `doc/avocado_predictors_report.html` or `doc/avocado_predictors_report.md`.
+
+To clean out all temporary files:
+
+```
+docker run --rm -v /$(pwd):/avocado murage/avocado_predictors:v1.0 make -C /avocado clean
+```
 
 ### Run without Docker
 
@@ -160,6 +159,10 @@ selenium|3.141.0
 - [Conduct Multicollinearity Test](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/multicoll/mc_create_assets.R)
 - [Conduct Feature Importances Analysis](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/regression.py)
 - [Final Report](https://github.com/UBC-MDS/DSCI_522_Group411/blob/master/src/run_all.sh)
+
+## File Dependency Graph
+
+![File Dependency Graph](Makefile.png)
 
 ## References
 
